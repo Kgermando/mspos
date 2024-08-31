@@ -7,9 +7,75 @@ export class routes {
   public static get core(): string {
     return this.baseUrl;
   }
-  public static get dashboard(): string {
-    return this.core + '/dashboard';
+
+
+  // Auth
+  public static get login(): string {
+    return this.baseUrl + '/login';
   }
+
+  public static get forgotPassword(): string {
+    return this.baseUrl + '/auth/forgot-password';
+  }
+
+  public static get register(): string {
+    return this.baseUrl + '/auth/register';
+  }
+  public static get emailVerification(): string {
+    return this.baseUrl + '/auth/email-verification';
+  }
+  
+  public static get lockScreen(): string {
+    return this.baseUrl + '/auth/lock-screen';
+  }
+
+
+  // Layouts
+
+  // Dashboard
+  public static get dashboard(): string {
+    return this.core + '/web/dashboard';
+  }
+  public static get msposDashboard(): string {
+    return this.dashboard + '/mspos-dashboard';
+  } 
+
+  // Pos
+  public static get pos(): string {
+    return this.core + '/web/pos';
+  }
+  public static get posForm(): string {
+    return this.pos + '/pos-form-list';
+  }
+
+
+  // Users
+  public static get user(): string {
+    return this.core + '/web/users';
+  }
+  public static get userList(): string {
+    return this.user + '/user-list';
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
   public static get application(): string {
     return this.core + '/application';
   }
@@ -76,14 +142,7 @@ export class routes {
   public static get pipeline(): string {
     return this.core + '/pipeline';
   }
-
-
-
-
-
-  public static get login(): string {
-    return this.baseUrl + '/login';
-  }
+ 
   public static get dealsDashboard(): string {
     return this.dashboard + '/deals-dashboard';
   }
@@ -626,20 +685,7 @@ export class routes {
   public static get testimonials(): string {
     return this.content + '/testimonials';
   }
-  public static get forgotPassword(): string {
-    return this.baseUrl + '/forgot-password';
-  }
-
-  public static get register(): string {
-    return this.baseUrl + '/register';
-  }
-  public static get emailVerification(): string {
-    return this.baseUrl + '/email-verification';
-  }
-  
-  public static get lockScreen(): string {
-    return this.baseUrl + '/lock-screen';
-  }
+ 
   public static get activityCalls(): string {
     return this.activities + '/activity-calls';
   }
@@ -744,5 +790,6 @@ export class routes {
   public static get invoiceGrid(): string {
     return this.invoice + '/invoice-grid';
   }
+ 
  
 }

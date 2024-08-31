@@ -6,8 +6,8 @@
       "size": "200 MB",
       "ownedMember": "Nolan Christopher",
       "modified": "by Angel",
-      "memberimg": "public/img/profiles/avatar-06.jpg",
-      "folderimg": "public/img/icons/folder.svg"
+      "memberimg": "img/profiles/avatar-06.jpg",
+      "folderimg": "img/icons/folder.svg"
     },
     {
       "name": "Estimation",
@@ -15,8 +15,8 @@
       "size": "140 MB",
       "ownedMember": "Nolan Harris",
       "modified": "by Angel",
-      "memberimg": "public/img/profiles/avatar-05.jpg",
-      "folderimg": "public/img/icons/xls.svg"
+      "memberimg": "img/profiles/avatar-05.jpg",
+      "folderimg": "img/icons/xls.svg"
     },
     {
       "name": "Intro.pdf",
@@ -24,8 +24,8 @@
       "size": "70 MB",
       "ownedMember": "Me",
       "modified": "by Angel",
-      "memberimg": "public/img/profiles/avatar-10.jpg",
-      "folderimg": "public/img/icons/xls.svg"
+      "memberimg": "img/profiles/avatar-10.jpg",
+      "folderimg": "img/icons/xls.svg"
     },
     {
       "name": "Demoworrking.mp4",
@@ -33,8 +33,8 @@
       "size": "180 MB",
       "ownedMember": "Daniel",
       "modified": "by Angel",
-      "memberimg": "public/img/profiles/avatar-02.jpg",
-      "folderimg": "public/img/icons/pdf-02.svg"
+      "memberimg": "img/profiles/avatar-02.jpg",
+      "folderimg": "img/icons/pdf-02.svg"
     },
     {
       "name": "voice.mp3",
@@ -42,8 +42,8 @@
       "size": "80 MB",
       "ownedMember": "Henriques",
       "modified": "by Angel",
-      "memberimg": "public/img/profiles/avatar-07.jpg",
-      "folderimg": "public/img/icons/video.svg"
+      "memberimg": "img/profiles/avatar-07.jpg",
+      "folderimg": "img/icons/video.svg"
     }
   ],
   "totalData": 5

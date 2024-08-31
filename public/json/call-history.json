@@ -8,7 +8,7 @@
       "dateTime": "19 Jan 2023 - 01:16 PM",
       "audio": true,
       "isSelected": false,
-      "img": "public/img/users/user-01.jpg"
+      "img": "img/users/user-01.jpg"
     },
     {
       "username": "Rose",
@@ -18,7 +18,7 @@
       "dateTime": "24 Jan 2023 - 02:50 PM",
       "audio": true,
       "isSelected": false,
-      "img": "public/img/users/user-02.jpg"
+      "img": "img/users/user-02.jpg"
     },
     {
       "username": "Benjamin",
@@ -28,7 +28,7 @@
       "dateTime": "03 Feb 2023 - 10:37 AM",
       "video": true,
       "isSelected": false,
-      "img": "public/img/users/user-03.jpg"
+      "img": "img/users/user-03.jpg"
     },
     {
       "username": "Kaitlin",
@@ -38,7 +38,7 @@
       "dateTime": "17 Feb 2023 - 11:25 AM",
       "audio": true,
       "isSelected": false,
-      "img": "public/img/users/user-04.jpg"
+      "img": "img/users/user-04.jpg"
     },
     {
       "username": "Lilly",
@@ -48,7 +48,7 @@
       "dateTime": "14 Mar 2023 - 09:12 AM",
       "video": true,
       "isSelected": false,
-      "img": "public/img/users/user-05.jpg"
+      "img": "img/users/user-05.jpg"
     },
     {
       "username": "Freda",
@@ -58,7 +58,7 @@
       "dateTime": "27 Mar 2023 - 04:32 PM",
       "audio": true,
       "isSelected": false,
-      "img": "public/img/users/user-06.jpg"
+      "img": "img/users/user-06.jpg"
     },
     {
       "username": "Alwin",
@@ -68,7 +68,7 @@
       "dateTime": "13 Apr 2023 - 02:46 PM",
       "audio": true,
       "isSelected": false,
-      "img": "public/img/users/user-07.jpg"
+      "img": "img/users/user-07.jpg"
     },
     {
       "username": "Maybelle",
@@ -78,7 +78,7 @@
       "dateTime": "11 Apr 2023 - 10:29 AM",
       "video": true,
       "isSelected": false,
-      "img": "public/img/users/user-08.jpg"
+      "img": "img/users/user-08.jpg"
     },
     {
       "username": "Ellen",
@@ -88,7 +88,7 @@
       "dateTime": "14 May 2023 - 03:06 PM",
       "audio": true,
       "isSelected": false,
-      "img": "public/img/users/user-09.jpg"
+      "img": "img/users/user-09.jpg"
     },
     {
       "username": "Grace",
@@ -98,7 +98,7 @@
       "dateTime": "29 May 2023 - 11:23 AM",
       "video": true,
       "isSelected": false,
-      "img": "public/img/users/user-10.jpg"
+      "img": "img/users/user-10.jpg"
     }
   ],
   "totalData": 10

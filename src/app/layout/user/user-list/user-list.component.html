@@ -1,0 +1,663 @@
+<!-- Page Wrapper -->
+<div class="page-wrapper">
+    <div class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- Page Header -->
+          <div class="page-header">
+            <div class="row align-items-center">
+              <div class="col-8">
+                <h4 class="page-title">
+                  Users <span class="count-title">2431</span>
+                </h4>
+              </div>
+              <div class="col-4 text-end">
+                <div class="head-icons">
+                  <a
+                    [routerLink]="routes.manageUsers"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    data-bs-original-title="Refresh"
+                    matTooltip="Refresh"
+                    ><i class="ti ti-refresh-dot"></i
+                  ></a>
+                  <app-collapse-header></app-collapse-header>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /Page Header -->
+  
+          <div class="card">
+            <div class="card-header">
+              <!-- Search -->
+              <div class="row align-items-center">
+                <div class="col-sm-4">
+                  <div class="icon-form mb-3 mb-sm-0">
+                    <span class="form-icon"><i class="ti ti-search"></i></span>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Search User"
+                    />
+                  </div>
+                </div>
+                <div class="col-sm-8">
+                  <div
+                    class="d-flex align-items-center flex-wrap row-gap-2 justify-content-sm-end"
+                  >
+                    <div class="dropdown me-2">
+                      <a
+                        href="javascript:void(0);"
+                        class="dropdown-toggle"
+                        data-bs-toggle="dropdown"
+                        ><i class="ti ti-package-export me-2"></i>Export</a
+                      >
+                      <div class="dropdown-menu dropdown-menu-end">
+                        <ul>
+                          <li>
+                            <a href="javascript:void(0);" class="dropdown-item"
+                              ><i class="ti ti-file-type-pdf text-danger me-1"></i
+                              >Export as PDF</a
+                            >
+                          </li>
+                          <li>
+                            <a href="javascript:void(0);" class="dropdown-item"
+                              ><i class="ti ti-file-type-xls text-green me-1"></i
+                              >Export as Excel
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <a
+                      href="javascript:void(0);"
+                      class="btn btn-primary"
+                      data-bs-toggle="offcanvas"
+                      data-bs-target="#offcanvas_add"
+                      ><i class="ti ti-square-rounded-plus me-2"></i>Add user</a
+                    >
+                  </div>
+                </div>
+              </div>
+              <!-- /Search -->
+            </div>
+            <div class="card-body">
+              <!-- Filter -->
+              <div
+                class="d-flex align-items-center justify-content-between flex-wrap row-gap-2 mb-4"
+              >
+                <div class="d-flex align-items-center flex-wrap row-gap-2">
+                  <div class="dropdown me-2">
+                    <a
+                      href="javascript:void(0);"
+                      class="dropdown-toggle"
+                      data-bs-toggle="dropdown"
+                      ><i class="ti ti-sort-ascending-2 me-2"></i>Sort
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-start">
+                      <ul>
+                        <li>
+                          <a href="javascript:void(0);" class="dropdown-item">
+                            <i class="ti ti-circle-chevron-right me-1"></i
+                            >Ascending
+                          </a>
+                        </li>
+                        <li>
+                          <a href="javascript:void(0);" class="dropdown-item">
+                            <i class="ti ti-circle-chevron-right me-1"></i
+                            >Descending
+                          </a>
+                        </li>
+                        <li>
+                          <a href="javascript:void(0);" class="dropdown-item">
+                            <i class="ti ti-circle-chevron-right me-1"></i
+                            >Recently Viewed
+                          </a>
+                        </li>
+                        <li>
+                          <a href="javascript:void(0);" class="dropdown-item">
+                            <i class="ti ti-circle-chevron-right me-1"></i
+                            >Recently Added
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <app-date-range-picker></app-date-range-picker>
+                </div>
+              </div>
+              <!-- /Filter -->
+  
+              <!-- Manage Users List -->
+              <div class="table-responsive custom-table">
+                <table
+                  matSort
+                  (matSortChange)="sortData($event)"
+                  class="table"
+                  id="manage-users-list"
+                >
+                  <thead class="thead-light">
+                    <tr>
+                      <th class="no-sort">
+                         <label class="checkboxs" (click)="selectAll(initChecked)"
+                          (keydown.enter)="selectAll(initChecked)" tabindex="0">
+                          <input type="checkbox" [(ngModel)]="initChecked" /><span
+                            class="checkmarks"
+                          ></span
+                        ></label>
+                      </th>
+                      <th class="no-sort"></th>
+                      <th mat-sort-header="customer_name">Name</th>
+                      <th mat-sort-header="phone">Phone</th>
+                      <th mat-sort-header="email">Email</th>
+                      <th mat-sort-header="location">Location</th>
+                      <th mat-sort-header="created">Created</th>
+                      <th mat-sort-header="last_activity">Last Activity</th>
+                      <th mat-sort-header="status">Status</th>
+                      <th class="text-end">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (data of tableData; track data) {
+                    <tr class="odd">
+                      <td class="sorting_1">
+                        <label class="checkboxs"
+                          ><input
+                            type="checkbox"
+                            [(ngModel)]="data.isSelected" /><span
+                            class="checkmarks"
+                          ></span
+                        ></label>
+                      </td>
+                      <td>
+                        <div class="set-star rating-select">
+                          <i class="fa fa-star"></i>
+                        </div>
+                      </td>
+                      <td>
+                        <h2 class="table-avatar d-flex align-items-center">
+                          <a href="javascript:void(0);" class="avatar avatar-sm me-2"
+                            ><img
+                              class="w-auto h-auto"
+                              [src]="data.customer_image"
+                              alt="User Image" /></a
+                          ><a
+                            href="javascript:void(0);"
+                            class="profile-split d-flex flex-column"
+                            >{{ data.customer_name }}
+                            <span>{{ data.customer_no }} </span></a
+                          >
+                        </h2>
+                      </td>
+                      <td>{{ data.phone }}</td>
+                      <td>{{ data.email }}</td>
+                      <td>{{ data.location }}</td>
+                      <td>{{ data.created }}</td>
+                      <td>{{ data.last_activity }}</td>
+                      <td>
+                        <span
+                          class="badge badge-pill badge-status"
+                          [ngClass]="{
+                            'bg-success': data.status === 'Active',
+                            'bg-danger': data.status === 'Inactive'
+                          }"
+                          >{{ data.status }}</span
+                        >
+                      </td>
+                      <td>
+                        <div class="dropdown table-action">
+                          <a
+                            href="javascript:void(0);"
+                            class="action-icon"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                            ><i class="fa fa-ellipsis-v"></i
+                          ></a>
+                          <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="offcanvas" data-bs-target="#offcanvas_edit"><i class="ti ti-edit text-blue"></i> Edit</a><a
+                              class="dropdown-item"
+                              href="javascript:void(0);"
+                              data-bs-toggle="modal"
+                              data-bs-target="#delete_contact"
+                              ><i class="ti ti-trash text-danger"></i> Delete</a
+                            >
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+              <app-custom-pagination></app-custom-pagination>
+              <div class="row align-items-center">
+                <div class="col-md-6">
+                  <div class="datatable-length"></div>
+                </div>
+                <div class="col-md-6">
+                  <div class="datatable-paginate"></div>
+                </div>
+              </div>
+              <!-- /Manage Users List -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /Page Wrapper -->
+  
+  <!-- Add User -->
+  <div
+    class="offcanvas offcanvas-end offcanvas-large"
+    tabindex="-1"
+    id="offcanvas_add"
+  >
+    <div class="offcanvas-header border-bottom">
+      <h5 class="fw-semibold">Add New User</h5>
+      <button
+        type="button"
+        class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+        data-bs-dismiss="offcanvas"
+        aria-label="Close"
+      >
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+    <div class="offcanvas-body">
+      <form>
+        <div>
+          <!-- Basic Info -->
+          <div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="profile-pic-upload">
+                  <div class="profile-pic">
+                    <span><i class="ti ti-photo"></i></span>
+                  </div>
+                  <div class="upload-content">
+                    <div class="upload-btn">
+                      <input type="file" />
+                      <span> <i class="ti ti-file-broken"></i>Upload File </span>
+                    </div>
+                    <p>JPG, GIF or PNG. Max size of 800K</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="col-form-label" for="name">
+                    Name <span class="text-danger">*</span></label
+                  >
+                  <input type="text" class="form-control" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="col-form-label" for="user"
+                    >User Name <span class="text-danger">*</span></label
+                  >
+                  <input type="text" class="form-control" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <label class="col-form-label" for="email"
+                      >Email <span class="text-danger">*</span></label
+                    >
+                    <div
+                      class="status-toggle small-toggle-btn d-flex align-items-center"
+                    >
+                      <span class="me-2 label-text">Email Opt Out</span>
+                      <input
+                        type="checkbox"
+                        id="user1"
+                        class="check"
+                        checked=""
+                      />
+                      <label for="user1" class="checktoggle"></label>
+                    </div>
+                  </div>
+                  <input type="text" class="form-control" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="col-form-label" for="role"
+                    >Role <span class="text-danger">*</span></label
+                  >
+                  <input type="text" class="form-control" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="col-form-label" for="phone"
+                    >Phone 1 <span class="text-danger">*</span></label
+                  >
+                  <input type="text" class="form-control" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="col-form-label" for="phone">Phone 2</label>
+                  <input type="text" class="form-control" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="col-form-label" for="Password"
+                    >Password <span class="text-danger">*</span></label
+                  >
+                  <div class="icon-form-end">
+                    <span class="form-icon" (click)="togglePassword(1)" (keydown.enter)="selectAll(initChecked)" tabindex="0"
+                      ><i
+                        class="ti"
+                        [ngClass]="password[1] ? 'ti-eye' : 'ti-eye-off'"
+                      ></i
+                    ></span>
+                    <input
+                      [type]="password[1] ? 'text' : 'password'"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="col-form-label"
+            for="text"        >Repeat Password <span class="text-danger">*</span></label
+                  >
+                  <div class="icon-form-end">
+                    <span class="form-icon" (click)="togglePassword(2)"
+                    (keydown.enter)="togglePassword(2)"  tabindex="0"
+                      ><i
+                        class="ti"
+                        [ngClass]="password[2] ? 'ti-eye' : 'ti-eye-off'"
+                      ></i
+                    ></span>
+                    <input
+                      [type]="password[2] ? 'text' : 'password'"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="col-form-label" for="location"
+                    >Location <span class="text-danger">*</span></label
+                  >
+                  <mat-select
+                    class="select custom-mat-select"
+                    placeholder="Choose"
+                  >
+                    <mat-option value="Germany">Germany</mat-option>
+                    <mat-option value="USA">USA</mat-option>
+                    <mat-option value="Canada">Canada</mat-option>
+                    <mat-option value="India">India</mat-option>
+                    <mat-option value="China">China</mat-option>
+                  </mat-select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="radio-wrap">
+                  <label class="col-form-label" for="reason">Status</label>
+                  <div class="d-flex align-items-center">
+                    <div class="me-2">
+                      <input
+                        type="radio"
+                        class="status-radio"
+                        id="active1"
+                        name="status"
+                        checked=""
+                      />
+                      <label for="active1">Active</label>
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        class="status-radio"
+                        id="inactive1"
+                        name="status"
+                      />
+                      <label for="inactive1">Inactive</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /Basic Info -->
+        </div>
+        <div class="d-flex align-items-center justify-content-end">
+          <a href="javascript:void(0);" class="btn btn-light me-2" data-bs-dismiss="offcanvas"
+            >Cancel</a
+          >
+          <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- /Add User -->
+  
+  <!-- Edit User -->
+  <div
+    class="offcanvas offcanvas-end offcanvas-large"
+    tabindex="-1"
+    id="offcanvas_edit"
+  >
+    <div class="offcanvas-header border-bottom">
+      <h5 class="fw-semibold">Edit User</h5>
+      <button
+        type="button"
+        class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+        data-bs-dismiss="offcanvas"
+        aria-label="Close"
+      >
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+    <div class="offcanvas-body">
+      <form>
+        <div>
+          <!-- Basic Info -->
+          <div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="profile-pic-upload">
+                  <div class="profile-pic">
+                    <span><i class="ti ti-photo"></i></span>
+                  </div>
+                  <div class="upload-content">
+                    <div class="upload-btn">
+                      <input type="file" />
+                      <span> <i class="ti ti-file-broken"></i>Upload File </span>
+                    </div>
+                    <p>JPG, GIF or PNG. Max size of 800K</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="col-form-label" for="reason">
+                    Name <span class="text-danger">*</span></label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    value="Darlee Robertson"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="col-form-label"
+            for="text"        >User Name <span class="text-danger">*</span></label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    value="Darlee Robertson"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <label class="col-form-label"
+        for="bill"              >Email <span class="text-danger">*</span></label
+                    >
+                    <div
+                      class="status-toggle small-toggle-btn d-flex align-items-center"
+                    >
+                      <span class="me-2 label-text">Email Opt Out</span>
+                      <input
+                        type="checkbox"
+                        id="user1"
+                        class="check"
+                        checked=""
+                      />
+                      <label for="user1" class="checktoggle"></label>
+                    </div>
+                  </div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    value="robertson@example.com"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="col-form-label"
+            for="text"        >Role <span class="text-danger">*</span></label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    value="Facility Manager"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="col-form-label"
+            for="text"        >Phone 1 <span class="text-danger">*</span></label
+                  >
+                  <input type="text" class="form-control" value="	+1 989757485" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="col-form-label" for="reason">Phone 2</label>
+                  <input type="text" class="form-control" value="	+1 989757485" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="col-form-label"
+            for="text"        >Password <span class="text-danger">*</span></label
+                  >
+                  <div class="icon-form-end">
+                    <span class="form-icon"><i class="ti ti-eye-off"></i></span>
+                    <input type="password" class="form-control" value="****" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="col-form-label"
+            for="text"        >Repeat Password <span class="text-danger">*</span></label
+                  >
+                  <div class="icon-form-end">
+                    <span class="form-icon"><i class="ti ti-eye-off"></i></span>
+                    <input type="password" class="form-control" value="****" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="col-form-label"
+            for="text"        >Location <span class="text-danger">*</span></label
+                  >
+                  <mat-select
+                    class="select custom-mat-select"
+                    placeholder="Choose"
+                  >
+                    <mat-option value="Germany">Germany</mat-option>
+                    <mat-option value="USA">USA</mat-option>
+                    <mat-option value="Canada">Canada</mat-option>
+                    <mat-option value="India">India</mat-option>
+                    <mat-option value="China">China</mat-option>
+                  </mat-select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="radio-wrap">
+                  <label class="col-form-label" for="reason">Status</label>
+                  <div class="d-flex align-items-center">
+                    <div class="me-2">
+                      <input
+                        type="radio"
+                        class="status-radio"
+                        id="active1"
+                        name="status"
+                        checked=""
+                      />
+                      <label for="active1">Active</label>
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        class="status-radio"
+                        id="inactive1"
+                        name="status"
+                      />
+                      <label for="inactive1">Inactive</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /Basic Info -->
+        </div>
+        <div class="d-flex align-items-center justify-content-end">
+          <a href="javascript:void(0);" class="btn btn-light me-2" data-bs-dismiss="offcanvas"
+            >Cancel</a
+          >
+          <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- /Edit User -->
+  
+  <!-- Delete User -->
+  <div class="modal fade" id="delete_contact" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="text-center">
+            <div class="avatar avatar-xl bg-danger-light rounded-circle mb-3">
+              <i class="ti ti-trash-x fs-36 text-danger"></i>
+            </div>
+            <h4 class="mb-2">Remove users?</h4>
+            <p class="mb-0">Are you sure you want to remove it</p>
+            <div class="d-flex align-items-center justify-content-center mt-4">
+              <a href="javascript:void(0);" class="btn btn-light me-2" data-bs-dismiss="modal"
+                >Cancel</a
+              >
+              <a [routerLink]="routes.manageUsers" class="btn btn-danger"
+                >Yes, Delete it</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /Delete User -->
+  

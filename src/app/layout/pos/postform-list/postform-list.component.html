@@ -1,0 +1,503 @@
+<!-- Page Wrapper -->
+<div class="page-wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div class="row align-items-center">
+                        <div class="col-4">
+                            <h4 class="page-title">
+                                POSFORM<span class="count-title">560</span>
+                            </h4>
+                        </div>
+                        <div class="col-8 text-end">
+                            <div class="head-icons">
+                                <a [routerLink]="routes.contractList" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    data-bs-original-title="Refresh" matTooltip="Refresh">
+                                    <i class="ti ti-refresh-dot"></i>
+                                </a>
+                                <app-collapse-header></app-collapse-header>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Page Header -->
+
+                <div class="card">
+                    <div class="card-header">
+                        <!-- Search -->
+                        <div class="row align-items-center">
+                            <div class="col-sm-4">
+                                <div class="icon-form mb-3 mb-sm-0">
+                                    <span class="form-icon"><i class="ti ti-search"></i></span>
+                                    <input type="text" class="form-control" placeholder="Search Contacts">
+                                </div>
+                            </div>
+                            <div class="col-sm-8">
+                                <div class="d-flex align-items-center flex-wrap row-gap-2 justify-content-sm-end">
+                                    <div class="dropdown me-2">
+                                        <a href="javascript:void(0);" class="dropdown-toggle"
+                                            data-bs-toggle="dropdown"><i
+                                                class="ti ti-package-export me-2"></i>Export</a>
+                                        <div class="dropdown-menu  dropdown-menu-end">
+                                            <ul>
+                                                <li>
+                                                    <a href="javascript:void(0);" class="dropdown-item"><i
+                                                            class="ti ti-file-type-pdf text-danger me-1"></i>Export as
+                                                        PDF</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0);" class="dropdown-item"><i
+                                                            class="ti ti-file-type-xls text-green me-1"></i>Export as
+                                                        Excel </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="offcanvas"
+                                        data-bs-target="#offcanvas_add">
+                                        <i class="ti ti-square-rounded-plus me-2"></i>
+                                        Add New Posform
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Search -->
+                    </div>
+                    <div class="card-body">
+                        <!-- Filter -->
+                        <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-2 mb-4">
+                            <div class="d-flex align-items-center flex-wrap row-gap-2">
+                                <div class="dropdown me-2">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown"><i
+                                            class="ti ti-sort-ascending-2 me-2"></i>Sort </a>
+                                    <div class="dropdown-menu  dropdown-menu-start">
+                                        <ul>
+                                            <li>
+                                                <a href="javascript:void(0);" class="dropdown-item">
+                                                    <i class="ti ti-circle-chevron-right me-1"></i>Ascending
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0);" class="dropdown-item">
+                                                    <i class="ti ti-circle-chevron-right me-1"></i>Descending
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0);" class="dropdown-item">
+                                                    <i class="ti ti-circle-chevron-right me-1"></i>Recently Viewed
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0);" class="dropdown-item">
+                                                    <i class="ti ti-circle-chevron-right me-1"></i>Recently Added
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="icon-form">
+                                    <span class="form-icon"><i class="ti ti-calendar"></i></span>
+                                    <app-date-range-picker></app-date-range-picker>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- /Filter -->
+
+                        <!-- Projects List -->
+                        <div class="table-responsive custom-table">
+                            <table matSort (matSortChange)="sortData($event)" class="table" id="contracts-list">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th class="no-sort">
+                                            <label class="checkboxs" (click)="selectAll(initChecked)"
+                                                (keydown.enter)="selectAll(initChecked)" tabindex="0"><input
+                                                    type="checkbox" id="select-all" [(ngModel)]="initChecked" /><span
+                                                    class="checkmarks"></span></label>
+                                        </th>
+                                        <th mat-sort-header="contractid">Contract ID</th>
+                                        <th mat-sort-header="subject">Subject</th>
+                                        <th mat-sort-header="customer">Customer</th>
+                                        <th mat-sort-header="contractvalue">Contract Value</th>
+                                        <th mat-sort-header="contracttype">Contract Type</th>
+                                        <th mat-sort-header="startdate">Start Date</th>
+                                        <th mat-sort-header="end">End Date</th>
+                                        <th class="text-end">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (data of tableData; track data) {
+                                    <tr class="odd">
+                                        <td class="sorting_1">
+                                            <label class="checkboxs"><input type="checkbox"
+                                                    [(ngModel)]="data.isSelected" /><span
+                                                    class="checkmarks"></span></label>
+                                        </td>
+                                        <td>
+                                            <a href="javascript:void(0);" class="add-popups">{{ data.contractId }}</a>
+                                        </td>
+                                        <td>
+                                            <a href="javascript:void(0);" class="title-name">{{ data.subject }}</a>
+                                        </td>
+                                        <td>
+                                            <h2 class="table-avatar d-flex align-items-center">
+                                                <a [routerLink]="routes.companiesDetails"
+                                                    class="avatar avatar-sm border me-2"><img class="w-auto h-auto"
+                                                        [src]="data.client_img" alt="User Image" /></a><a
+                                                    [routerLink]="routes.companiesDetails"
+                                                    class="profile-split d-flex flex-column">{{ data.customer }}</a>
+                                            </h2>
+                                        </td>
+                                        <td>{{ data.contractValue }}</td>
+                                        <td>{{ data.contractType }}</td>
+                                        <td>{{ data.startDate }}</td>
+                                        <td>{{ data.endDate }}</td>
+                                        <td>
+                                            <div class="dropdown table-action">
+                                                <a href="javascript:void(0);" class="action-icon"
+                                                    data-bs-toggle="dropdown" aria-expanded="false"><i
+                                                        class="fa fa-ellipsis-v"></i></a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item" data-bs-toggle="offcanvas"
+                                                        data-bs-target="#offcanvas_edit" href="javascript:void(0);"><i
+                                                            class="ti ti-edit text-blue"></i> Edit</a><a
+                                                        class="dropdown-item" href="javascript:void(0);"
+                                                        data-bs-toggle="modal" data-bs-target="#delete_contracts"><i
+                                                            class="ti ti-trash text-danger"></i> Delete</a><a
+                                                        class="dropdown-item" href="javascript:void(0);"><i
+                                                            class="ti ti-copy text-tertiary"></i> Clone</a><a
+                                                        class="dropdown-item" href="javascript:void(0);"><i
+                                                            class="ti ti-clipboard-copy text-violet"></i>
+                                                        View Contract</a><a class="dropdown-item"
+                                                        href="javascript:void(0);"><i
+                                                            class="ti ti-checks text-success"></i> Mark as
+                                                        Signed</a><a class="dropdown-item" href="javascript:void(0);"><i
+                                                            class="ti ti-printer text-info"></i> Print</a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <app-custom-pagination></app-custom-pagination>
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <div class="datatable-length"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="datatable-paginate"></div>
+                            </div>
+                        </div>
+                        <!-- /Projects List -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Page Wrapper -->
+<!-- Add New Contracts -->
+<div class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_add">
+
+    <div class="offcanvas-header border-bottom">
+        <h4>Add New Contract</h4>
+        <button type="button"
+            class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+            data-bs-dismiss="offcanvas" aria-label="Close">
+            <i class="ti ti-x"></i>
+        </button>
+    </div>
+    <div class="offcanvas-body">
+        <form>
+            <div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="text">Subject <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="text">Date of Birth<span
+                                    class="text-danger">*</span></label>
+                            <div class="icon-form">
+                                <span class="form-icon"><i class="ti ti-calendar-check"></i></span>
+                                <input type="text" class="form-control datetimepicker" bsDatepicker
+                                    [bsConfig]="{ adaptivePosition: true }" placeholder="DD/MM/YY" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="text">End Date<span class="text-danger">*</span></label>
+                            <div class="icon-form">
+                                <span class="form-icon"><i class="ti ti-calendar-check"></i></span>
+                                <input type="text" class="form-control datetimepicker" bsDatepicker
+                                    [bsConfig]="{ adaptivePosition: true }" placeholder="DD/MM/YY" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="text">Client <span class="text-danger">*</span></label>
+                            <p-dropdown [options]="selectedValue1" [(ngModel)]="selectedDatas1"
+                                [ngModelOptions]="{ standalone: true }" optionLabel="name" [filter]="true"
+                                filterBy="name" [showClear]="true" placeholder="Choose">
+                                <ng-template pTemplate="selectedItem" let-selectedOption>
+                                    <div class="flex align-items-center gap-2">
+                                        <div>{{ selectedOption.name }}</div>
+                                    </div>
+                                </ng-template>
+                                <ng-template let-data1 pTemplate="item">
+                                    <div class="flex align-items-center gap-2">
+                                        <div>{{ data1.name }}</div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="text">Contact Value<span
+                                    class="text-danger">*</span></label>
+
+                            <p-dropdown [options]="selectedValue2" [(ngModel)]="selectedDatas2"
+                                [ngModelOptions]="{ standalone: true }" optionLabel="name" [filter]="true"
+                                filterBy="name" [showClear]="true" placeholder="Choose">
+                                <ng-template pTemplate="selectedItem" let-selectedOption>
+                                    <div class="flex align-items-center gap-2">
+                                        <div>{{ selectedOption.name }}</div>
+                                    </div>
+                                </ng-template>
+                                <ng-template let-data1 pTemplate="item">
+                                    <div class="flex align-items-center gap-2">
+                                        <div>{{ data1.name }}</div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="text">Contact Value <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="text">Attachment <span
+                                    class="text-danger">*</span></label>
+                            <div class="drag-attach">
+                                <input type="file" />
+                                <div class="img-upload">
+                                    <i class="ti ti-file-broken"></i>Upload File
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="text">Description <span
+                                    class="text-danger">*</span></label>
+                            <div class="summernote">
+                                <p-editor [(ngModel)]="text" [ngModelOptions]="{ standalone: true }"
+                                    [style]="{ height: '100px' }"></p-editor>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex align-items-center justify-content-end">
+                <button type="button" data-bs-dismiss="offcanvas" class="btn btn-light me-2">Cancel</button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#create_success">Create</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+<!-- /Add New Contracts -->
+
+
+<!-- Edit Contracts -->
+<div class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_edit">
+
+    <div class="offcanvas-header border-bottom">
+        <h4>Edit Contract</h4>
+        <button type="button"
+            class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+            data-bs-dismiss="offcanvas" aria-label="Close">
+            <i class="ti ti-x"></i>
+        </button>
+    </div>
+    <div class="offcanvas-body">
+        <form>
+            <div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="text">Subject <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" placeholder="Web Design Contract" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="text">Date of Birth<span
+                                    class="text-danger">*</span></label>
+                            <div class="icon-form">
+                                <span class="form-icon"><i class="ti ti-calendar-check"></i></span>
+                                <input type="text" class="form-control datetimepicker" bsDatepicker
+                                    [bsConfig]="{ adaptivePosition: true }" placeholder="11/06/2024" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="text">End Date<span class="text-danger">*</span></label>
+                            <div class="icon-form">
+                                <span class="form-icon"><i class="ti ti-calendar-check"></i></span>
+                                <input type="text" class="form-control datetimepicker" bsDatepicker
+                                    [bsConfig]="{ adaptivePosition: true }" placeholder="14/06/2024" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="text">Client <span class="text-danger">*</span></label>
+                            <p-dropdown [options]="selectedValue3" [(ngModel)]="selectedDatas3"
+                                [ngModelOptions]="{ standalone: true }" optionLabel="name" [filter]="true"
+                                filterBy="name" [showClear]="true" placeholder="Choose">
+                                <ng-template pTemplate="selectedItem" let-selectedOption>
+                                    <div class="flex align-items-center gap-2">
+                                        <div>{{ selectedOption.name }}</div>
+                                    </div>
+                                </ng-template>
+                                <ng-template let-data1 pTemplate="item">
+                                    <div class="flex align-items-center gap-2">
+                                        <div>{{ data1.name }}</div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="text">Contact Value<span
+                                    class="text-danger">*</span></label>
+                            <p-dropdown [options]="selectedValue4" [(ngModel)]="selectedDatas4"
+                                [ngModelOptions]="{ standalone: true }" optionLabel="name" [filter]="true"
+                                filterBy="name" [showClear]="true" placeholder="Choose">
+                                <ng-template pTemplate="selectedItem" let-selectedOption>
+                                    <div class="flex align-items-center gap-2">
+                                        <div>{{ selectedOption.name }}</div>
+                                    </div>
+                                </ng-template>
+                                <ng-template let-data1 pTemplate="item">
+                                    <div class="flex align-items-center gap-2">
+                                        <div>{{ data1.name }}</div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="text">Contact Value <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control" placeholder="$25,00,500" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="col-form-label" for="subject">Attachment <span
+                                class="text-danger">*</span></label>
+                        <div class="drag-attach">
+                            <input type="file" />
+                            <div class="img-upload">
+                                <i class="ti ti-file-broken"></i>Upload File
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="col-form-label" for="reason">Uploaded Files</label>
+                        <div class="upload-file upload-list">
+                            <div>
+                                <h6>Web_Design_Contract.pdf</h6>
+                                <p>1.2 MB</p>
+                            </div>
+                            <a href="javascript:void(0);" class="text-danger"><i class="ti ti-trash-x"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="text">Description <span
+                                    class="text-danger">*</span></label>
+                            <div class="summernote"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex align-items-center justify-content-end">
+                <button type="button" data-bs-dismiss="offcanvas" class="btn btn-light me-2">Cancel</button>
+                <button type="button" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+<!-- /Edit Contracts -->
+
+
+<!-- Delete Contracts -->
+<div class="modal custom-modal fade" id="delete_contracts" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <div class="success-message text-center">
+                    <div class="success-popup-icon">
+                        <i class="ti ti-trash-x"></i>
+                    </div>
+                    <h3>Remove Contracts?</h3>
+                    <p class="mb-0">Are you sure you want to remove <br> contract you selected.</p>
+                    <div class="col-lg-12 text-center modal-btn">
+                        <a href="javascript:void(0);" class="btn btn-light" data-bs-dismiss="modal">Cancel</a>
+                        <a [routerLink]="routes.contractList" class="btn btn-danger">Yes, Delete it</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Delete Contracts -->
+<!-- Create Contracts -->
+<!-- <div class="modal custom-modal fade" id="create_success" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-0 m-0 justify-content-end">
+          <button  class="btn-close" data-bs-dismiss="modal" aria-label="Close">	
+            <i class="ti ti-x"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="success-message text-center">
+            <div class="success-popup-icon bg-light-blue">
+              <i class="ti ti-atom-2"></i>
+            </div>
+            <h3>Contracts Created Successfully!!!</h3>
+            <p>View the details of contracts, created</p>
+            <div class="col-lg-12 text-center modal-btn">
+              <a href="javascript:void(0);" class="btn btn-light" data-bs-dismiss="modal">Cancel</a>
+              <a href="javascript:void(0);" class="btn btn-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+<!-- /Create Contracts -->
