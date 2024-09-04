@@ -94,8 +94,7 @@ export class AsmListComponent implements OnInit {
           });
         }); 
         this.asmService.getAll().subscribe((apiRes: apiResultFormat) => {
-          this.actualData = apiRes.data; 
-          console.log("actualData", this.actualData)
+          this.actualData = apiRes.data;  
           this.totalUser = apiRes.meta.total;
           this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
             if (this.router.url == this.routes.asmList) {
@@ -103,8 +102,7 @@ export class AsmListComponent implements OnInit {
               this.pageSize = res.pageSize;
             }
           });
-        });
-        console.log("id", this.idItem)
+        }); 
         if (this.idItem) {
           this.asmService.get(this.idItem).subscribe(item => { 
             this.dataItem = item.data;

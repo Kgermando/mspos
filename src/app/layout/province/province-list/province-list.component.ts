@@ -58,6 +58,9 @@ export class ProvinceListComponent implements OnInit {
   isLoading = false;
 
   totalUser = 0;
+
+  idItem!: number;
+  dataItem!: IProvince; // Single data
   
    
   ngOnInit() {
@@ -203,4 +206,68 @@ export class ProvinceListComponent implements OnInit {
       console.log(error);
     }
   } 
+
+  onSubmitUpdate() {
+    try {
+      this.isLoading = true;
+      var body = { 
+        name: this.formGroup.value.name, 
+        signature: this.currentUser.fullname,
+      };
+      this.provinceService.update(this.idItem, body)
+      .subscribe({
+        next: () => {
+          this.formGroup.reset();
+          this.toastr.success('Modification enregistré!', 'Success!'); 
+          this.isLoading = false;
+        },
+        error: err => {
+          console.log(err);
+          this.toastr.error('Une erreur s\'est produite!', 'Oupss!');
+          this.isLoading = false;
+        }
+      }); 
+    } catch (error) {
+      this.isLoading = false;
+      console.log(error);
+    }
+  }
+ 
+  findValue(value: string) { 
+    this.actualData.forEach(item => { 
+      if (item.name === value) {
+        this.idItem = item.ID;
+        if (this.idItem) {
+          this.provinceService.get(this.idItem).subscribe(item => { 
+            this.dataItem = item.data;
+              this.formGroup.patchValue({
+                name: this.dataItem.name,  
+              });
+            }
+          );
+        }
+      }
+    });
+  }
+
+ 
+
+  delete(): void {
+    this.provinceService
+    .delete(this.idItem)
+    .subscribe({
+      next: () => {
+        this.toastr.info('Supprimé avec succès!', 'Success!'); 
+      },
+      error: err => {
+        this.toastr.error('Une erreur s\'est produite!', 'Oupss!');
+        console.log(err);
+      }
+    }
+    );
+  }
+
+  compareFn(c1: IProvince, c2: IProvince): boolean {
+    return c1 && c2 ? c1.ID === c2.ID : c1 === c2;
+  }
 }

@@ -18,6 +18,7 @@ import { AsmListComponent } from './asm/asm-list/asm-list.component';
 import { ManagerListComponent } from './managers/manager-list/manager-list.component';
 import { AsmSupCountComponent } from './asm/asm-sup-count/asm-sup-count.component';
 import { SupAsmComponent } from './sups/sup-asm/sup-asm.component';
+import { SupAreComponent } from './areas/sup-are/sup-are.component';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import { SupAsmComponent } from './sups/sup-asm/sup-asm.component';
     ManagerListComponent,
     AsmSupCountComponent,
     SupAsmComponent,
+    SupAreComponent,
   ],
   imports: [
     CommonModule,

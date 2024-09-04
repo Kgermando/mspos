@@ -65,17 +65,18 @@
                         </div>
                         <!-- /Search -->
                     </div>
-                    <div class="card-body"> 
+                    <div class="card-body">
                         <!-- Projects List -->
                         <div class="table-responsive custom-table">
                             <table matSort (matSortChange)="sortData($event)" class="table" id="contracts-list">
                                 <thead class="thead-light">
                                     <tr>
-                                        <th mat-sort-header="name">Name</th> 
+                                        <th mat-sort-header="name">Name</th>
                                         <th mat-sort-header="area">Total Area</th>
-                                        <th mat-sort-header="pos">Total POS</th> 
-                                        <th mat-sort-header="pos">Superviseur</th> 
-                                        <th mat-sort-header="pos">DR</th> 
+                                        <th mat-sort-header="pos">Total POS</th>
+                                        <th mat-sort-header="pos">Superviseur</th>
+                                        <th mat-sort-header="pos">DR</th>
+                                        <th mat-sort-header="action">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -83,7 +84,7 @@
                                     <tr class="odd">
                                         <td>
                                             <a href="javascript:void(0);" class="add-popups">{{ data.name }}</a>
-                                        </td> 
+                                        </td>
                                         <td>
                                             <app-area-count [id]="data.ID"></app-area-count>
                                         </td>
@@ -96,7 +97,29 @@
                                         <td>
                                             <app-dr-count [id]="data.ID"></app-dr-count>
                                         </td>
+                                        <td>
+                                            <div class="dropdown table-action">
+                                                <a href="javascript:void(0);" class="action-icon"
+                                                    data-bs-toggle="dropdown" aria-expanded="false"><i
+                                                        class="fa fa-ellipsis-v"></i></a>
+                                                <div class="dropdown-menu dropdown-menu-right">
 
+                                                    <a class="dropdown-item" href="javascript:void(0);"
+                                                        (click)="findValue(data.name)" data-bs-toggle="offcanvas"
+                                                        data-bs-target="#offcanvas_edit">
+                                                        <i class="ti ti-edit text-blue"></i>
+                                                        Edit
+                                                    </a>
+
+                                                    <a class="dropdown-item" href="javascript:void(0);"
+                                                        data-bs-toggle="modal" (click)="findValue(data.name)"
+                                                        data-bs-target="#delete_contact"><i
+                                                            class="ti ti-trash text-danger"></i>
+                                                        Delete
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
                                     }
                                 </tbody>
@@ -136,29 +159,29 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="mb-3">
-                            <label class="col-form-label" for="text">Name province <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control"  formControlName="name" required/>
+                            <label class="col-form-label" for="text">Name province <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control" formControlName="name" required />
                             <mat-error *ngIf="formGroup.controls['name'].hasError('required')">
                                 Ce champs est obligatoire
                             </mat-error>
                         </div>
-                    </div> 
+                    </div>
                 </div>
             </div>
             <div class="d-flex align-items-center justify-content-end">
                 <button type="button" data-bs-dismiss="offcanvas" class="btn btn-light me-2">Cancel</button>
                 @if (isLoading) {
-                    <button disabled class="btn btn-primary">
-                        <div class="spinner-border" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    </button>
+                <button disabled class="btn btn-primary">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </button>
                 }
                 @if (!isLoading) {
-                    <button type="submit" class="btn btn-primary" data-bs-toggle="modal"
-                    data-bs-dismiss="offcanvas"
+                <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="offcanvas"
                     data-bs-target="#create_success">Create</button>
-                } 
+                }
             </div>
         </form>
     </div>
@@ -171,7 +194,7 @@
 <div class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_edit">
 
     <div class="offcanvas-header border-bottom">
-        <h4>Edit Contract</h4>
+        <h4>Edit province</h4>
         <button type="button"
             class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
             data-bs-dismiss="offcanvas" aria-label="Close">
@@ -179,114 +202,35 @@
         </button>
     </div>
     <div class="offcanvas-body">
-        <form>
+        <form [formGroup]="formGroup" (ngSubmit)="onSubmitUpdate()">
             <div>
                 <div class="row">
-                    <div class="col-md-12">
-                        <div class="mb-3">
-                            <label class="col-form-label" for="text">Subject <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="Web Design Contract" />
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="col-form-label" for="text">Date of Birth<span
-                                    class="text-danger">*</span></label>
-                            <div class="icon-form">
-                                <span class="form-icon"><i class="ti ti-calendar-check"></i></span>
-                                <input type="text" class="form-control datetimepicker" bsDatepicker
-                                    [bsConfig]="{ adaptivePosition: true }" placeholder="11/06/2024" />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="col-form-label" for="text">Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" formControlName="name" required />
+                                <mat-error *ngIf="formGroup.controls['name'].hasError('required')">
+                                    Ce champs est obligatoire
+                                </mat-error>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="col-form-label" for="text">End Date<span class="text-danger">*</span></label>
-                            <div class="icon-form">
-                                <span class="form-icon"><i class="ti ti-calendar-check"></i></span>
-                                <input type="text" class="form-control datetimepicker" bsDatepicker
-                                    [bsConfig]="{ adaptivePosition: true }" placeholder="14/06/2024" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="mb-3">
-                            <label class="col-form-label" for="text">Client <span class="text-danger">*</span></label>
-                            <p-dropdown [options]="selectedValue3" [(ngModel)]="selectedDatas3"
-                                [ngModelOptions]="{ standalone: true }" optionLabel="name" [filter]="true"
-                                filterBy="name" [showClear]="true" placeholder="Choose">
-                                <ng-template pTemplate="selectedItem" let-selectedOption>
-                                    <div class="flex align-items-center gap-2">
-                                        <div>{{ selectedOption.name }}</div>
-                                    </div>
-                                </ng-template>
-                                <ng-template let-data1 pTemplate="item">
-                                    <div class="flex align-items-center gap-2">
-                                        <div>{{ data1.name }}</div>
-                                    </div>
-                                </ng-template>
-                            </p-dropdown>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="mb-3">
-                            <label class="col-form-label" for="text">Contact Value<span
-                                    class="text-danger">*</span></label>
-                            <p-dropdown [options]="selectedValue4" [(ngModel)]="selectedDatas4"
-                                [ngModelOptions]="{ standalone: true }" optionLabel="name" [filter]="true"
-                                filterBy="name" [showClear]="true" placeholder="Choose">
-                                <ng-template pTemplate="selectedItem" let-selectedOption>
-                                    <div class="flex align-items-center gap-2">
-                                        <div>{{ selectedOption.name }}</div>
-                                    </div>
-                                </ng-template>
-                                <ng-template let-data1 pTemplate="item">
-                                    <div class="flex align-items-center gap-2">
-                                        <div>{{ data1.name }}</div>
-                                    </div>
-                                </ng-template>
-                            </p-dropdown>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="mb-3">
-                            <label class="col-form-label" for="text">Contact Value <span
-                                    class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="$25,00,500" />
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="col-form-label" for="subject">Attachment <span
-                                class="text-danger">*</span></label>
-                        <div class="drag-attach">
-                            <input type="file" />
-                            <div class="img-upload">
-                                <i class="ti ti-file-broken"></i>Upload File
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="col-form-label" for="reason">Uploaded Files</label>
-                        <div class="upload-file upload-list">
-                            <div>
-                                <h6>Web_Design_Contract.pdf</h6>
-                                <p>1.2 MB</p>
-                            </div>
-                            <a href="javascript:void(0);" class="text-danger"><i class="ti ti-trash-x"></i></a>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="mb-3">
-                            <label class="col-form-label" for="text">Description <span
-                                    class="text-danger">*</span></label>
-                            <div class="summernote"></div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="d-flex align-items-center justify-content-end">
                 <button type="button" data-bs-dismiss="offcanvas" class="btn btn-light me-2">Cancel</button>
-                <button type="button" class="btn btn-primary">Save Changes</button>
+                @if (isLoading) {
+                <button disabled class="btn btn-primary">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </button>
+                }
+                @if (!isLoading) {
+                <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="offcanvas"
+                    data-bs-target="#create_success">Save Changes</button>
+                }
             </div>
         </form>
     </div>
@@ -294,52 +238,27 @@
 </div>
 <!-- /Edit Contracts -->
 
-
-<!-- Delete Contracts -->
-<div class="modal custom-modal fade" id="delete_contracts" role="dialog">
+<!-- Delete User -->
+<div class="modal fade" id="delete_contact" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-
             <div class="modal-body">
-                <div class="success-message text-center">
-                    <div class="success-popup-icon">
-                        <i class="ti ti-trash-x"></i>
+                <div class="text-center">
+                    <div class="avatar avatar-xl bg-danger-light rounded-circle mb-3">
+                        <i class="ti ti-trash-x fs-36 text-danger"></i>
                     </div>
-                    <h3>Remove Contracts?</h3>
-                    <p class="mb-0">Are you sure you want to remove <br> contract you selected.</p>
-                    <div class="col-lg-12 text-center modal-btn">
-                        <a href="javascript:void(0);" class="btn btn-light" data-bs-dismiss="modal">Cancel</a>
-                        <a [routerLink]="routes.contractList" class="btn btn-danger">Yes, Delete it</a>
+                    <h4 class="mb-2">Remove item?</h4>
+                    <p class="mb-0">Are you sure you want to remove it</p>
+                    <div class="d-flex align-items-center justify-content-center mt-4">
+                        <a href="javascript:void(0);" class="btn btn-light me-2" data-bs-dismiss="modal">Cancel</a>
+                        <button (click)="delete()" class="btn btn-danger" data-bs-dismiss="modal">
+                            Yes, Delete it
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<!-- /Delete User -->
 <!-- /Delete Contracts -->
-<!-- Create Contracts -->
-<!-- <div class="modal custom-modal fade" id="create_success" role="dialog">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header border-0 m-0 justify-content-end">
-          <button  class="btn-close" data-bs-dismiss="modal" aria-label="Close">	
-            <i class="ti ti-x"></i>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="success-message text-center">
-            <div class="success-popup-icon bg-light-blue">
-              <i class="ti ti-atom-2"></i>
-            </div>
-            <h3>Contracts Created Successfully!!!</h3>
-            <p>View the details of contracts, created</p>
-            <div class="col-lg-12 text-center modal-btn">
-              <a href="javascript:void(0);" class="btn btn-light" data-bs-dismiss="modal">Cancel</a>
-              <a href="javascript:void(0);" class="btn btn-primary">View Details</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
-<!-- /Create Contracts -->

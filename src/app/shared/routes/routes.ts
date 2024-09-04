@@ -85,6 +85,11 @@ export class routes {
     return this.core + '/web/asm/asm-list';
   }
 
+   // Managers
+   public static get managerList(): string {
+    return this.core + '/web/managers/manager-list';
+  }
+
   public static get userLogsList(): string {
     return this.core + '/web/users-logs/activity';
   }

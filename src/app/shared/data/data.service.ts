@@ -123,7 +123,7 @@ export class DataService {
           icon: 'users',
           hasSubRoute: false,
           showSubRoute: false,
-          base1: 'membership',  
+          base1: 'asm',  
           route: routes.asmList,
         },
         {
@@ -132,8 +132,17 @@ export class DataService {
           icon: 'users',
           hasSubRoute: false,
           showSubRoute: false,
-          base1: 'Superviseurs', 
+          base1: 'superviseurs', 
           route: routes.supList,
+        },
+        {
+          menuValue: 'Managers',
+          base: 'expense',
+          icon: 'users',
+          hasSubRoute: false,
+          showSubRoute: false,
+          base1: 'managers', 
+          route: routes.managerList,
         },
         {
           menuValue: 'Activity Users',

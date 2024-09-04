@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { PaginationService, pageSelection, tablePageSize } from '../../../shared/custom-pagination/pagination.service';
 import { Router } from '@angular/router';
 import { Sort } from '@angular/material/sort';
-import { routes } from '../../../shared/routes/routes'; 
+import { routes } from '../../../shared/routes/routes';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserModel } from '../../../auth/models/user.model';
 import { AuthService } from '../../../auth/auth.service';
@@ -36,6 +36,12 @@ export class AreaListComponent implements OnInit {
   bsValue = new Date();
   bsRangeValue!: Date[];
   maxDate = new Date();
+
+  idItem!: number;
+  dataItem!: IArea; // Single data
+
+
+
   constructor(
     private pagination: PaginationService,
     private router: Router,
@@ -45,7 +51,7 @@ export class AreaListComponent implements OnInit {
     private provinceService: ProvinceService,
     private supService: SupService,
     private toastr: ToastrService
-  ) { 
+  ) {
   }
 
   selectedValue1: any[] | undefined;
@@ -68,9 +74,7 @@ export class AreaListComponent implements OnInit {
   provinceList: IProvince[] = [];
   supList: ISup[] = [];
 
-  
-  
-   
+
   ngOnInit() {
     this.authService.user().subscribe({
       next: (user) => {
@@ -89,12 +93,15 @@ export class AreaListComponent implements OnInit {
     });
 
     this.formGroup = this._formBuilder.group({
-      name: ['', Validators.required], 
+      name: ['', Validators.required],
+      province_id: ['', Validators.required],
+      sup_id: ['', Validators.required],
     });
 
     this.areaService.refreshDataList$.subscribe(() => {
       this.areaService.getAll().subscribe((apiRes: apiResultFormat) => {
-        this.actualData = apiRes.data; 
+        this.actualData = apiRes.data;
+        this.totalUser = apiRes.meta.total;
         this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
           if (this.router.url == this.routes.area) {
             this.getTableData({ skip: res.skip, limit: res.limit });
@@ -102,18 +109,18 @@ export class AreaListComponent implements OnInit {
           }
         });
       });
-    }); 
+    });
     this.areaService.getAll().subscribe((apiRes: apiResultFormat) => {
-      this.actualData = apiRes.data; 
+      this.actualData = apiRes.data;
       this.totalUser = apiRes.meta.total;
       this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-        if (this.router.url == this.routes.provinceList) {
+        if (this.router.url == this.routes.area) {
           this.getTableData({ skip: res.skip, limit: res.limit });
           this.pageSize = res.pageSize;
         }
       });
     });
-    
+
     this.maxDate.setDate(this.maxDate.getDate() + 7);
     this.bsRangeValue = [this.bsValue, this.maxDate];
 
@@ -191,21 +198,23 @@ export class AreaListComponent implements OnInit {
     }
   }
   initChecked = false;
- 
- 
+
+
   onSubmit() {
     try {
       if (this.formGroup.valid) {
         this.isLoading = true;
-        var body = { 
-          name: this.formGroup.value.name, 
+        var body = {
+          name: this.formGroup.value.name,
+          province_id: parseInt(this.formGroup.value.province_id),
+          sup_id: parseInt(this.formGroup.value.sup_id),
           signature: this.currentUser.fullname,
         };
         this.areaService.create(body).subscribe({
           next: (res) => {
             this.isLoading = false;
             this.formGroup.reset();
-            this.toastr.success('Ajouter avec succès!', 'Success!'); 
+            this.toastr.success('Ajouter avec succès!', 'Success!');
           },
           error: (err) => {
             this.isLoading = false;
@@ -218,5 +227,73 @@ export class AreaListComponent implements OnInit {
       this.isLoading = false;
       console.log(error);
     }
-  } 
+  }
+
+  onSubmitUpdate() {
+    try {
+      this.isLoading = true;
+      var body = {
+        name: this.formGroup.value.name,
+        province_id: parseInt(this.formGroup.value.province_id),
+        sup_id: parseInt(this.formGroup.value.sup_id),
+        signature: this.currentUser.fullname,
+      };
+      this.areaService.update(this.idItem, body)
+        .subscribe({
+          next: () => {
+            this.formGroup.reset();
+            this.toastr.success('Modification enregistré!', 'Success!');
+            this.isLoading = false;
+          },
+          error: err => {
+            console.log(err);
+            this.toastr.error('Une erreur s\'est produite!', 'Oupss!');
+            this.isLoading = false;
+          }
+        });
+    } catch (error) {
+      this.isLoading = false;
+      console.log(error);
+    }
+  }
+
+  findValue(value: string) {
+    this.actualData.forEach(item => {
+      if (item.name === value) {
+        this.idItem = item.ID;
+        if (this.idItem) {
+          this.areaService.get(this.idItem).subscribe(item => {
+            this.dataItem = item.data;
+            this.formGroup.patchValue({
+              name: this.dataItem.name,
+              province_id: this.dataItem.province_id, 
+              sup_id: this.dataItem.sup_id, 
+            });
+          }
+          );
+        }
+      }
+    });
+  }
+
+
+
+  delete(): void {
+    this.areaService
+      .delete(this.idItem)
+      .subscribe({
+        next: () => {
+          this.toastr.info('Supprimé avec succès!', 'Success!');
+        },
+        error: err => {
+          this.toastr.error('Une erreur s\'est produite!', 'Oupss!');
+          console.log(err);
+        }
+      }
+      );
+  }
+
+  compareFn(c1: IProvince, c2: IProvince): boolean {
+    return c1 && c2 ? c1.ID === c2.ID : c1 === c2;
+  }
 }
