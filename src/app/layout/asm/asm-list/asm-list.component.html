@@ -1,0 +1,313 @@
+<!-- Page Wrapper -->
+<div class="page-wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div class="row align-items-center">
+                        <div class="col-4">
+                            <h4 class="page-title">
+                                ASM<span class="count-title">{{totalUser}}</span>
+                            </h4>
+                        </div>
+                        <div class="col-8 text-end">
+                            <div class="head-icons">
+                                <a [routerLink]="routes.contractList" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    data-bs-original-title="Refresh" matTooltip="Refresh">
+                                    <i class="ti ti-refresh-dot"></i>
+                                </a>
+                                <app-collapse-header></app-collapse-header>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Page Header -->
+
+                <div class="card">
+                    <div class="card-header">
+                        <!-- Search -->
+                        <div class="row align-items-center">
+                            <div class="col-sm-4">
+                                <div class="icon-form mb-3 mb-sm-0">
+                                    <span class="form-icon"><i class="ti ti-search"></i></span>
+                                    <input type="text" class="form-control" placeholder="Search">
+                                </div>
+                            </div>
+                            <div class="col-sm-8">
+                                <div class="d-flex align-items-center flex-wrap row-gap-2 justify-content-sm-end">
+                                    <div class="dropdown me-2">
+                                        <a href="javascript:void(0);" class="dropdown-toggle"
+                                            data-bs-toggle="dropdown"><i
+                                                class="ti ti-package-export me-2"></i>Export</a>
+                                        <div class="dropdown-menu  dropdown-menu-end">
+                                            <ul>
+                                                <li>
+                                                    <a href="javascript:void(0);" class="dropdown-item"><i
+                                                            class="ti ti-file-type-pdf text-danger me-1"></i>Export as
+                                                        PDF</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0);" class="dropdown-item"><i
+                                                            class="ti ti-file-type-xls text-green me-1"></i>Export as
+                                                        Excel </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="offcanvas"
+                                        data-bs-target="#offcanvas_add">
+                                        <i class="ti ti-square-rounded-plus me-2"></i>
+                                        Add New ASM
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Search -->
+                    </div>
+                    <div class="card-body">
+                        <!-- Projects List -->
+                        <div class="table-responsive custom-table">
+                            <table matSort (matSortChange)="sortData($event)" class="table" id="contracts-list">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th mat-sort-header="name">Name</th>
+                                        <th mat-sort-header="province">Province</th>
+                                        <th mat-sort-header="superviseurs">Superviseurs</th>
+                                        <th   mat-sort-header="action">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (data of tableData; track data; let i = $index) {
+                                    <tr class="odd">
+                                        <td>
+                                            <a href="javascript:void(0);" class="add-popups">{{ data.name }}</a>
+                                        </td>
+                                        <td>
+                                            @if (data.province_id) {
+                                            <app-province-user [province_id]="data.province_id"></app-province-user>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (data.ID) {
+                                                <app-asm-sup-count [id]="data.ID"></app-asm-sup-count>
+                                            }  
+                                        </td>
+                                        <td>
+                                            <div class="dropdown table-action">
+                                                <a href="javascript:void(0);" class="action-icon"
+                                                    data-bs-toggle="dropdown" aria-expanded="false"><i
+                                                        class="fa fa-ellipsis-v"></i></a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+
+                                                    <a class="dropdown-item" href="javascript:void(0);"
+                                                        (click)="findValue(data.name)"
+                                                        data-bs-toggle="offcanvas" data-bs-target="#offcanvas_edit">
+                                                        <i class="ti ti-edit text-blue"></i> 
+                                                        Edit 
+                                                    </a>
+ 
+                                                    <a class="dropdown-item" href="javascript:void(0);"
+                                                        data-bs-toggle="modal" (click)="findValue(data.name)"
+                                                        data-bs-target="#delete_contact"><i
+                                                            class="ti ti-trash text-danger"></i>
+                                                        Delete 
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <app-custom-pagination></app-custom-pagination>
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <div class="datatable-length"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="datatable-paginate"></div>
+                            </div>
+                        </div>
+                        <!-- /Projects List -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Page Wrapper -->
+<!-- Add New Contracts -->
+<div class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_add">
+
+    <div class="offcanvas-header border-bottom">
+        <h4>Add New ASM</h4>
+        <button type="button"
+            class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+            data-bs-dismiss="offcanvas" aria-label="Close">
+            <i class="ti ti-x"></i>
+        </button>
+    </div>
+    <div class="offcanvas-body">
+        <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+            <div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="text">Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" formControlName="name" required />
+                            <mat-error *ngIf="formGroup.controls['name'].hasError('required')">
+                                Ce champs est obligatoire
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label class="col-form-label" for="location">Province <span class="text-danger">*</span></label>
+                        <mat-select class="select custom-mat-select" formControlName="province_id"
+                            placeholder="Choose province">
+                            @for (item of provinceList; track item) {
+                            <mat-option value="{{item.ID}}">{{item.name}}</mat-option>
+                            }
+                        </mat-select>
+                        <mat-error *ngIf="formGroup.controls['province_id'].hasError('required')">
+                            Ce champs est obligatoire
+                        </mat-error>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex align-items-center justify-content-end">
+                <button type="button" data-bs-dismiss="offcanvas" class="btn btn-light me-2">Cancel</button>
+                @if (isLoading) {
+                <button disabled class="btn btn-primary">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </button>
+                }
+                @if (!isLoading) {
+                <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="offcanvas"
+                    data-bs-target="#create_success">Create</button>
+                }
+            </div>
+        </form>
+    </div>
+
+</div>
+<!-- /Add New Contracts -->
+
+
+<!-- Edit Contracts -->
+<div class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_edit">
+
+    <div class="offcanvas-header border-bottom">
+        <h4>Edit ASM</h4>
+        <button type="button"
+            class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
+            data-bs-dismiss="offcanvas" aria-label="Close">
+            <i class="ti ti-x"></i>
+        </button>
+    </div>
+    <div class="offcanvas-body">
+        <form [formGroup]="formGroup" (ngSubmit)="onSubmitUpdate()">
+            <div>
+                <div class="row">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="col-form-label" for="text">Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" formControlName="name" required />
+                                <mat-error *ngIf="formGroup.controls['name'].hasError('required')">
+                                    Ce champs est obligatoire
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="location">Province <span class="text-danger">*</span></label>
+                            <mat-select [compareWith]="compareFn" class="select custom-mat-select" formControlName="province_id"
+                                placeholder="Choose province">
+                                @for (item of provinceList; track item) {
+                                <mat-option value="{{item.ID}}">{{item.name}}</mat-option>
+                                }
+                            </mat-select>
+                            <mat-error *ngIf="formGroup.controls['province_id'].hasError('required')">
+                                Ce champs est obligatoire
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex align-items-center justify-content-end">
+                <button type="button" data-bs-dismiss="offcanvas" class="btn btn-light me-2">Cancel</button>
+                @if (isLoading) {
+                    <button disabled class="btn btn-primary">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </button>
+                    }
+                    @if (!isLoading) {
+                        <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="offcanvas"
+                            data-bs-target="#create_success">Save Changes</button>
+                        } 
+            </div>
+        </form>
+    </div>
+
+</div>
+<!-- /Edit Contracts -->
+
+<!-- Delete User -->
+<div class="modal fade" id="delete_contact" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="text-center">
+            <div class="avatar avatar-xl bg-danger-light rounded-circle mb-3">
+              <i class="ti ti-trash-x fs-36 text-danger"></i>
+            </div>
+            <h4 class="mb-2">Remove item?</h4>
+            <p class="mb-0">Are you sure you want to remove it</p>
+            <div class="d-flex align-items-center justify-content-center mt-4">
+              <a href="javascript:void(0);" class="btn btn-light me-2" data-bs-dismiss="modal">Cancel</a>
+              <button (click)="delete()" class="btn btn-danger" data-bs-dismiss="modal">
+                Yes, Delete it 
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /Delete User -->
+<!-- /Delete Contracts -->
+<!-- Create Contracts -->
+<!-- <div class="modal custom-modal fade" id="create_success" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-0 m-0 justify-content-end">
+          <button  class="btn-close" data-bs-dismiss="modal" aria-label="Close">	
+            <i class="ti ti-x"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="success-message text-center">
+            <div class="success-popup-icon bg-light-blue">
+              <i class="ti ti-atom-2"></i>
+            </div>
+            <h3>Contracts Created Successfully!!!</h3>
+            <p>View the details of contracts, created</p>
+            <div class="col-lg-12 text-center modal-btn">
+              <a href="javascript:void(0);" class="btn btn-light" data-bs-dismiss="modal">Cancel</a>
+              <a href="javascript:void(0);" class="btn btn-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+<!-- /Create Contracts -->

@@ -1,25 +1,33 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SidebarService } from '../../../shared/sidebar/sidebar.service';
 import { CommonService } from '../../../shared/common/common.service';
 import { routes } from '../../../shared/routes/routes';
 import { SettingsService } from '../../../shared/settings/settings.service';
+import { Auth } from '../../../auth/classes/auth';
+import { UserModel } from '../../../auth/models/user.model';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   base = '';
   page = '';
   last = '';
   themeMode = 'light_mode';
   public miniSidebar = false;
   public routes = routes;
+
+  currentUser!: UserModel; 
+
+
   constructor(
     private common: CommonService,
     private sidebar: SidebarService,
-    private settings: SettingsService
+    private settings: SettingsService,
+    private authService: AuthService,
   ) {
     this.common.base.subscribe((base: string) => {
       this.base = base;
@@ -42,6 +50,20 @@ export class HeaderComponent {
     });
     
   }
+
+  ngOnInit(): void { 
+    Auth.userEmitter.subscribe(
+        user => {
+          this.currentUser = user; 
+        }
+    );
+}
+
+
+logout() {
+  this.authService.logout();
+  this.routes.login
+}
   
 
   public toggleSidebar(): void {

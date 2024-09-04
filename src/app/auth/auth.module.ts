@@ -3,18 +3,20 @@ import { CommonModule } from '@angular/common';
 
 import { AuthRoutingModule } from './auth-routing.module';
 import { LoginComponent } from './login/login.component';
-import { AuthComponent } from './auth.component';
-import { SharedModule } from 'primeng/api';
+import { AuthComponent } from './auth.component'; 
+import { RegisterComponent } from './register/register.component';
+import { SharedModule } from '../shared/shared.module'; 
 
 
 @NgModule({
   declarations: [
     LoginComponent,
-    AuthComponent
+    AuthComponent,
+    RegisterComponent, 
   ],
   imports: [
     CommonModule,
-    AuthRoutingModule,
+    AuthRoutingModule, 
     SharedModule,
   ]
 })

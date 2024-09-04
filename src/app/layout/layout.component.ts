@@ -12,6 +12,8 @@ import { DataService } from '../shared/data/data.service';
 import { SettingsService } from '../shared/settings/settings.service';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from '../auth/auth.service';
+import { Auth } from '../auth/classes/auth';
 
 @Component({
   selector: 'app-layout',
@@ -42,7 +44,8 @@ export class LayoutComponent implements OnInit {
     private renderer: Renderer2,
     private titleService: Title,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private authService: AuthService,
   ) {
     this.sidebar.toggleMobileSideBar.subscribe((res: string) => {
       if (res == 'true' || res == 'true') {
@@ -126,10 +129,7 @@ export class LayoutComponent implements OnInit {
       if (event instanceof NavigationStart) {
         const url = event.url;
         if (
-          url.includes('mspos-dashboard') ||
-          url.includes('deals-dashboard') ||
-          url.includes('lead-dashboard') ||
-          url.includes('project-dashboard')
+          url.includes('mspos-dashboard') 
         ) {
           this.showPreloader = true;
           setTimeout(() => {
@@ -139,6 +139,13 @@ export class LayoutComponent implements OnInit {
       }
     });
     
+    this.authService.user().subscribe({
+      next: (user) => Auth.userEmitter.emit(user),
+      error: (error) => {
+        this.router.navigate(['/auth/login']);
+        console.log(error);
+      }
+    });
    
   }
 

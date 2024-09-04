@@ -6,6 +6,8 @@ import {  NavigationStart, Router, Event as RouterEvent } from '@angular/router'
 import { SidebarService } from '../../../shared/sidebar/sidebar.service';
 import { DataService } from '../../../shared/data/data.service';
 import { CommonService } from '../../../shared/common/common.service';
+import { UserModel } from '../../../auth/models/user.model';
+import { Auth } from '../../../auth/classes/auth';
 
 
 @Component({
@@ -20,6 +22,8 @@ export class SidebarComponent  {
   last = '';
 
   currentUrl = '';
+
+  currentUser!: UserModel;
 
    
   public side_bar_data: any[] = [];
@@ -37,9 +41,6 @@ export class SidebarComponent  {
         this.currentUrl = event.url;
         this.base = splitVal[1];
         this.page = splitVal[2];
-
-        console.log("splitVal", splitVal)
-        console.log("currentUrl", this.currentUrl)
       }
     });
     this.getRoutes(this.router);
@@ -54,6 +55,14 @@ export class SidebarComponent  {
       this.last = res;
     });
   }
+
+  ngOnInit(): void { 
+    Auth.userEmitter.subscribe(
+        user => {
+          this.currentUser = user; 
+        }
+    );
+}
 
   private getRoutes(route: url): void {
     const splitVal = route.url.split('/');

@@ -5,6 +5,12 @@ export interface pageSelection {
 export interface apiResultFormat {
   data: [];
   totalData: number;
+  meta: metaFormat;
+}
+export interface metaFormat {
+  total: number;
+  page: number;
+  last_page: number;
 }
 export interface contactList {
   isSelected: boolean;

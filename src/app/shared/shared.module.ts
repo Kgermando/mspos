@@ -30,10 +30,13 @@ import {NgxMatTimepickerModule} from 'ngx-mat-timepicker';
 import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 import { DateRangePickerModule } from './common/date-range-picker/date-range-picker.module';
 import { CollapseHeaderModule } from './common/collapse-header/collapse-header.module';
+import { ProvinceUserComponent } from './components/province-user/province-user.component';
 
 
 
-@NgModule({ declarations: [],
+@NgModule({ declarations: [
+    ProvinceUserComponent,
+  ],
     exports: [
         CommonModule,
         NgScrollbarModule,
@@ -64,6 +67,8 @@ import { CollapseHeaderModule } from './common/collapse-header/collapse-header.m
         DropdownModule,
         TimepickerModule,
         NgxMatTimepickerModule,
+
+        ProvinceUserComponent,
     ], imports: [
         CommonModule,
         NgScrollbarModule,

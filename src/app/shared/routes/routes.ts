@@ -24,7 +24,7 @@ export class routes {
   public static get emailVerification(): string {
     return this.baseUrl + '/auth/email-verification';
   }
-  
+
   public static get lockScreen(): string {
     return this.baseUrl + '/auth/lock-screen';
   }
@@ -38,7 +38,7 @@ export class routes {
   }
   public static get msposDashboard(): string {
     return this.dashboard + '/mspos-dashboard';
-  } 
+  }
 
   // Pos
   public static get pos(): string {
@@ -57,6 +57,37 @@ export class routes {
     return this.user + '/user-list';
   }
 
+  // Provinces
+  public static get province(): string {
+    return this.core + '/web/provinces';
+  }
+  public static get provinceList(): string {
+    return this.province + '/province-list';
+  }
+
+  // Area
+  public static get area(): string {
+    return this.core + '/web/ares/ares-list';
+  }
+
+  // Pos
+  public static get posVente(): string {
+    return this.core + '/web/vente/pos-list';
+  }
+
+  // Supervisor
+  public static get supList(): string {
+    return this.core + '/web/supervisors/sup-list';
+  }
+
+  // ASM
+  public static get asmList(): string {
+    return this.core + '/web/asm/asm-list';
+  }
+
+  public static get userLogsList(): string {
+    return this.core + '/web/users-logs/activity';
+  }
 
 
 
@@ -71,11 +102,6 @@ export class routes {
 
 
 
-
-
-
-  
-  
   public static get application(): string {
     return this.core + '/application';
   }
@@ -142,7 +168,7 @@ export class routes {
   public static get pipeline(): string {
     return this.core + '/pipeline';
   }
- 
+
   public static get dealsDashboard(): string {
     return this.dashboard + '/deals-dashboard';
   }
@@ -592,7 +618,7 @@ export class routes {
   public static get states(): string {
     return this.location + '/states';
   }
-  
+
   public static get crmSetting(): string {
     return this.baseUrl + '/crmsetting';
   }
@@ -685,7 +711,7 @@ export class routes {
   public static get testimonials(): string {
     return this.content + '/testimonials';
   }
- 
+
   public static get activityCalls(): string {
     return this.activities + '/activity-calls';
   }
@@ -714,11 +740,11 @@ export class routes {
   public static get twoStepVerfication(): string {
     return this.baseUrl + '/two-step-verification';
   }
- 
+
   public static get resetPasseword(): string {
     return this.baseUrl + '/reset-password';
   }
- 
+
   public static get companiesReports(): string {
     return this.reports + '/companies-reports';
   }
@@ -728,7 +754,7 @@ export class routes {
   public static get allTask(): string {
     return this.task + '/all-task';
   }
-  
+
   public static get companiesGrid(): string {
     return this.companies + '/companies-grid';
   }
@@ -741,10 +767,10 @@ export class routes {
   public static get success(): string {
     return this.baseUrl + '/success';
   }
- 
- 
-  
- 
+
+
+
+
   public static get errorPages(): string {
     return this.baseUrl + '/error-pages';
   }
@@ -790,6 +816,6 @@ export class routes {
   public static get invoiceGrid(): string {
     return this.invoice + '/invoice-grid';
   }
- 
- 
+
+
 }

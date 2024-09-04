@@ -45,6 +45,7 @@
     "ngx-material-timepicker": "^13.1.1",
     "ngx-owl-carousel-o": "^18.0.0",
     "ngx-scrollbar": "^14.0.0-beta.6",
+    "ngx-toastr": "^19.0.0",
     "npm": "^10.8.1",
     "plyr": "^3.7.8",
     "primeng": "^17.4.0",
