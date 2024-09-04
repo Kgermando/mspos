@@ -12,7 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { IAsm } from '../models/asm.model';
 import { AsmService } from '../asm.service'; 
 import { IProvince } from '../../province/models/province.model';
-import { ProvinceService } from '../../province/province.service';
+import { ProvinceService } from '../../province/province.service'; 
 
 @Component({
   selector: 'app-asm-list',
@@ -262,8 +262,7 @@ export class AsmListComponent implements OnInit {
   findValue(value: string) { 
     this.actualData.forEach(item => { 
       if (item.name === value) {
-        this.idItem = item.ID; 
-        console.log("idItem", this.idItem)
+        this.idItem = item.ID;
         if (this.idItem) {
           this.asmService.get(this.idItem).subscribe(item => { 
             this.dataItem = item.data;
