@@ -275,8 +275,6 @@ export class AsmListComponent implements OnInit {
     });
   }
 
- 
-
   delete(): void {
     this.asmService
     .delete(this.idItem)
