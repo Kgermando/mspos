@@ -101,11 +101,13 @@
               <table matSort (matSortChange)="sortData($event)" class="table" id="manage-users-list">
                 <thead class="thead-light">
                   <tr>
-                    <th mat-sort-header="customer_name">Fullname</th>
+                    <th mat-sort-header="fullname">Fullname</th>
                     <th mat-sort-header="email">Email</th>
                     <th mat-sort-header="phone">Phone</th>
                     <th mat-sort-header="province">Province</th>
-                    <th mat-sort-header="created">Created</th>
+                    <th mat-sort-header="area">Area</th>
+                    <th mat-sort-header="sup">Sup</th>
+                    <th mat-sort-header="pos">Pos</th>
                     <th mat-sort-header="status">Status</th>
                     <th class="text-end">Action</th>
                   </tr>
@@ -131,16 +133,42 @@
                     <td>{{ data.email }}</td>
                     <td>{{ data.phone }}</td>
                     <td>
-                      @if (data.province_id) {
-                      <app-province-user [province_id]="data.province_id"></app-province-user>
+                      @if (data.province_id > 0) {
+                        <app-province-user [province_id]="data.province_id"></app-province-user>
+                        }
+                        @if (data.province_id == 0) {
+                          --
                       }
                     </td>
-                    <td>{{ data.CreatedAt | date: 'dd/MM/yyyy' }}</td>
+                    <td>
+                      @if (data.area_id > 0) { 
+                        <app-user-area [id]="data.area_id"></app-user-area>
+                      }
+                      @if (data.area_id == 0) {
+                        --
+                      }
+                    </td>
+                    <td>
+                      @if (data.sup_id > 0) { 
+                        <app-user-sup [id]="data.sup_id"></app-user-sup>
+                      }
+                      @if (data.sup_id == 0) {
+                        --
+                      }
+                    </td>
+                    <td>
+                      @if (data.pos_id > 0) { 
+                        <app-user-pos [id]="data.pos_id"></app-user-pos>
+                      }
+                      @if (data.pos_id == 0) {
+                        --
+                      }
+                    </td>
                     <td>
                       <span class="badge badge-pill badge-status" [ngClass]="{
-                            'bg-success': (data.status) ? 'Active' : '',
-                            'bg-danger': (data.status) ? '' : 'Inactive'
-                          }">
+                              'bg-success': (data.status) ? 'Active' : '',
+                              'bg-danger': (data.status) ? '' : 'Inactive'
+                            }">
                         @if (data.status) {
                         Active
                         } @else {
@@ -153,11 +181,15 @@
                         <a href="javascript:void(0);" class="action-icon" data-bs-toggle="dropdown"
                           aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                         <div class="dropdown-menu dropdown-menu-right">
-                          <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="offcanvas"
-                            data-bs-target="#offcanvas_edit">
-                            <i class="ti ti-edit text-blue"></i> Edit</a>
+
+                          <a class="dropdown-item" href="javascript:void(0);" (click)="findValue(data.fullname)"
+                            data-bs-toggle="offcanvas" data-bs-target="#offcanvas_edit">
+                            <i class="ti ti-edit text-blue"></i>
+                            Edit
+                          </a>
+
                           <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal"
-                            (click)="findValue(data.ID)" data-bs-target="#delete_contact"><i
+                            (click)="findValue(data.fullname)" data-bs-target="#delete_contact"><i
                               class="ti ti-trash text-danger"></i>
                             Delete
                           </a>
@@ -198,138 +230,214 @@
     </button>
   </div>
   <div class="offcanvas-body">
-    <form [formGroup]="formGroupAdd" (ngSubmit)="onSubmitAdd()">
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
       <div>
-        <!-- Basic Info -->
-        <div>
-          <div class="row">
-            <!-- <div class="col-md-12">
-                <div class="profile-pic-upload">
-                  <div class="profile-pic">
-                    <span><i class="ti ti-photo"></i></span>
-                  </div>
-                  <div class="upload-content">
-                    <div class="upload-btn">
-                      <input type="file" />
-                      <span> <i class="ti ti-file-broken"></i>Upload File </span>
-                    </div>
-                    <p>JPG, GIF or PNG. Max size of 800K</p>
-                  </div>
-                </div>
-              </div> -->
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label class="col-form-label" for="user">Fullname <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" formControlName="fullname" required />
-                <mat-error *ngIf="formGroupAdd.controls['fullname'].hasError('required')">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="col-form-label" for="user">Fullname <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" formControlName="fullname" required />
+              <mat-error *ngIf="formGroup.controls['fullname'].hasError('required')">
+                Ce champs est obligatoire
+              </mat-error>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="col-form-label" for="location">Title <span class="text-danger">*</span></label>
+              <mat-select class="select custom-mat-select" placeholder="Choose title" 
+                    formControlName="title" required >
+                @for (item of isTitleList; track item) {
+                <mat-option value="{{item}}">{{item}}</mat-option>
+                }
+              </mat-select>
+              <mat-error *ngIf="formGroup.controls['title'].hasError('required')">
+                Ce champs est obligatoire
+              </mat-error>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <label class="col-form-label" for="email">Email <span class="text-danger">*</span></label>
+              </div>
+              <input type="text" class="form-control" formControlName="email" required />
+              <mat-error *ngIf="formGroup.controls['email'].hasError('required')">
+                Ce champs est obligatoire
+              </mat-error>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="col-form-label" for="phone">Phone
+                <span class="text-danger">*</span>
+              </label>
+              <input type="text" class="form-control" formControlName="phone" required />
+              <mat-error *ngIf="formGroup.controls['phone'].hasError('required')">
+                Ce champs est obligatoire
+              </mat-error>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="col-form-label" for="Password">Password <span class="text-danger">*</span></label>
+              <div class="icon-form-end">
+                <span class="form-icon" (click)="togglePassword(1)" tabindex="0"><i class="ti"
+                    [ngClass]="password[1] ? 'ti-eye' : 'ti-eye-off'"></i></span>
+                <input [type]="password[1] ? 'text' : 'password'" class="form-control" formControlName="password"
+                  required />
+                <mat-error *ngIf="formGroup.controls['password'].hasError('required')">
                   Ce champs est obligatoire
                 </mat-error>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label class="col-form-label" for="location">Title <span class="text-danger">*</span></label>
-                <mat-select class="select custom-mat-select" placeholder="Choose title">
-                  @for (item of isTitleList; track item) {
-                  <mat-option value="{{item}}">{{item}}</mat-option>
-                  }
-                </mat-select>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="mb-3">
-                <div class="d-flex justify-content-between align-items-center">
-                  <label class="col-form-label" for="email">Email <span class="text-danger">*</span></label>
-                </div>
-                <input type="text" class="form-control" formControlName="email" required />
-                <mat-error *ngIf="formGroupAdd.controls['email'].hasError('required')">
-                  Ce champs est obligatoire
-                </mat-error>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label class="col-form-label" for="phone">Phone
-                  <span class="text-danger">*</span>
-                </label>
-                <input type="text" class="form-control" formControlName="phone" required />
-                <mat-error *ngIf="formGroupAdd.controls['phone'].hasError('required')">
-                  Ce champs est obligatoire
-                </mat-error>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label class="col-form-label" for="Password">Password <span class="text-danger">*</span></label>
-                <div class="icon-form-end">
-                  <span class="form-icon" (click)="togglePassword(1)" (keydown.enter)="selectAll(initChecked)"
-                    tabindex="0"><i class="ti" [ngClass]="password[1] ? 'ti-eye' : 'ti-eye-off'"></i></span>
-                  <input [type]="password[1] ? 'text' : 'password'" class="form-control" formControlName="password"
-                    required />
-                  <mat-error *ngIf="formGroupAdd.controls['password'].hasError('required')">
-                    Ce champs est obligatoire
-                  </mat-error>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label class="col-form-label" for="text">Repeat Password <span class="text-danger">*</span></label>
-                <div class="icon-form-end">
-                  <span class="form-icon" (click)="togglePassword(2)" (keydown.enter)="togglePassword(2)"
-                    tabindex="0"><i class="ti" [ngClass]="password[2] ? 'ti-eye' : 'ti-eye-off'"></i></span>
-                  <input [type]="password[2] ? 'text' : 'password'" class="form-control"
-                    formControlName="password_confirm" required />
-                  <mat-error *ngIf="formGroupAdd.controls['password_confirm'].hasError('required')">
-                    Ce champs est obligatoire
-                  </mat-error>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label class="col-form-label" for="location">Area <span class="text-danger">*</span></label>
-                <mat-select class="select custom-mat-select" placeholder="Choose">
-                  <mat-option value="Germany">Germany</mat-option>
-                  <mat-option value="USA">USA</mat-option>
-                  <mat-option value="Canada">Canada</mat-option>
-                  <mat-option value="India">India</mat-option>
-                  <mat-option value="China">China</mat-option>
-                </mat-select>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="radio-wrap">
-                <label class="col-form-label" for="reason">Status</label>
-                <div class="d-flex align-items-center">
-                  <div class="me-2">
-                    <input type="radio" class="status-radio" id="active1" name="status" checked="" />
-                    <label for="active1">Active</label>
-                  </div>
-                  <div>
-                    <input type="radio" class="status-radio" id="inactive1" name="status" />
-                    <label for="inactive1">Inactive</label>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="col-form-label" for="text">Repeat Password <span class="text-danger">*</span></label>
+              <div class="icon-form-end">
+                <span class="form-icon" (click)="togglePassword(2)" (keydown.enter)="togglePassword(2)"
+                  tabindex="0"><i class="ti" [ngClass]="password[2] ? 'ti-eye' : 'ti-eye-off'"></i></span>
+                <input [type]="password[2] ? 'text' : 'password'" class="form-control"
+                  formControlName="password_confirm" required />
+                <mat-error *ngIf="formGroup.controls['password_confirm'].hasError('required')">
+                  Ce champs est obligatoire
+                </mat-error>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="col-form-label" for="permission">
+                Permission
+                <span class="text-danger">*</span>
+              </label>
+              <mat-select class="select custom-mat-select" formControlName="permission"
+                placeholder="Choose permission">
+                @for (item of permissionList; track item) {
+                <mat-option value="{{item.name}}">{{item.name}} => "{{item.desc}}"</mat-option>
+                }
+              </mat-select>
+              <mat-error *ngIf="formGroup.controls['permission'].hasError('required')">
+                Ce champs est obligatoire
+              </mat-error>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="mt-3 mb-3">
+              <label class="col-form-label" for="status">Status user <span class="text-danger">*</span></label>
+              <div class="status-toggle">
+                <input type="checkbox" id="status" class="check form-control" 
+                formControlName="status">
+                <label for="status" class="checktoggle"></label>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="mt-3 mb-3">
+              <label class="col-form-label" for="is_manager">Status manager
+                <span class="text-danger">*</span></label>
+              <div class="status-toggle">
+                <input type="checkbox" id="is_manager" class="check form-control" 
+                formControlName="is_manager"
+                  (change)="onChangeCheck($event)">
+                <label for="is_manager" class="checktoggle"></label>
+              </div>
+            </div>
+          </div>
+          @if (!isManager) {
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="col-form-label" for="location">Province <span class="text-danger">*</span></label>
+              <mat-select class="select custom-mat-select" formControlName="province_id" placeholder="Choose province"
+                (selectionChange)="onProvinceChange($event)">
+                @for (item of provinceList; track item) {
+                <mat-option value="{{item.ID}}">{{item.name}}</mat-option>
+                }
+              </mat-select>
+              <mat-error *ngIf="formGroup.controls['province_id'].hasError('required')">
+                Ce champs est obligatoire
+              </mat-error>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="col-form-label" for="area_id">
+                Area
+                <span class="text-danger">*</span>
+              </label>
+              <mat-select class="select custom-mat-select" formControlName="area_id" placeholder="Choose area"
+                (selectionChange)="onAreaChange($event)">
+                @for (item of areaListFilter; track item) {
+                <mat-option value="{{item.ID}}">{{item.name}}</mat-option>
+                }
+              </mat-select>
+              <mat-error *ngIf="formGroup.controls['area_id'].hasError('required')">
+                Ce champs est obligatoire
+              </mat-error>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="col-form-label" for="sup_id">
+                Superviseur
+                <span class="text-danger">*</span>
+              </label>
+              <mat-select class="select custom-mat-select" formControlName="sup_id" placeholder="Choose superviseur">
+                @for (item of supListFilter; track item) {
+                <mat-option value="{{item.ID}}">{{item.name}}</mat-option>
+                }
+              </mat-select>
+              <mat-error *ngIf="formGroup.controls['sup_id'].hasError('required')">
+                Ce champs est obligatoire
+              </mat-error>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="col-form-label" for="pos_id">
+                POS
+                <span class="text-danger">*</span>
+              </label>
+              <mat-select class="select custom-mat-select" formControlName="pos_id" placeholder="Choose pos">
+                @for (item of posListFilter; track item) {
+                <mat-option value="{{item.ID}}">{{item.name}}</mat-option>
+                }
+              </mat-select>
+              <mat-error *ngIf="formGroup.controls['pos_id'].hasError('required')">
+                Ce champs est obligatoire
+              </mat-error>
+            </div>
+          </div>
+          }
         </div>
-        <!-- /Basic Info -->
       </div>
       <div class="d-flex align-items-center justify-content-end">
         <a href="javascript:void(0);" class="btn btn-light me-2" data-bs-dismiss="offcanvas">Cancel</a>
-        <button type="submit" class="btn btn-primary">Create</button>
+        @if (isLoading) {
+        <button disabled class="btn btn-primary">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </button>
+        }
+        @if (!isLoading) {
+        <button type="submit" class="btn btn-primary"  
+          data-bs-target="#create_success">Create</button>
+        }
       </div>
     </form>
   </div>
 </div>
 <!-- /Add User -->
 
-<!-- Edit User -->
+
+
+<!-- Edit Contracts -->
 <div class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_edit">
+
   <div class="offcanvas-header border-bottom">
-    <h5 class="fw-semibold">Edit User</h5>
+    <h4>Edit manager</h4>
     <button type="button"
       class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
       data-bs-dismiss="offcanvas" aria-label="Close">
@@ -337,126 +445,174 @@
     </button>
   </div>
   <div class="offcanvas-body">
-    <form>
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmitUpdate()">
       <div>
-        <!-- Basic Info -->
-        <div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="profile-pic-upload">
-                <div class="profile-pic">
-                  <span><i class="ti ti-photo"></i></span>
-                </div>
-                <div class="upload-content">
-                  <div class="upload-btn">
-                    <input type="file" />
-                    <span> <i class="ti ti-file-broken"></i>Upload File </span>
-                  </div>
-                  <p>JPG, GIF or PNG. Max size of 800K</p>
-                </div>
-              </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="col-form-label" for="user">Fullname <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" formControlName="fullname" required />
             </div>
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label class="col-form-label" for="reason">
-                  Name <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" value="Darlee Robertson" />
-              </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="col-form-label" for="location">Title <span class="text-danger">*</span></label>
+              <mat-select class="select custom-mat-select" placeholder="Choose title" 
+                    formControlName="title" required >
+                @for (item of isTitleList; track item) {
+                <mat-option value="{{item}}">{{item}}</mat-option>
+                }
+              </mat-select> 
             </div>
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label class="col-form-label" for="text">User Name <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" value="Darlee Robertson" />
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <label class="col-form-label" for="email">Email <span class="text-danger">*</span></label>
               </div>
+              <input type="text" class="form-control" formControlName="email" required /> 
             </div>
-            <div class="col-md-6">
-              <div class="mb-3">
-                <div class="d-flex justify-content-between align-items-center">
-                  <label class="col-form-label" for="bill">Email <span class="text-danger">*</span></label>
-                  <div class="status-toggle small-toggle-btn d-flex align-items-center">
-                    <span class="me-2 label-text">Email Opt Out</span>
-                    <input type="checkbox" id="user1" class="check" checked="" />
-                    <label for="user1" class="checktoggle"></label>
-                  </div>
-                </div>
-                <input type="text" class="form-control" value="robertson@example.com" />
-              </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="col-form-label" for="phone">Phone
+                <span class="text-danger">*</span>
+              </label>
+              <input type="text" class="form-control" formControlName="phone" required />
             </div>
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label class="col-form-label" for="text">Role <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" value="Facility Manager" />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label class="col-form-label" for="text">Phone 1 <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" value="	+1 989757485" />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label class="col-form-label" for="reason">Phone 2</label>
-                <input type="text" class="form-control" value="	+1 989757485" />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label class="col-form-label" for="text">Password <span class="text-danger">*</span></label>
-                <div class="icon-form-end">
-                  <span class="form-icon"><i class="ti ti-eye-off"></i></span>
-                  <input type="password" class="form-control" value="****" />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label class="col-form-label" for="text">Repeat Password <span class="text-danger">*</span></label>
-                <div class="icon-form-end">
-                  <span class="form-icon"><i class="ti ti-eye-off"></i></span>
-                  <input type="password" class="form-control" value="****" />
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label class="col-form-label" for="text">Location <span class="text-danger">*</span></label>
-                <mat-select class="select custom-mat-select" placeholder="Choose">
-                  <mat-option value="Germany">Germany</mat-option>
-                  <mat-option value="USA">USA</mat-option>
-                  <mat-option value="Canada">Canada</mat-option>
-                  <mat-option value="India">India</mat-option>
-                  <mat-option value="China">China</mat-option>
-                </mat-select>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="radio-wrap">
-                <label class="col-form-label" for="reason">Status</label>
-                <div class="d-flex align-items-center">
-                  <div class="me-2">
-                    <input type="radio" class="status-radio" id="active1" name="status" checked="" />
-                    <label for="active1">Active</label>
-                  </div>
-                  <div>
-                    <input type="radio" class="status-radio" id="inactive1" name="status" />
-                    <label for="inactive1">Inactive</label>
-                  </div>
-                </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="col-form-label" for="Password">Password <span class="text-danger">*</span></label>
+              <div class="icon-form-end">
+                <span class="form-icon" (click)="togglePassword(1)" tabindex="0"><i class="ti"
+                    [ngClass]="password[1] ? 'ti-eye' : 'ti-eye-off'"></i></span>
+                <input [type]="password[1] ? 'text' : 'password'" class="form-control" formControlName="password"
+                  required /> 
               </div>
             </div>
           </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="col-form-label" for="text">Repeat Password <span class="text-danger">*</span></label>
+              <div class="icon-form-end">
+                <span class="form-icon" (click)="togglePassword(2)" (keydown.enter)="togglePassword(2)"
+                  tabindex="0"><i class="ti" [ngClass]="password[2] ? 'ti-eye' : 'ti-eye-off'"></i></span>
+                <input [type]="password[2] ? 'text' : 'password'" class="form-control"
+                  formControlName="password_confirm" required /> 
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="col-form-label" for="permission">
+                Permission
+                <span class="text-danger">*</span>
+              </label>
+              <mat-select class="select custom-mat-select" formControlName="permission"
+                placeholder="Choose permission">
+                @for (item of permissionList; track item) {
+                <mat-option value="{{item.name}}">{{item.name}} => "{{item.desc}}"</mat-option>
+                }
+              </mat-select> 
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="mt-3 mb-3">
+              <label class="col-form-label" for="status">Status user <span class="text-danger">*</span></label>
+              <div class="status-toggle">
+                <input type="checkbox" id="status" class="check form-control" 
+                formControlName="status">
+                <label for="status" class="checktoggle"></label>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="mt-3 mb-3">
+              <label class="col-form-label" for="is_manager">Status manager
+                <span class="text-danger">*</span></label>
+              <div class="status-toggle">
+                <input type="checkbox" id="is_manager" class="check form-control" 
+                formControlName="is_manager"
+                  (change)="onChangeCheck($event)">
+                <label for="is_manager" class="checktoggle"></label>
+              </div>
+            </div>
+          </div>
+          @if (!isManager) {
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="col-form-label" for="location">Province <span class="text-danger">*</span></label>
+              <mat-select class="select custom-mat-select" formControlName="province_id" placeholder="Choose province"
+                (selectionChange)="onProvinceChange($event)">
+                @for (item of provinceList; track item) {
+                <mat-option value="{{item.ID}}">{{item.name}}</mat-option>
+                }
+              </mat-select> 
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="col-form-label" for="area_id">
+                Area
+                <span class="text-danger">*</span>
+              </label>
+              <mat-select class="select custom-mat-select" formControlName="area_id" placeholder="Choose area"
+                (selectionChange)="onAreaChange($event)">
+                @for (item of areaListFilter; track item) {
+                <mat-option value="{{item.ID}}">{{item.name}}</mat-option>
+                }
+              </mat-select> 
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="col-form-label" for="sup_id">
+                Superviseur
+                <span class="text-danger">*</span>
+              </label>
+              <mat-select class="select custom-mat-select" formControlName="sup_id" placeholder="Choose superviseur">
+                @for (item of supListFilter; track item) {
+                <mat-option value="{{item.ID}}">{{item.name}}</mat-option>
+                }
+              </mat-select> 
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="col-form-label" for="pos_id">
+                POS
+                <span class="text-danger">*</span>
+              </label>
+              <mat-select class="select custom-mat-select" formControlName="pos_id" placeholder="Choose pos">
+                @for (item of posListFilter; track item) {
+                <mat-option value="{{item.ID}}">{{item.name}}</mat-option>
+                }
+              </mat-select> 
+            </div>
+          </div>
+          }
         </div>
-        <!-- /Basic Info -->
       </div>
       <div class="d-flex align-items-center justify-content-end">
-        <a href="javascript:void(0);" class="btn btn-light me-2" data-bs-dismiss="offcanvas">Cancel</a>
-        <button type="submit" class="btn btn-primary">Create</button>
+        <button type="button" data-bs-dismiss="offcanvas" class="btn btn-light me-2">Cancel</button>
+        @if (isLoading) {
+        <button disabled class="btn btn-primary">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </button>
+        }
+        @if (!isLoading) {
+        <button type="submit" class="btn btn-primary"   data-bs-dismiss="offcanvas"
+          data-bs-target="#create_success">Save Changes</button>
+        }
       </div>
     </form>
   </div>
+
 </div>
-<!-- /Edit User -->
+<!-- /Edit Contracts -->
 
 <!-- Delete User -->
 <div class="modal fade" id="delete_contact" role="dialog">
@@ -467,12 +623,12 @@
           <div class="avatar avatar-xl bg-danger-light rounded-circle mb-3">
             <i class="ti ti-trash-x fs-36 text-danger"></i>
           </div>
-          <h4 class="mb-2">Remove users?</h4>
+          <h4 class="mb-2">Remove item?</h4>
           <p class="mb-0">Are you sure you want to remove it</p>
           <div class="d-flex align-items-center justify-content-center mt-4">
             <a href="javascript:void(0);" class="btn btn-light me-2" data-bs-dismiss="modal">Cancel</a>
-            <button (click)="onDelete(deleteID)" class="btn btn-danger">
-              Yes, Delete it < {{ deleteID }}>
+            <button (click)="delete()" class="btn btn-danger" data-bs-dismiss="modal">
+              Yes, Delete it
             </button>
           </div>
         </div>
@@ -481,3 +637,4 @@
   </div>
 </div>
 <!-- /Delete User -->
+<!-- /Delete Contracts -->

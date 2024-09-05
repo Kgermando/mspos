@@ -28,6 +28,8 @@ export class PostformListComponent implements OnInit {
   bsValue = new Date();
   bsRangeValue!: Date[];
   maxDate = new Date();
+
+  
   constructor(
     private data: DataService,
     private pagination: PaginationService,

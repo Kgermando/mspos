@@ -10,7 +10,6 @@ import { UserModel } from '../../../auth/models/user.model';
 import { AuthService } from '../../../auth/auth.service';
 import { ToastrService } from 'ngx-toastr'; 
 import { IProvince } from '../../province/models/province.model';
-import { ProvinceService } from '../../province/province.service'; 
 import { ManagerService } from '../manager.service';
 import { IManager } from '../models/manager.model';
 
