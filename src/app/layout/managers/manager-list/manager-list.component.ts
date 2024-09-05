@@ -37,6 +37,13 @@ export class ManagerListComponent implements OnInit {
   idItem!: number;
   dataItem!: IManager; // Single data
 
+  formGroup!: FormGroup;
+  currentUser!: UserModel;
+  isLoading = false;
+
+  totalUser = 0;
+  
+
   constructor(
     private pagination: PaginationService,
     private router: Router,
@@ -59,13 +66,7 @@ export class ManagerListComponent implements OnInit {
   selectedDatas4: any[] | undefined;
 
 
-  formGroup!: FormGroup;
-  currentUser!: UserModel;
-  isLoading = false;
 
-  totalUser = 0;
-  provinceList: IProvince[] = [];
-  
    
   ngOnInit() {
     this.formGroup = this._formBuilder.group({

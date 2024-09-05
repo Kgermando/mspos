@@ -119,22 +119,22 @@ export class UserListComponent implements OnInit {
       is_manager: [''],
     }); 
 
+    this.provinceService.getAll().subscribe(res => {
+      this.provinceList = res.data;
+    });
+    this.areaService.getAll().subscribe(res => {
+      this.areaList = res.data;
+    });
+    this.supService.getAll().subscribe(res => {
+      this.supList = res.data;
+    });
+    this.posService.getAll().subscribe(res => {
+      this.posList = res.data;
+    });
+
     this.authService.user().subscribe({
       next: (user) => {
-        this.currentUser = user;
-        this.provinceService.getAll().subscribe(res => {
-          this.provinceList = res.data;
-        });
-        this.areaService.getAll().subscribe(res => {
-          this.areaList = res.data;
-        });
-        this.supService.getAll().subscribe(res => {
-          this.supList = res.data;
-        });
-        this.posService.getAll().subscribe(res => {
-          this.posList = res.data;
-        });
-
+        this.currentUser = user; 
         this.isLoadingData = true;
         this.usersService.refreshDataList$.subscribe(() => {
           this.usersService.getAll().subscribe((apiRes: apiResultFormat) => {

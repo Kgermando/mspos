@@ -71,8 +71,8 @@
                             <table matSort (matSortChange)="sortData($event)" class="table" id="contracts-list">
                                 <thead class="thead-light">
                                     <tr>
-                                        <th mat-sort-header="name">Name</th> 
-                                        <th   mat-sort-header="action">Action</th>
+                                        <th mat-sort-header="name">Name</th>
+                                        <th mat-sort-header="action">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -80,7 +80,7 @@
                                     <tr class="odd">
                                         <td>
                                             <a href="javascript:void(0);" class="add-popups">{{ data.name }}</a>
-                                        </td> 
+                                        </td>
                                         <td>
                                             <div class="dropdown table-action">
                                                 <a href="javascript:void(0);" class="action-icon"
@@ -89,17 +89,17 @@
                                                 <div class="dropdown-menu dropdown-menu-right">
 
                                                     <a class="dropdown-item" href="javascript:void(0);"
-                                                        (click)="findValue(data.name)"
-                                                        data-bs-toggle="offcanvas" data-bs-target="#offcanvas_edit">
-                                                        <i class="ti ti-edit text-blue"></i> 
-                                                        Edit 
+                                                        (click)="findValue(data.name)" data-bs-toggle="offcanvas"
+                                                        data-bs-target="#offcanvas_edit">
+                                                        <i class="ti ti-edit text-blue"></i>
+                                                        Edit
                                                     </a>
- 
+
                                                     <a class="dropdown-item" href="javascript:void(0);"
                                                         data-bs-toggle="modal" (click)="findValue(data.name)"
                                                         data-bs-target="#delete_contact"><i
                                                             class="ti ti-trash text-danger"></i>
-                                                        Delete 
+                                                        Delete
                                                     </a>
                                                 </div>
                                             </div>
@@ -150,7 +150,7 @@
                             </mat-error>
                         </div>
                     </div>
-                </div> 
+                </div>
             </div>
             <div class="d-flex align-items-center justify-content-end">
                 <button type="button" data-bs-dismiss="offcanvas" class="btn btn-light me-2">Cancel</button>
@@ -198,22 +198,22 @@
                                 </mat-error>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                 </div>
             </div>
             <div class="d-flex align-items-center justify-content-end">
                 <button type="button" data-bs-dismiss="offcanvas" class="btn btn-light me-2">Cancel</button>
                 @if (isLoading) {
-                    <button disabled class="btn btn-primary">
-                        <div class="spinner-border" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    </button>
-                    }
-                    @if (!isLoading) {
-                        <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="offcanvas"
-                            data-bs-target="#create_success">Save Changes</button>
-                        } 
+                <button disabled class="btn btn-primary">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </button>
+                }
+                @if (!isLoading) {
+                <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-dismiss="offcanvas"
+                    data-bs-target="#create_success">Save Changes</button>
+                }
             </div>
         </form>
     </div>
@@ -224,24 +224,24 @@
 <!-- Delete User -->
 <div class="modal fade" id="delete_contact" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-body">
-          <div class="text-center">
-            <div class="avatar avatar-xl bg-danger-light rounded-circle mb-3">
-              <i class="ti ti-trash-x fs-36 text-danger"></i>
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center">
+                    <div class="avatar avatar-xl bg-danger-light rounded-circle mb-3">
+                        <i class="ti ti-trash-x fs-36 text-danger"></i>
+                    </div>
+                    <h4 class="mb-2">Remove item?</h4>
+                    <p class="mb-0">Are you sure you want to remove it</p>
+                    <div class="d-flex align-items-center justify-content-center mt-4">
+                        <a href="javascript:void(0);" class="btn btn-light me-2" data-bs-dismiss="modal">Cancel</a>
+                        <button (click)="delete()" class="btn btn-danger" data-bs-dismiss="modal">
+                            Yes, Delete it
+                        </button>
+                    </div>
+                </div>
             </div>
-            <h4 class="mb-2">Remove item?</h4>
-            <p class="mb-0">Are you sure you want to remove it</p>
-            <div class="d-flex align-items-center justify-content-center mt-4">
-              <a href="javascript:void(0);" class="btn btn-light me-2" data-bs-dismiss="modal">Cancel</a>
-              <button (click)="delete()" class="btn btn-danger" data-bs-dismiss="modal">
-                Yes, Delete it 
-              </button>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
-  <!-- /Delete User -->
-<!-- /Delete Contracts --> 
+</div>
+<!-- /Delete User -->
+<!-- /Delete Contracts -->
