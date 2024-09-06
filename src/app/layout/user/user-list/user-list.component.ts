@@ -89,7 +89,7 @@ export class UserListComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private usersService: UserService,
-    public provinceService: ProvinceService,
+    private provinceService: ProvinceService,
     private areaService: AreaService,
     private supService: SupService,
     private posService: PosVenteService,
@@ -135,35 +135,36 @@ export class UserListComponent implements OnInit {
     this.authService.user().subscribe({
       next: (user) => {
         this.currentUser = user; 
-        this.isLoadingData = true;
-        this.usersService.refreshDataList$.subscribe(() => {
-          this.usersService.getAll().subscribe((apiRes: apiResultFormat) => {
-            this.actualData = apiRes.data;
-            this.totalUser = apiRes.meta.total;
-            this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-              if (this.router.url == this.routes.userList) {
-                this.getTableData({ skip: res.skip, limit: res.limit });
-                this.pageSize = res.pageSize;
-              }
-            });
-          });
-        });
-        this.usersService.getAll().subscribe((apiRes: apiResultFormat) => {
-          this.actualData = apiRes.data;
-          this.totalUser = apiRes.meta.total;
-          this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-            if (this.router.url == this.routes.userList) {
-              this.getTableData({ skip: res.skip, limit: res.limit });
-              this.pageSize = res.pageSize;
-            }
-          });
-        });
-
+        this.isLoadingData = true; 
       },
       error: (error) => {
         this.router.navigate(['/auth/login']);
         console.log(error);
       }
+    });
+
+
+    this.usersService.refreshDataList$.subscribe(() => {
+      this.usersService.getAll().subscribe((apiRes: apiResultFormat) => {
+        this.actualData = apiRes.data;
+        this.totalUser = apiRes.meta.total;
+        this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
+          if (this.router.url == this.routes.userList) {
+            this.getTableData({ skip: res.skip, limit: res.limit });
+            this.pageSize = res.pageSize;
+          }
+        });
+      });
+    });
+    this.usersService.getAll().subscribe((apiRes: apiResultFormat) => {
+      this.actualData = apiRes.data;
+      this.totalUser = apiRes.meta.total;
+      this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
+        if (this.router.url == this.routes.userList) {
+          this.getTableData({ skip: res.skip, limit: res.limit });
+          this.pageSize = res.pageSize;
+        }
+      });
     });
 
   }

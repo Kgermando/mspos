@@ -286,8 +286,7 @@
               <div class="icon-form-end">
                 <span class="form-icon" (click)="togglePassword(1)" tabindex="0"><i class="ti"
                     [ngClass]="password[1] ? 'ti-eye' : 'ti-eye-off'"></i></span>
-                <input [type]="password[1] ? 'text' : 'password'" class="form-control" formControlName="password"
-                  required />
+                <input [type]="password[1] ? 'text' : 'password'" class="form-control" formControlName="password" required />
                 <mat-error *ngIf="formGroup.controls['password'].hasError('required')">
                   Ce champs est obligatoire
                 </mat-error>

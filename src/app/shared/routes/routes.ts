@@ -11,7 +11,7 @@ export class routes {
 
   // Auth
   public static get login(): string {
-    return this.baseUrl + '/login';
+    return this.baseUrl + '/auth/login';
   }
 
   public static get forgotPassword(): string {

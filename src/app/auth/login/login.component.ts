@@ -3,8 +3,7 @@ import { routes } from '../../shared/routes/routes';
 import { Router } from '@angular/router';
 import { formatDate } from '@angular/common';
 import { AuthService } from '../auth.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserModel } from '../models/user.model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'; 
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
