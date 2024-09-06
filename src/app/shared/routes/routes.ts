@@ -39,6 +39,26 @@ export class routes {
   public static get msposDashboard(): string {
     return this.dashboard + '/mspos-dashboard';
   }
+  public static get ndDashboard(): string {
+    return this.dashboard + '/numeric-distribution';
+  }
+  public static get wdDashboard(): string {
+    return this.dashboard + '/weighted-distribution';
+  }
+  public static get sishDashboard(): string {
+    return this.dashboard + '/share-in-shop-handling';
+  }
+  public static get oosDashboard(): string {
+    return this.dashboard + '/out-of-stock';
+  }
+  public static get sosDashboard(): string {
+    return this.dashboard + '/share-of-stock';
+  }
+  public static get seDashboard(): string {
+    return this.dashboard + '/sales-evolution';
+  }
+
+
 
   // Pos
   public static get pos(): string {

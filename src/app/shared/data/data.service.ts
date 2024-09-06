@@ -24,15 +24,40 @@ export class DataService {
       separateRoute: false,
       hasSubRoute: false,
       showSubRoute: true,
-      base1: 'dashboard',
       menu: [
         {
           menuValue: 'Dashboard',
-          hasSubRoute: false,
-          showSubRoute: false,
+          hasSubRoute: true,
+          showSubRoute: true,
           icon: 'layout-2',
-          route: routes.msposDashboard,
-        },
+          base1: 'dashboard',
+          subMenus: [
+            {
+              menuValue: 'Numeric distribution',
+              route: routes.ndDashboard,
+            },
+            {
+              menuValue: 'Weighted distribution',
+              route: routes.wdDashboard,
+            },
+            {
+              menuValue: 'Share in shop handling',
+              route: routes.sishDashboard,
+            },
+            {
+              menuValue: 'Out of stock',
+              route: routes.oosDashboard,
+            },
+            {
+              menuValue: 'Share of stck',
+              route: routes.sosDashboard,
+            },
+            {
+              menuValue: 'Sales evolution',
+              route: routes.seDashboard,
+            },
+          ]
+        }, 
       ],
     },
     {
@@ -49,24 +74,7 @@ export class DataService {
           base: 'posforms',
           subRoutes: [],
         }, 
-        {
-          menuValue: 'Analytics',
-          icon: 'chart-bar',
-          hasSubRoute: false,
-          showSubRoute: false,
-          route: 'routes.analyticsList',
-          base: 'analytics',
-          subRoutes: [],
-        },
-        {
-          menuValue: 'Activities',
-          icon: 'bounce-right',
-          hasSubRoute: false,
-          showSubRoute: false,
-          route: 'routes.activitiesList',
-          base: 'activities',
-          subRoutes: [],
-        },
+        
       ],
     },
     {

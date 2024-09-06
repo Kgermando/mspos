@@ -109,7 +109,7 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th mat-sort-header="equateur">EQ</th>
-                                        <th mat-sort-header="sold">SOLD</th>
+                                        <th mat-sort-header="sold">SOLDE</th>
                                         <th mat-sort-header="dhl">DHL</th>
                                         <th mat-sort-header="ar">AR</th>
                                         <th mat-sort-header="sbl">SBL</th>
@@ -240,7 +240,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label class="col-form-label" for="text">SOLD <span class="text-danger">*</span></label>
+                            <label class="col-form-label" for="text">SOLDE <span class="text-danger">*</span></label>
                             <input type="number" class="form-control" formControlName="sold" required />
                             <mat-error *ngIf="formGroup.controls['sold'].hasError('required')">
                                 Ce champs est obligatoire
@@ -419,7 +419,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label class="col-form-label" for="text">SOLD <span class="text-danger">*</span></label>
+                            <label class="col-form-label" for="text">SOLDE <span class="text-danger">*</span></label>
                             <input type="number" class="form-control" formControlName="sold" required />
                             <mat-error *ngIf="formGroup.controls['sold'].hasError('required')">
                                 Ce champs est obligatoire
