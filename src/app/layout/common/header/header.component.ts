@@ -61,8 +61,10 @@ export class HeaderComponent implements OnInit {
 
 
 logout() {
-  this.authService.logout();
-  this.routes.login
+  this.authService.logout().subscribe(res => {
+    console.log(res);
+    this.routes.login;
+});
 }
   
 

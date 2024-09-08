@@ -49,7 +49,7 @@ export class DataService {
               route: routes.oosDashboard,
             },
             {
-              menuValue: 'Share of stck',
+              menuValue: 'Share of stock',
               route: routes.sosDashboard,
             },
             {
