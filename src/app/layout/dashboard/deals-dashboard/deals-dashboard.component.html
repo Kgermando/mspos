@@ -9,28 +9,15 @@
             </div>
             <div class="col-md-8 float-end ms-auto">
               <div class="d-flex title-head">
-                <div
-                  class="daterange-picker d-flex align-items-center justify-content-center"
-                >
+                <div class="daterange-picker d-flex align-items-center justify-content-center">
                   <div class="form-sort me-2">
                     <i class="ti ti-calendar"></i>
-                    <input
-                      type="text"
-                      class="form-control date-range bookingrange"
-                      bsDaterangepicker
-                      [bsConfig]="{ adaptivePosition: true }"
-                      [(ngModel)]="bsRangeValue"
-                    />
+                    <input type="text" class="form-control date-range bookingrange" bsDaterangepicker
+                      [bsConfig]="{ adaptivePosition: true }" [(ngModel)]="bsRangeValue" />
                   </div>
                   <div class="head-icons mb-0">
-                    <a
-                      [routerLink]="routes.msposDashboard"
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      data-bs-original-title="Refresh"
-                      matTooltip="Refresh"
-                      ><i class="ti ti-refresh-dot"></i
-                    ></a>
+                    <a [routerLink]="routes.msposDashboard" data-bs-toggle="tooltip" data-bs-placement="top"
+                      data-bs-original-title="Refresh" matTooltip="Refresh"><i class="ti ti-refresh-dot"></i></a>
                     <app-collapse-header></app-collapse-header>
                   </div>
                 </div>
@@ -60,10 +47,10 @@
                 </div>
               </div>
             </div>
-            
+
           </div>
           <div class="card-body">
-           
+
             <div class="table-responsive custom-table">
               <table class="table dataTable" id="deals-project">
                 <thead class="thead-light">
@@ -137,7 +124,7 @@
                   <a class="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
                     Sales Pipeline
                   </a>
-                  <div class="dropdown-menu dropdown-menu-end">														
+                  <div class="dropdown-menu dropdown-menu-end">
                     <a href="javascript:void(0);" class="dropdown-item">
                       Marketing Pipeline
                     </a>
@@ -153,7 +140,7 @@
                     <a href="javascript:void(0);" class="dropdown-item">
                       Operational
                     </a>
-                  </div>										
+                  </div>
                 </div>
                 <div class="dropdown">
                   <a class="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
@@ -176,19 +163,11 @@
           </div>
           <div class="card-body">
             <div id="deals-chart">
-              <apx-chart
-                [series]="chartOptions3.series"
-                [chart]="chartOptions3.chart"
-                [dataLabels]="chartOptions3.dataLabels"
-                [plotOptions]="chartOptions3.plotOptions"
-                [yaxis]="chartOptions3.yaxis"
-                [xaxis]="chartOptions3.xaxis"
-                [stroke]="chartOptions3.stroke"
-                [grid]="chartOptions3.grid"
-                [fill]="chartOptions3.fill"
-                [annotations]="chartOptions3.annotations"
-                [colors]="chartOptions3.colors"
-              ></apx-chart>
+              <apx-chart [series]="chartOptions3.series" [chart]="chartOptions3.chart"
+                [dataLabels]="chartOptions3.dataLabels" [plotOptions]="chartOptions3.plotOptions"
+                [yaxis]="chartOptions3.yaxis" [xaxis]="chartOptions3.xaxis" [stroke]="chartOptions3.stroke"
+                [grid]="chartOptions3.grid" [fill]="chartOptions3.fill" [annotations]="chartOptions3.annotations"
+                [colors]="chartOptions3.colors"></apx-chart>
             </div>
           </div>
         </div>
@@ -205,7 +184,7 @@
                   <a class="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
                     Marketing Pipeline
                   </a>
-                  <div class="dropdown-menu dropdown-menu-end">														
+                  <div class="dropdown-menu dropdown-menu-end">
                     <a href="javascript:void(0);" class="dropdown-item">
                       Marketing Pipeline
                     </a>
@@ -221,7 +200,7 @@
                     <a href="javascript:void(0);" class="dropdown-item">
                       Operational
                     </a>
-                  </div>										
+                  </div>
                 </div>
                 <div class="dropdown">
                   <a class="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
@@ -244,13 +223,9 @@
           </div>
           <div class="card-body">
             <div id="last-chart">
-              <apx-chart
-                [series]="chartOptions.series"
-                [chart]="chartOptions.chart"
-                [dataLabels]="chartOptions.dataLabels"
-                [plotOptions]="chartOptions.plotOptions"
-                [xaxis]="chartOptions.xaxis"
-              ></apx-chart>
+              <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart"
+                [dataLabels]="chartOptions.dataLabels" [plotOptions]="chartOptions.plotOptions"
+                [xaxis]="chartOptions.xaxis"></apx-chart>
             </div>
           </div>
         </div>
@@ -265,7 +240,7 @@
                   <a class="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
                     Marketing Pipeline
                   </a>
-                  <div class="dropdown-menu dropdown-menu-end">														
+                  <div class="dropdown-menu dropdown-menu-end">
                     <a href="javascript:void(0);" class="dropdown-item">
                       Marketing Pipeline
                     </a>
@@ -281,7 +256,7 @@
                     <a href="javascript:void(0);" class="dropdown-item">
                       Operational
                     </a>
-                  </div>										
+                  </div>
                 </div>
                 <div class="dropdown">
                   <a class="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
@@ -303,75 +278,64 @@
             </div>
           </div>
           <div class="card-body">
-           
+
             <div id="won-chart">
-              <apx-chart
-                [series]="chartOptions2.series"
-                [chart]="chartOptions2.chart"
-                [dataLabels]="chartOptions2.dataLabels"
-                [plotOptions]="chartOptions2.plotOptions"
-                [xaxis]="chartOptions2.xaxis"
-              ></apx-chart>
+              <apx-chart [series]="chartOptions2.series" [chart]="chartOptions2.chart"
+                [dataLabels]="chartOptions2.dataLabels" [plotOptions]="chartOptions2.plotOptions"
+                [xaxis]="chartOptions2.xaxis"></apx-chart>
             </div>
           </div>
         </div>
       </div>
       <div class="row">
-      <div class="col-md-12 d-flex">
-        <div class="card w-100">
-          <div class="card-header border-0 pb-0">
-            <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-              <h4><i class="ti ti-grip-vertical me-1"></i>Deals by Year</h4>
-              <div class="d-flex align-items-center flex-wrap row-gap-2">
-                <div class="dropdown me-2">
-                  <a class="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
-                    Sales Pipeline
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-end">
-                        
-                    <a href="javascript:void(0);" class="dropdown-item">
-                      Marketing Pipeline
-                    </a>
-                    <a href="javascript:void(0);" class="dropdown-item">
+        <div class="col-md-12 d-flex">
+          <div class="card w-100">
+            <div class="card-header border-0 pb-0">
+              <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+                <h4><i class="ti ti-grip-vertical me-1"></i>Deals by Year</h4>
+                <div class="d-flex align-items-center flex-wrap row-gap-2">
+                  <div class="dropdown me-2">
+                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
                       Sales Pipeline
                     </a>
-                  </div>						
-                </div>
-                <div class="dropdown">
-                  <a class="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
-                    Last 3 months
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-end">
-                    <a href="javascript:void(0);" class="dropdown-item">
+                    <div class="dropdown-menu dropdown-menu-end">
+
+                      <a href="javascript:void(0);" class="dropdown-item">
+                        Marketing Pipeline
+                      </a>
+                      <a href="javascript:void(0);" class="dropdown-item">
+                        Sales Pipeline
+                      </a>
+                    </div>
+                  </div>
+                  <div class="dropdown">
+                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
                       Last 3 months
                     </a>
-                    <a href="javascript:void(0);" class="dropdown-item">
-                      Last 6 months
-                    </a>
-                    <a href="javascript:void(0);" class="dropdown-item">
-                      Last 12 months
-                    </a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                      <a href="javascript:void(0);" class="dropdown-item">
+                        Last 3 months
+                      </a>
+                      <a href="javascript:void(0);" class="dropdown-item">
+                        Last 6 months
+                      </a>
+                      <a href="javascript:void(0);" class="dropdown-item">
+                        Last 12 months
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="card-body">
-            <div id="deals-year">
-              <apx-chart
-                [series]="chartOptions4.series"
-                [chart]="chartOptions4.chart"
-                [xaxis]="chartOptions4.xaxis"
-                [dataLabels]="chartOptions4.dataLabels"
-                [grid]="chartOptions4.grid"
-                [stroke]="chartOptions4.stroke"
-                [title]="chartOptions4.title"
-                [colors]="chartOptions4.colors"
-              ></apx-chart>
+            <div class="card-body">
+              <div id="deals-year">
+                <apx-chart [series]="chartOptions4.series" [chart]="chartOptions4.chart" [xaxis]="chartOptions4.xaxis"
+                  [dataLabels]="chartOptions4.dataLabels" [grid]="chartOptions4.grid" [stroke]="chartOptions4.stroke"
+                  [title]="chartOptions4.title" [colors]="chartOptions4.colors"></apx-chart>
+              </div>
             </div>
           </div>
         </div>
-      </div>
       </div>
     </div>
   </div>

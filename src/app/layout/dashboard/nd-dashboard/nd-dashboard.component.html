@@ -1,1 +1,163 @@
-<p>nd-dashboard works!</p>
+<div class="page-wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-header">
+                    <div class="row align-items-center">
+                        <div class="col-md-4">
+                            <h3 class="page-title">Numeric distribution</h3>
+                        </div>
+                        <div class="col-md-8 float-end ms-auto">
+                            <div class="d-flex title-head">
+                                <div class="daterange-picker d-flex align-items-center justify-content-center">
+                                    <div class="card mb-0">
+                                        <div class="card mb-0">
+                                            <mat-select class="select custom-mat-select"
+                                                (selectionChange)="onProvinceChange($event)"
+                                                placeholder="Select province">
+                                                @for (item of provinceList; track item) {
+                                                <mat-option value="{{item.ID}}">{{item.name}}</mat-option>
+                                                }
+                                            </mat-select>
+                                        </div>
+                                    </div>
+                                    <div class="form-sort me-2">
+                                        <i class="ti ti-calendar"></i>
+                                        <input type="text" class="form-control date-range bookingrange"
+                                            bsDaterangepicker [bsConfig]="{ adaptivePosition: true }"
+                                            [(ngModel)]="bsRangeValue" />
+                                    </div>
+                                    <div class="head-icons mb-0">
+                                        <a [routerLink]="routes.msposDashboard" data-bs-toggle="tooltip"
+                                            data-bs-placement="top" data-bs-original-title="Refresh"
+                                            matTooltip="Refresh"><i class="ti ti-refresh-dot"></i></a>
+                                        <app-collapse-header></app-collapse-header>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 d-flex">
+                <div class="card flex-fill">
+                    <div class="card-header border-0 pb-0">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+                            <h4><i class="ti ti-grip-vertical me-1"></i>Recently Created Deals</h4>
+                            <div class="dropdown">
+                                <a class="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
+                                    <i class="ti ti-calendar-check me-2"></i>Last 30 days
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a href="javascript:void(0);" class="dropdown-item">
+                                        Last 15 days
+                                    </a>
+                                    <a href="javascript:void(0);" class="dropdown-item">
+                                        Last 30 days
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+                        <div id="deals-chart">
+                            <div id="last-chart">
+                                <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart"
+                                    [dataLabels]="chartOptions.dataLabels" [plotOptions]="chartOptions.plotOptions"
+                                    [xaxis]="chartOptions.xaxis"></apx-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 d-flex">
+                <div class="card flex-fill">
+                    <div class="card-header border-0 pb-0">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+                            <h4><i class="ti ti-grip-vertical me-1"></i>Pie chart view</h4>
+                            <div class="d-flex align-items-center flex-wrap row-gap-2">
+                                <div class="dropdown">
+                                    <mat-select class="select custom-mat-select" placeholder="Select area"
+                                        (selectionChange)="onAreaChange($event)">
+                                        @for (item of areaListFilter; track item) {
+                                        <mat-option value="{{item.name}}">{{item.name}}</mat-option>
+                                        }
+                                    </mat-select>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <apx-chart [series]="chartOptions1.series" [chart]="chartOptions1.chart"
+                            [dataLabels]="chartOptions1.dataLabels" [colors]="chartOptions1.colors"></apx-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-12 d-flex">
+                <div class="card w-100">
+                    <div class="card-header border-0 pb-0">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+                            <h4><i class="ti ti-grip-vertical me-1"></i>Table view</h4> 
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive custom-table">
+                            <table class="table dataTable" id="deals-project">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Area</th>
+                                        <th>EQ</th>
+                                        <th>Dhl</th>
+                                        <th>Ar</th>
+                                        <th>Sbl</th>
+                                        <th>Pmt</th>
+                                        <th>Pmm</th>
+                                        <th>Ticket</th>
+                                        <th>Mtc</th>
+                                        <th>Mast</th>
+                                        <th>Oris</th>
+                                        <th>Elite</th>
+                                        <th>Ck</th>
+                                        <th>Yes</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="odd">
+                                        <td>Funa</td>
+                                        <td>
+                                            @if (85 < 50) { <span class="badge badge-pill bg-danger">85%</span>
+                                                }
+                                                @if (85 >= 50) {
+                                                <span class="badge badge-pill bg-success">85%</span>
+                                                }
+                                        </td>
+                                        <td>85%</td>
+                                        <td>85%</td>
+                                        <td>85%</td>
+                                        <td>85%</td>
+                                        <td>85%</td>
+                                        <td>85%</td>
+                                        <td>85%</td>
+                                        <td>85%</td>
+                                        <td>85%</td>
+                                        <td>85%</td>
+                                        <td>85%</td>
+                                        <td>85%</td>
+                                        <td>85%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
