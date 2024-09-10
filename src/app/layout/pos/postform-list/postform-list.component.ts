@@ -271,7 +271,7 @@ export class PostformListComponent implements OnInit {
           province_id: this.currentUser.province_id,
           area_id: this.currentUser.area_id,
           sup_id: this.currentUser.sup_id,
-          pos_id: this.formGroup.value.pos_id,
+          pos_id: parseInt(this.formGroup.value.pos_id),
           signature: this.currentUser.fullname,
         };
         this.posformService.create(body).subscribe({
@@ -317,7 +317,7 @@ export class PostformListComponent implements OnInit {
         province_id: this.currentUser.province_id,
         area_id: this.currentUser.area_id,
         sup_id: this.currentUser.sup_id,
-        pos_id: this.formGroup.value.pos_id,
+        pos_id: parseInt(this.formGroup.value.pos_id),
         signature: this.currentUser.fullname,
       };
       this.posformService.update(this.idItem, body)

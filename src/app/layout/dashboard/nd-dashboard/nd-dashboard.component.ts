@@ -67,7 +67,7 @@ export class NdDashboardComponent implements OnInit, OnChanges {
     this.common.last.subscribe((last: string) => {
       this.last = last;
     });
-    if (this.page == 'deals-dashboard') {
+    if (this.page == 'nd-dashboard') {
       this.renderer.addClass(document.body, 'date-picker-dashboard');
     }
   }
