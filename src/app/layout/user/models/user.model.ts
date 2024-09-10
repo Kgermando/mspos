@@ -9,8 +9,7 @@ export interface IUser {
     password_confirm: string;
     province_id: number;
     area_id: number; 
-    sup_id: number;
-    pos_id: number;
+    sup_id: number; 
     role: string; // Idem with title
     permission: string;
     image: string;

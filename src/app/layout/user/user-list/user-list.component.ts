@@ -77,9 +77,7 @@ export class UserListComponent implements OnInit {
   areaList: IArea[] = [];
   areaListFilter: IArea[] = [];
   supList: ISup[] = [];
-  supListFilter: ISup[] = [];
-  posList: IPos[] = [];
-  posListFilter: IPos[] = [];
+  supListFilter: ISup[] = []; 
 
   isManager = false; 
 
@@ -91,8 +89,7 @@ export class UserListComponent implements OnInit {
     private usersService: UserService,
     private provinceService: ProvinceService,
     private areaService: AreaService,
-    private supService: SupService,
-    private posService: PosVenteService,
+    private supService: SupService, 
     private _formBuilder: FormBuilder,
     private toastr: ToastrService
   ) {
@@ -128,9 +125,7 @@ export class UserListComponent implements OnInit {
     this.supService.getAll().subscribe(res => {
       this.supList = res.data;
     });
-    this.posService.getAll().subscribe(res => {
-      this.posList = res.data;
-    });
+    
 
     this.authService.user().subscribe({
       next: (user) => {
@@ -335,7 +330,7 @@ export class UserListComponent implements OnInit {
               province_id: this.dataItem.province_id,
               area_id: this.dataItem.area_id, 
               sup_id: this.dataItem.sup_id,
-              pos_id: this.dataItem.pos_id,
+              // pos_id: this.dataItem.pos_id,
               role: this.dataItem.title, // Role et title c'est la meme chose mais le role cest pour le code source
               permission: this.dataItem.permission,
               // image: this.imageUrl,  
@@ -379,15 +374,7 @@ export class UserListComponent implements OnInit {
       index === self.findIndex((t) => t.name === obj.name)
     );
 
-  }
-
-  onAreaChange(event: any) {
-    const posArray = this.posList.filter((v) => v.area_id == event.value);
-    this.posListFilter = posArray.filter((obj, index, self) =>
-      index === self.findIndex((t) => t.name === obj.name)
-    );
-  }
-
+  } 
 
   compareFn(c1: IProvince, c2: IProvince): boolean {
     return c1 && c2 ? c1.ID === c2.ID : c1 === c2;

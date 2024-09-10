@@ -21,6 +21,6 @@ export interface IPosForm {
     province_id: number;
     area_id : number;
     sup_id: number;
-    pos_id: number;
+    pos_id: number; 
     signature : string;
 }

@@ -71,7 +71,8 @@ export class PosVenteListComponent implements OnInit {
   totalUser = 0;
   provinceList: IProvince[] = [];
   areaList: IArea[] = [];
-
+  areaListFilter: IArea[] = [];
+ 
 
   ngOnInit() {
     this.formGroup = this._formBuilder.group({
@@ -384,6 +385,15 @@ export class PosVenteListComponent implements OnInit {
   compareFn2(c1: IArea, c2: IArea): boolean {
     return c1 && c2 ? c1.ID === c2.ID : c1 === c2;
   }
+
+
+
+  onProvinceChange(event: any) {
+    const areaArray = this.areaList.filter((v) => v.province_id == event.value);
+    this.areaListFilter = areaArray.filter((obj, index, self) =>
+      index === self.findIndex((t) => t.name === obj.name)
+    );
+  } 
 
 }
 

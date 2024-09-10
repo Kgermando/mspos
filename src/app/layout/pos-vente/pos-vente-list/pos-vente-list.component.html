@@ -218,7 +218,7 @@
                             <label class="col-form-label" for="location">Province <span
                                     class="text-danger">*</span></label>
                             <mat-select class="select custom-mat-select" formControlName="province_id"
-                                placeholder="Choose province">
+                                (selectionChange)="onProvinceChange($event)" placeholder="Choose province">
                                 @for (item of provinceList; track item) {
                                 <mat-option value="{{item.ID}}">{{item.name}}</mat-option>
                                 }
@@ -233,7 +233,7 @@
                             <label class="col-form-label" for="area_id">Area <span class="text-danger">*</span></label>
                             <mat-select class="select custom-mat-select" formControlName="area_id"
                                 placeholder="Choose area">
-                                @for (item of areaList; track item) {
+                                @for (item of areaListFilter; track item) {
                                 <mat-option value="{{item.ID}}">{{item.name}}</mat-option>
                                 }
                             </mat-select>

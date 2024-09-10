@@ -17,6 +17,7 @@ import { IArea } from '../../areas/models/area.model';
 import { ISup } from '../../sups/models/sup.model';
 import { IPos } from '../../pos-vente/models/pos.model';
 import { generateRandomString } from '../../../utils/generate-random';
+import { PosVenteService } from '../../pos-vente/pos-vente.service';
 
 
 @Component({
@@ -54,7 +55,8 @@ export class PostformListComponent implements OnInit {
   provinceList: IProvince[] = [];
   areaList: IArea[] = [];
   supList: ISup[] = [];
-  posList: IPos[] = [];
+  posList: IPos[] = []; 
+  posListFilter: IPos[] = [];
 
   constructor(
     private pagination: PaginationService,
@@ -62,6 +64,7 @@ export class PostformListComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private authService: AuthService,
     public posformService: PosformService,
+    private posService: PosVenteService,
     private toastr: ToastrService
   ) {
   }
@@ -79,6 +82,7 @@ export class PostformListComponent implements OnInit {
 
   ngOnInit() {
     this.formGroup = this._formBuilder.group({
+      pos_id: ['', Validators.required],
       equateur: ['', Validators.required],
       sold: ['', Validators.required],
       dhl: ['', Validators.required],
@@ -100,6 +104,10 @@ export class PostformListComponent implements OnInit {
     this.authService.user().subscribe({
       next: (user) => {
         this.currentUser = user;
+        this.posService.getAll().subscribe(res => {
+          this.posList = res.data;
+          this.posListFilter = this.posList.filter((v) => v.area_id == this.currentUser.area_id)
+        });
         this.posformService.refreshDataList$.subscribe(() => {
           this.posformService.getAll().subscribe((apiRes: apiResultFormat) => {
             this.actualData = apiRes.data;
@@ -127,6 +135,7 @@ export class PostformListComponent implements OnInit {
             this.dataItem = item.data;
             this.formGroup.patchValue({
               // id_unique: this.dataItem.id_unique,  
+              pos_id: this.dataItem.pos_id,
               equateur: this.dataItem.equateur,
               sold: this.dataItem.sold,
               dhl: this.dataItem.dhl,
@@ -262,7 +271,7 @@ export class PostformListComponent implements OnInit {
           province_id: this.currentUser.province_id,
           area_id: this.currentUser.area_id,
           sup_id: this.currentUser.sup_id,
-          pos_id: this.currentUser.pos_id,
+          pos_id: this.formGroup.value.pos_id,
           signature: this.currentUser.fullname,
         };
         this.posformService.create(body).subscribe({
@@ -304,6 +313,11 @@ export class PostformListComponent implements OnInit {
         yes: parseInt(this.formGroup.value.yes),
         time: parseInt(this.formGroup.value.time),
         comment: this.formGroup.value.comment,
+        user_id: this.currentUser.id,
+        province_id: this.currentUser.province_id,
+        area_id: this.currentUser.area_id,
+        sup_id: this.currentUser.sup_id,
+        pos_id: this.formGroup.value.pos_id,
         signature: this.currentUser.fullname,
       };
       this.posformService.update(this.idItem, body)
@@ -350,7 +364,7 @@ export class PostformListComponent implements OnInit {
               yes: this.dataItem.yes,
               time: this.dataItem.time,
               comment: this.dataItem.comment,
-
+              pos_id: this.dataItem.pos_id,
             });
           }
           );
@@ -377,5 +391,6 @@ export class PostformListComponent implements OnInit {
   }
 
 
+ 
 
 }
