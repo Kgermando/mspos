@@ -25,10 +25,10 @@
                                         <i class="ti ti-calendar"></i>
                                         <input type="text" class="form-control date-range bookingrange"
                                             bsDaterangepicker [bsConfig]="{ adaptivePosition: true }"
-                                            [(ngModel)]="bsRangeValue" />
+                                            [formControl]="rangeDate" />
                                     </div>
                                     <div class="head-icons mb-0">
-                                        <a [routerLink]="routes.msposDashboard" data-bs-toggle="tooltip"
+                                        <a [routerLink]="routes.ndDashboard" data-bs-toggle="tooltip"
                                             data-bs-placement="top" data-bs-original-title="Refresh"
                                             matTooltip="Refresh"><i class="ti ti-refresh-dot"></i></a>
                                         <app-collapse-header></app-collapse-header>
@@ -86,7 +86,7 @@
                                         <mat-option value="{{item.name}}">{{item.name}}</mat-option>
                                         }
                                     </mat-select>
-                                </div> 
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                 <div class="card w-100">
                     <div class="card-header border-0 pb-0">
                         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-                            <h4><i class="ti ti-grip-vertical me-1"></i>Table view</h4> 
+                            <h4><i class="ti ti-grip-vertical me-1"></i>Table view</h4>
                         </div>
                     </div>
                     <div class="card-body">
@@ -112,47 +112,52 @@
                             <table class="table dataTable" id="deals-project">
                                 <thead class="thead-light">
                                     <tr>
-                                        <th>Area</th>
+                                        <th>AREA</th>
                                         <th>EQ</th>
-                                        <th>Dhl</th>
-                                        <th>Ar</th>
-                                        <th>Sbl</th>
-                                        <th>Pmt</th>
-                                        <th>Pmm</th>
-                                        <th>Ticket</th>
-                                        <th>Mtc</th>
-                                        <th>Mast</th>
-                                        <th>Oris</th>
-                                        <th>Elite</th>
-                                        <th>Ck</th>
-                                        <th>Yes</th>
-                                        <th>Time</th>
+                                        <th>DHL</th>
+                                        <th>AR</th>
+                                        <th>SBL</th>
+                                        <th>PMT</th>
+                                        <th>PMM</th>
+                                        <th>TICKET</th>
+                                        <th>MTC</th>
+                                        <th>WS</th>
+                                        <th>MAST</th>
+                                        <th>ORIS</th>
+                                        <th>ELITE</th>
+                                        <th>CK</th>
+                                        <th>YES</th>
+                                        <th>TIME</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @for (item of tableView; track $index) {
                                     <tr class="odd">
-                                        <td>Funa</td>
+                                        <td>{{item.Area}}</td>
                                         <td>
-                                            @if (85 < 50) { <span class="badge badge-pill bg-danger">85%</span>
-                                                }
-                                                @if (85 >= 50) {
-                                                <span class="badge badge-pill bg-success">85%</span>
-                                                }
+                                            @if (item.Eq < 50) { 
+                                             <span class="badge badge-pill bg-danger">{{item.Eq}} %</span>
+                                            }
+                                            @if (item.Eq >= 50) {
+                                             <span class="badge badge-pill bg-success">{{item.Eq}} %</span>
+                                            }
                                         </td>
-                                        <td>85%</td>
-                                        <td>85%</td>
-                                        <td>85%</td>
-                                        <td>85%</td>
-                                        <td>85%</td>
-                                        <td>85%</td>
-                                        <td>85%</td>
-                                        <td>85%</td>
-                                        <td>85%</td>
-                                        <td>85%</td>
-                                        <td>85%</td>
-                                        <td>85%</td>
-                                        <td>85%</td>
-                                    </tr>
+                                        <td>{{item.Dhl}} %</td>
+                                        <td>{{item.Ar}} %</td>
+                                        <td>{{item.Sbl}} %</td>
+                                        <td>{{item.Pmt}} %</td>
+                                        <td>{{item.Pmm}} %</td>
+                                        <td>{{item.Ticket}} %</td>
+                                        <td>{{item.Mtc}} %</td>
+                                        <td>{{item.Ws}} %</td>
+                                        <td>{{item.Mast}} %</td>
+                                        <td>{{item.Oris}} %</td>
+                                        <td>{{item.Elite}} %</td>
+                                        <td>{{item.Ck}} %</td>
+                                        <td>{{item.Yes}} %</td>
+                                        <td>{{item.Time}} %</td> 
+                                    </tr> 
+                                    }
                                 </tbody>
                             </table>
                         </div>

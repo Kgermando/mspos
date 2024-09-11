@@ -13,6 +13,12 @@ import { AreaService } from '../../areas/area.service';
 import { CommonService } from '../../../shared/common/common.service';
 import { IProvince } from '../../province/models/province.model';
 import { IArea } from '../../areas/models/area.model';
+import { NdService } from '../services/nd.service';
+import { formatDate } from '@angular/common';
+import { FormControl } from '@angular/forms';
+import { debounceTime } from 'rxjs/internal/operators/debounceTime';
+import { distinctUntilChanged } from 'rxjs/internal/operators/distinctUntilChanged';
+import { NDDashboardTableView } from '../models/nd-dashboard.models';
 
 export interface ChartOptions {
   series: ApexAxisChartSeries | any;
@@ -29,9 +35,19 @@ export interface ChartOptions {
 })
 export class NdDashboardComponent implements OnInit, OnChanges {
   public routes = routes;
-  bsValue = new Date();
-  bsRangeValue!: Date[];
-  maxDate = new Date();
+  date = new Date(); 
+  startDate = new Date();  
+  endDate = new Date();
+  rangeValue!: Date[];
+
+  public rangeDate!: FormControl;
+  public debounce: number = 400;
+
+
+  provinceName = 'kinshasa'
+  start_date!: string;
+  end_date!: string;
+
   base = '';
   page = '';
   last = '';
@@ -41,6 +57,7 @@ export class NdDashboardComponent implements OnInit, OnChanges {
   areaList: IArea[] = [];
   areaListFilter: IArea[] = [];
 
+  tableView: NDDashboardTableView[] = [];
 
 
   @ViewChild('chart') chart!: ChartComponent;
@@ -53,11 +70,11 @@ export class NdDashboardComponent implements OnInit, OnChanges {
   constructor(
     private common: CommonService,
     private renderer: Renderer2,
+    private ndService: NdService,
     private provinceService: ProvinceService,
     private areaService: AreaService
   ) {
-    this.maxDate.setDate(this.maxDate.getDate() + 7);
-    this.bsRangeValue = [this.bsValue, this.maxDate];
+
     this.common.base.subscribe((base: string) => {
       this.base = base;
     });
@@ -74,18 +91,61 @@ export class NdDashboardComponent implements OnInit, OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges): void {
-   
+    this.endDate.setDate(this.endDate.getDate() + 7);
+    this.rangeValue = [this.startDate, this.endDate];
+    // Init date
+    this.start_date = formatDate(this.rangeValue[0], 'yyyy-MM-dd', 'en-US');
+    this.end_date = formatDate(this.rangeValue[1], 'yyyy-MM-dd', 'en-US');
+    console.log("rangeValue", this.start_date, this.end_date)
+  // Select date change
+  this.rangeDate = new FormControl(this.rangeValue);
+  this.rangeDate.valueChanges
+    .pipe(debounceTime(this.debounce), distinctUntilChanged())
+    .subscribe(query => {
+      this.start_date = formatDate(query[0], 'yyyy-MM-dd', 'en-US');
+      this.end_date = formatDate(query[1], 'yyyy-MM-dd', 'en-US');
+      console.log("rangeValue 2", this.start_date, this.end_date)
+    });
 
+  this.ndService.tableView(this.provinceName, this.start_date, this.end_date).subscribe((res) => { 
+    this.tableView = res.data;
+    console.log("tableView", this.tableView)
+  });
   }
 
 
-  ngOnInit(): void {
+  ngOnInit(): void { 
+    this.startDate = new Date(this.date.getFullYear(), this.date.getMonth(), 1);
+
     this.provinceService.getAll().subscribe(res => {
       this.provinceList = res.data;
     });
     this.areaService.getAll().subscribe(res => {
       this.areaList = res.data;
     });
+
+    this.endDate.setDate(this.endDate.getDate() + 7);
+    this.rangeValue = [this.startDate, this.endDate];
+    // Init date
+    this.start_date = formatDate(this.rangeValue[0], 'yyyy-MM-dd', 'en-US');
+    this.end_date = formatDate(this.rangeValue[1], 'yyyy-MM-dd', 'en-US');
+    console.log("rangeValue", this.start_date, this.end_date)
+
+    // Select date change
+    this.rangeDate = new FormControl(this.rangeValue);
+    this.rangeDate.valueChanges
+      .pipe(debounceTime(this.debounce), distinctUntilChanged())
+      .subscribe(query => {
+        this.start_date = formatDate(query[0], 'yyyy-MM-dd', 'en-US');
+        this.end_date = formatDate(query[1], 'yyyy-MM-dd', 'en-US');
+        console.log("rangeValue 2", this.start_date, this.end_date)
+      });
+ 
+    this.ndService.tableView(this.provinceName, this.start_date, this.end_date).subscribe((res) => { 
+      this.tableView = res.data;
+      console.log("tableView", this.tableView)
+    });
+
 
     this.chartOptions1 = {
       series: [44, 55, 41, 17],
@@ -200,19 +260,20 @@ export class NdDashboardComponent implements OnInit, OnChanges {
 
   onProvinceChange(event: any) {
     const name = this.provinceList.find((v) => v.ID == event.value)?.name;
-    console.log("name", name);
+    console.log("name ", name);
 
     const areaArray = this.areaList.filter((v) => v.province_id == event.value);
     this.areaListFilter = areaArray.filter((obj, index, self) =>
       index === self.findIndex((t) => t.name === obj.name)
     );
-    console.log("areaArray", areaArray);
-    console.log("areaListFilter", this.areaListFilter);
+
+    this.ndService.tableView(name!, this.start_date, this.end_date).subscribe((res) => {
+      console.log("tableView", res.data)
+    });
   }
 
   onAreaChange(event: any) {
     console.log("province", event.value);
   }
-
-
+ 
 }
