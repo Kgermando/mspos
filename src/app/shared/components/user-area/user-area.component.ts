@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { IArea } from '../../areas/models/area.model';
-import { AreaService } from '../../areas/area.service';
+import { Component, Input, OnInit } from '@angular/core'; 
+import { AreaService } from '../../../layout/areas/area.service';
+import { IArea } from '../../../layout/areas/models/area.model';
 
 @Component({
   selector: 'app-user-area',

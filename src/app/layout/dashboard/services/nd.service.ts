@@ -18,6 +18,6 @@ export class NdService extends ApiService {
     return this.http.get(`${this.endpoint}/pos-area/${province}/${area}/${start_date}/${end_date}`);
   }
 
-  
+  // http://localhost:8000/api/dashboard/numeric-distribution/pos-area/kinshasa/Funa/2024-09-01/2024-09-17
 
 }

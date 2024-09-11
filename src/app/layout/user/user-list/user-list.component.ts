@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, model, OnInit } from '@angular/core';
-import { Sort } from '@angular/material/sort';
+import { ChangeDetectionStrategy, Component, model, OnInit, ViewChild } from '@angular/core';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import {
@@ -26,6 +26,7 @@ import { AreaService } from '../../areas/area.service';
 import { SupService } from '../../sups/sup.service';
 import { PosVenteService } from '../../pos-vente/pos-vente.service';
 import { IPermission, permissions } from '../../../shared/model/permission.model';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-user-list',
@@ -36,13 +37,26 @@ import { IPermission, permissions } from '../../../shared/model/permission.model
 export class UserListComponent implements OnInit {
   isLoadingData = false;
   public routes = routes;
+
+  ELEMENT_DATA: IUser[] = [];
+  pageSize = 15; // Default page size
+  pageCurrent = 1; // Default page number
+  totalPages = 0; // Stores total pages from API response 
+  
+  dataSource = new MatTableDataSource<IUser>(this.ELEMENT_DATA); 
+
+  @ViewChild(MatSort) sort: MatSort | any;
+  @ViewChild(MatPaginator) paginator: MatPaginator | any;
+
+
+
   // pagination variables
   public tableData: IUser[] = [];
-  public pageSize = 10;
+  // public pageSize = 15;
   public serialNumberArray: number[] = [];
   public totalData = 0;
   showFilter = false;
-  dataSource!: MatTableDataSource<IUser>;
+  // dataSource!: MatTableDataSource<IUser>;
   public searchDataValue = '';
   public tableDataCopy: IUser[] = [];
   public actualData: IUser[] = [];
@@ -68,8 +82,7 @@ export class UserListComponent implements OnInit {
     'Supervisor',
     'DR',
     'Support'
-  ];
-
+  ]; 
 
   permissionList: IPermission[] = permissions;
 
@@ -116,21 +129,22 @@ export class UserListComponent implements OnInit {
       is_manager: [''],
     }); 
 
-    this.provinceService.getAll().subscribe(res => {
-      this.provinceList = res.data;
-    });
-    this.areaService.getAll().subscribe(res => {
-      this.areaList = res.data;
-    });
-    this.supService.getAll().subscribe(res => {
-      this.supList = res.data;
-    });
     
-
+    
+    this.isLoadingData = true; 
     this.authService.user().subscribe({
       next: (user) => {
         this.currentUser = user; 
-        this.isLoadingData = true; 
+       
+        this.provinceService.getAll().subscribe(res => {
+          this.provinceList = res.data;
+        });
+        this.areaService.getAll().subscribe(res => {
+          this.areaList = res.data;
+        });
+        this.supService.getAll().subscribe(res => {
+          this.supList = res.data;
+        });
       },
       error: (error) => {
         this.router.navigate(['/auth/login']);
@@ -154,6 +168,7 @@ export class UserListComponent implements OnInit {
     this.usersService.getAll().subscribe((apiRes: apiResultFormat) => {
       this.actualData = apiRes.data;
       this.totalUser = apiRes.meta.total;
+      console.log("apiRes data", apiRes)
       this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
         if (this.router.url == this.routes.userList) {
           this.getTableData({ skip: res.skip, limit: res.limit });
@@ -161,9 +176,23 @@ export class UserListComponent implements OnInit {
         }
       });
     });
-
+    this.fetchProducts();
   }
 
+
+  private fetchProducts() {
+    this.usersService.getPaginated(this.pageSize, this.pageCurrent)
+      .subscribe(response => {
+        this.ELEMENT_DATA = response.data; 
+        this.dataSource = new MatTableDataSource<IUser>(this.ELEMENT_DATA);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.totalPages = response.pagination.total_pages;
+        console.log("ELEMENT_DATA", this.ELEMENT_DATA)
+        this.isLoadingData = false;
+      }
+    );
+  }
 
   private getTableData(pageOption: pageSelection): void {
     this.usersService.getAll().subscribe((apiRes: apiResultFormat) => {
@@ -333,7 +362,7 @@ export class UserListComponent implements OnInit {
               // pos_id: this.dataItem.pos_id,
               role: this.dataItem.title, // Role et title c'est la meme chose mais le role cest pour le code source
               permission: this.dataItem.permission,
-              // image: this.imageUrl,  
+              // image: this.imageUrl,
               status: this.dataItem.status,
               is_manager: this.dataItem.is_manager,
             });

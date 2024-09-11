@@ -11,8 +11,8 @@ import {
   templateUrl: './custom-pagination.component.html',
   styleUrls: ['./custom-pagination.component.scss'],
 })
-export class CustomPaginationComponent {
-  public pageSize = 10;
+export class CustomPaginationComponent { 
+  public pageSize = 15;
   public tableData: string[] = [];
   // pagination variables
   public lastIndex = 0;

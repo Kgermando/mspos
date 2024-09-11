@@ -3,8 +3,8 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import {
-  BsDatepickerModule,
-  BsDatepickerConfig,
+    BsDatepickerModule,
+    BsDatepickerConfig,
 } from 'ngx-bootstrap/datepicker';
 import { CustomPaginationModule } from './custom-pagination/custom-pagination.module';
 import { HttpClientModule, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
@@ -13,7 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxEditorModule } from 'ngx-editor';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CarouselModule } from 'ngx-owl-carousel-o';
-import { LightgalleryModule } from 'lightgallery/angular'; 
+import { LightgalleryModule } from 'lightgallery/angular';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
@@ -26,17 +26,24 @@ import { ChipsModule } from 'primeng/chips';
 import { EditorModule } from 'primeng/editor';
 import { DropdownModule } from 'primeng/dropdown';
 import { TimepickerModule } from 'ngx-bootstrap/timepicker';
-import {NgxMatTimepickerModule} from 'ngx-mat-timepicker';
+import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 import { DateRangePickerModule } from './common/date-range-picker/date-range-picker.module';
 import { CollapseHeaderModule } from './common/collapse-header/collapse-header.module';
 import { ProvinceUserComponent } from './components/province-user/province-user.component';
+import { UserAreaComponent } from './components/user-area/user-area.component';
+import { UserSupComponent } from './components/user-sup/user-sup.component';
+import { UserPosComponent } from './components/user-pos/user-pos.component';
 
 
 
-@NgModule({ declarations: [
-    ProvinceUserComponent,
-  ],
+@NgModule({
+    declarations: [
+        ProvinceUserComponent,
+        UserAreaComponent,
+        UserSupComponent,
+        UserPosComponent,
+    ],
     exports: [
         CommonModule,
         NgScrollbarModule,
@@ -69,6 +76,9 @@ import { ProvinceUserComponent } from './components/province-user/province-user.
         NgxMatTimepickerModule,
 
         ProvinceUserComponent,
+        UserAreaComponent,
+        UserSupComponent,
+        UserPosComponent,
     ], imports: [
         CommonModule,
         NgScrollbarModule,
@@ -99,12 +109,12 @@ import { ProvinceUserComponent } from './components/province-user/province-user.
         DateRangePickerModule,
         DropdownModule,
         TimepickerModule.forRoot(),
-        NgxMatTimepickerModule], 
+        NgxMatTimepickerModule],
     providers: [
-        BsDatepickerConfig, 
-        DatePipe, 
-        BsDaterangepickerConfig, 
+        BsDatepickerConfig,
+        DatePipe,
+        BsDaterangepickerConfig,
         provideHttpClient(withInterceptorsFromDi())
-    ] 
+    ]
 })
-export class SharedModule {}
+export class SharedModule { }

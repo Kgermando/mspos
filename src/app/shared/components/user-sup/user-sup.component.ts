@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ISup } from '../../sups/models/sup.model';
-import { SupService } from '../../sups/sup.service';
+import { Component, Input, OnInit } from '@angular/core'; 
+import { SupService } from '../../../layout/sups/sup.service';
+import { ISup } from '../../../layout/sups/models/sup.model';
 
 @Component({
   selector: 'app-user-sup',

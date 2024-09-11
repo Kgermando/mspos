@@ -125,13 +125,26 @@
                                     <app-province-user [province_id]="currentUser.province_id"></app-province-user>
                                 </span>
                             </li>
-                            <li class="row mb-3"><span class="col-6">Area</span><span class="col-6">{{
-                                    currentUser.area_id }}</span></li>
-                            <li class="row mb-3"><span class="col-6">Supervisor</span><span class="col-6">{{
-                                    currentUser.sup_id }}</span></li>
-                            <li class="row mb-3"><span class="col-6">POS</span><span class="col-6">{{ currentUser.pos_id
-                                    }}</span></li>
-                        </ul>
+                            <li class="row mb-3">
+                                <span class="col-6">Area</span>
+                                <span class="col-6"> 
+                                    @if (currentUser.area_id) {
+                                        <app-user-area [id]="currentUser.area_id"></app-user-area>
+                                    }
+                                </span>
+                            </li>
+                            <li class="row mb-3"> 
+                                <span class="col-6">Supervisor</span>
+                                <span class="col-6">
+                                    @if (currentUser.sup_id) {
+                                        <app-user-sup [id]="currentUser.sup_id"></app-user-sup>
+                                    } 
+                                </span>
+                            </li>
+                            <li class="row mb-3"><span class="col-6">POS</span>
+                                <span class="col-6">{{ currentUser.pos_id}}</span>
+                            </li>
+                        </ul> 
                     </div>
                 </div>
             </div>

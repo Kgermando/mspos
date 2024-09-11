@@ -264,7 +264,7 @@ export class PosVenteListComponent implements OnInit {
           ckiosk: (this.formGroup.value.ckiosk) ? this.formGroup.value.ckiosk : false,
           province_id: parseInt(this.formGroup.value.province_id),
           area_id: parseInt(this.formGroup.value.area_id),
-          status: this.formGroup.value.status,
+          status: (this.formGroup.value.status) ? this.formGroup.value.status : false,
           signature: this.currentUser.fullname,
         };
         this.posVenteService.create(body).subscribe({
@@ -307,7 +307,7 @@ export class PosVenteListComponent implements OnInit {
         ckiosk: this.formGroup.value.ckiosk,
         province_id: parseInt(this.formGroup.value.province_id),
         area_id: parseInt(this.formGroup.value.area_id),
-        status: this.formGroup.value.status,
+        status: (this.formGroup.value.status) ? this.formGroup.value.status : false, 
         signature: this.currentUser.fullname,
       };
       this.posVenteService.update(this.idItem, body)

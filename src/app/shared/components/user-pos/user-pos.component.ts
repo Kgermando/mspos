@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { IPos } from '../../pos-vente/models/pos.model';
-import { PosVenteService } from '../../pos-vente/pos-vente.service';
+import { Component, Input, OnInit } from '@angular/core'; 
+import { PosVenteService } from '../../../layout/pos-vente/pos-vente.service';
+import { IPos } from '../../../layout/pos-vente/models/pos.model';
 
 @Component({
   selector: 'app-user-pos',

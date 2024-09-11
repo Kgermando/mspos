@@ -8,7 +8,7 @@
           <div class="row align-items-center">
             <div class="col-8">
               <h4 class="page-title">
-                Users <span class="count-title">{{ totalUser }}</span>
+                Utilisateurs <span class="count-title">{{ totalUser }}</span>
               </h4>
             </div>
             <div class="col-4 text-end">
@@ -101,14 +101,14 @@
               <table matSort (matSortChange)="sortData($event)" class="table" id="manage-users-list">
                 <thead class="thead-light">
                   <tr>
-                    <th mat-sort-header="fullname">Fullname</th>
-                    <th mat-sort-header="email">Title</th>
+                    <th mat-sort-header="fullname">Nom complet</th>
+                    <th mat-sort-header="title">Titre</th>
                     <th mat-sort-header="email">Email</th>
                     <th mat-sort-header="phone">Phone</th>
                     <th mat-sort-header="province">Province</th>
-                    <th mat-sort-header="area">Area</th>
-                    <th mat-sort-header="sup">Sup</th>
-                    <th mat-sort-header="status">Status</th>
+                    <th mat-sort-header="area">Secteur</th>
+                    <th mat-sort-header="sup">Superviceur</th>
+                    <th mat-sort-header="status">Statut</th>
                     <th class="text-end">Action</th>
                   </tr>
                 </thead>
@@ -126,7 +126,7 @@
                         </a>
                         <a href="javascript:void(0);" class="profile-split d-flex flex-column">
                           {{ data.fullname }}
-                          <span>{{ data.title }} </span>
+                          <span>{{ data.permission }} </span>
                         </a>
                       </h2>
                     </td>
@@ -159,8 +159,8 @@
                     </td> 
                     <td>
                       <span class="badge badge-pill badge-status" [ngClass]="{
-                              'bg-success': (data.status) ? 'Active' : '',
-                              'bg-danger': (data.status) ? '' : 'Inactive'
+                              'bg-success': (data.status) ? 'Actif' : '',
+                              'bg-danger': (data.status) ? '' : 'Inactif'
                             }">
                         @if (data.status) {
                         Active
@@ -184,7 +184,7 @@
                           <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal"
                             (click)="findValue(data.fullname)" data-bs-target="#delete_contact"><i
                               class="ti ti-trash text-danger"></i>
-                            Delete
+                            Delete 
                           </a>
                         </div>
                       </div>
@@ -194,7 +194,7 @@
                 </tbody>
               </table>
             </div>
-            <app-custom-pagination></app-custom-pagination>
+            <app-custom-pagination></app-custom-pagination> 
             <div class="row align-items-center">
               <div class="col-md-6">
                 <div class="datatable-length"></div>
