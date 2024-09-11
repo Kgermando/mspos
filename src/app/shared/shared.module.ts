@@ -36,7 +36,6 @@ import { UserSupComponent } from './components/user-sup/user-sup.component';
 import { UserPosComponent } from './components/user-pos/user-pos.component';
 
 
-
 @NgModule({
     declarations: [
         ProvinceUserComponent,
