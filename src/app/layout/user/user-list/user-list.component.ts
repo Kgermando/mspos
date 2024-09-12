@@ -152,6 +152,8 @@ export class UserListComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
         this.totalPages = response.meta.total;
         console.log("response", response)
+        console.log("totalPages", this.totalPages)
+        console.log("ELEMENT_DATA", this.ELEMENT_DATA)
         this.isLoadingData = false;
       }
     );

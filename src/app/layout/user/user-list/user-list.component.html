@@ -168,6 +168,13 @@
               </div>
             </div>
             <!-- /Manage Users List -->
+            @if (isLoadingData) {
+              <button disabled class="btn btn-primary">
+                  <div class="spinner-border" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                  </div>
+              </button>
+          }
           </div>
         </div>
       </div>
