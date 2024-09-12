@@ -40,13 +40,13 @@
         <div class="card flex-fill">
           <div class="card-header border-0 pb-0">
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-              <h4><i class="ti ti-grip-vertical me-1"></i>Deals By Stage</h4>
+              <h4><i class="ti ti-grip-vertical me-1"></i>ND Average</h4>
               <div class="d-flex align-items-center flex-wrap row-gap-2">
                 <div class="dropdown">
                   <mat-select class="select custom-mat-select" placeholder="Select area"
                     (selectionChange)="onAreaChange($event)">
                     @for (item of areaListFilter; track item) {
-                    <mat-option value="{{item.name}}">{{item.name}}</mat-option>
+                      <mat-option value="{{item.name}}">{{item.name}}</mat-option>
                     }
                   </mat-select>
                 </div>
@@ -68,30 +68,15 @@
         <div class="card flex-fill">
           <div class="card-header border-0 pb-0">
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-              <h4><i class="ti ti-grip-vertical me-1"></i>Pie chart view</h4>
-              <div class="d-flex align-items-center flex-wrap row-gap-2">
-                <div class="dropdown">
-                  <mat-select class="select custom-mat-select" placeholder="Select area"
-                    (selectionChange)="onAreaChange($event)">
-                    @for (item of areaListFilter; track item) {
-                    <mat-option value="{{item.name}}">{{item.name}}</mat-option>
-                    }
-                  </mat-select>
-                </div>
-              </div>
+              <h4><i class="ti ti-grip-vertical me-1"></i>Performance Area pour Equateur</h4>
             </div>
           </div>
           <div class="card-body">
-            <div class="chart liveVisitsChart">
-              <!-- <apx-chart
-                  [series]="chartOptionPie.series!"
-                  [chart]="chartOptionPie.chart!"
-                  [labels]="chartOptionPie.labels!"
-                  [colors]="chartOptionPie.colors!"
-                  [legend]="chartOptionPie.legend!"
-                  [stroke]="chartOptionPie.stroke!"
-              ></apx-chart> -->
-          </div>
+            <div id="won-chart">
+              <apx-chart [series]="chartOptions2.series" [chart]="chartOptions2.chart"
+                [dataLabels]="chartOptions2.dataLabels" [plotOptions]="chartOptions2.plotOptions"
+                [xaxis]="chartOptions2.xaxis"></apx-chart>
+            </div>
           </div>
         </div>
       </div>
@@ -156,6 +141,25 @@
                   }
                 </tbody>
               </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 d-flex">
+        <div class="card w-100">
+          <div class="card-header border-0 pb-0">
+            <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+              <h4><i class="ti ti-grip-vertical me-1"></i>ND by Year</h4> 
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="deals-year">
+              <apx-chart [series]="chartOptions4.series" [chart]="chartOptions4.chart" [xaxis]="chartOptions4.xaxis"
+                [dataLabels]="chartOptions4.dataLabels" [grid]="chartOptions4.grid" [stroke]="chartOptions4.stroke"
+                [title]="chartOptions4.title" [colors]="chartOptions4.colors"></apx-chart>
             </div>
           </div>
         </div>

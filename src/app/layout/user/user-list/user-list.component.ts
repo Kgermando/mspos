@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, model, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, model, OnInit, ViewChild } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -34,7 +34,7 @@ import { MatPaginator } from '@angular/material/paginator';
   styleUrl: './user-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserListComponent implements OnInit {
+export class UserListComponent implements OnInit, AfterViewInit {
   isLoadingData = false;
   public routes = routes;
   public sidebarPopup1 = false;
@@ -95,6 +95,12 @@ export class UserListComponent implements OnInit {
   ) {
 
   } 
+  ngAfterViewInit(): void {
+    this.usersService.refreshDataList$.subscribe(() => {
+      this.fetchProducts();
+    });
+    this.fetchProducts();
+  }
    
   
   ngOnInit() {
@@ -129,10 +135,7 @@ export class UserListComponent implements OnInit {
           this.supService.getAll().subscribe(res => {
             this.supList = res.data;
           });
-          this.usersService.refreshDataList$.subscribe(() => {
-            this.fetchProducts();
-          });
-          this.fetchProducts();
+          
         },
         error: (error) => {
           this.isLoadingData = false;

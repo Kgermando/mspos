@@ -179,33 +179,13 @@ export class NdDashboardComponent implements OnInit, OnChanges {
     }
     
 
+ 
 
-    this.chartOptions1 = {
-      series: [44, 55, 41, 17],
-      chart: {
-        type: 'donut',
-
-      },
-      colors: ['#0092E4', '#4A00E5', '#E41F07', '#FFA201'],
-      dataLabels: {
-        enabled: false
-      },
-      plotOptions: {
-        pie: {
-          startAngle: -90,
-          endAngle: 270
-        }
-      },
-
-
-
-
-    };
-    this.chartOptions = {
+    this.chartOptions2 = {
       series: [
         {
-          data: [400, 220, 448],
-          color: '#FC0027',
+          data: [90, 93, 95, 98],
+          color: '#77D882',
         },
       ],
       chart: {
@@ -222,41 +202,68 @@ export class NdDashboardComponent implements OnInit, OnChanges {
       },
 
       xaxis: {
-        categories: ['Conversation', 'Follow Up', 'Inpipeline'],
+        categories: ['Funa', 'Lukunga', 'Tshiangu', 'Mont-amba'],
       },
     };
     this.chartOptions3 = {
       series: [
         {
-          name: 'sales',
+          name: 'Brand',
           colors: ['#FFC38F'],
-          data: this.tableArea,
-          // data: [
-          //   {
-          //     x: 'Inpipeline',
-          //     y: 400,
-          //   },
-          //   {
-          //     x: 'Follow Up',
-          //     y: 130,
-          //   },
-          //   {
-          //     x: 'Schedule',
-          //     y: 248,
-          //   },
-          //   {
-          //     x: 'Conversation',
-          //     y: 470,
-          //   },
-          //   {
-          //     x: 'Won',
-          //     y: 470,
-          //   },
-          //   {
-          //     x: 'Lost',
-          //     y: 180,
-          //   },
-          // ],
+          // data: this.tableArea,
+          data: [
+            {
+              x: 'Eq',
+              y: 100,
+            },
+            {
+              x: 'Dhl',
+              y: 60,
+            },
+            {
+              x: 'Ar',
+              y: 70,
+            },
+            {
+              x: 'Sbl',
+              y: 50,
+            },
+            {
+              x: 'Pmf',
+              y: 70,
+            },
+            {
+              x: 'Pmm',
+              y: 80,
+            },
+            {
+              x: 'Ticket',
+              y: 10,
+            },
+            {
+              x: 'Mtc',
+              y: 40,
+            },
+            {
+              x: 'Ws',
+              y: 70,
+            },{
+              x: 'Mast',
+              y: 100,
+            },{
+              x: 'Oris',
+              y: 50,
+            },{
+              x: 'Elite',
+              y: 30,
+            },{
+              x: 'Yes',
+              y: 20,
+            },{
+              x: 'Time',
+              y: 80,
+            },
+          ],
         },
       ],
       colors: ['#00918E'],
@@ -281,9 +288,47 @@ export class NdDashboardComponent implements OnInit, OnChanges {
       },
       yaxis: {
         min: 0,
-        max: 500,
+        max: 100,
         tickAmount: 5,
       }
+    };
+    this.chartOptions4 = {
+      series: [
+        {
+          name: 'Equateur',
+          data: [10, 60, 30, 80, 70, 40, 60, 20, 100, 0, 0, 0],
+        },
+      ],
+      colors: ['#E41F07'],
+      chart: {
+        height: 273,
+        type: 'area',
+        zoom: {
+          enabled: false,
+        },
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        curve: 'straight',
+      },
+      xaxis: {
+        categories: [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ],
+      },
     };
   }
 

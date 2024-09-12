@@ -185,7 +185,7 @@ export class ProvinceListComponent implements OnInit {
       if (this.formGroup.valid) {
         this.isLoading = true;
         var body = { 
-          name: this.formGroup.value.name, 
+          name: this.formGroup.value.name.toLowerCase(), 
           signature: this.currentUser.fullname,
         };
         this.provinceService.create(body).subscribe({
@@ -211,7 +211,7 @@ export class ProvinceListComponent implements OnInit {
     try {
       this.isLoading = true;
       var body = { 
-        name: this.formGroup.value.name, 
+        name: this.formGroup.value.name.toLowerCase(), 
         signature: this.currentUser.fullname,
       };
       this.provinceService.update(this.idItem, body)

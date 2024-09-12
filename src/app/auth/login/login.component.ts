@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
           this.authService.user().subscribe({
             next: (u) => {
               console.log("user", u)
-              this.toastr.success(`Bienvenue ${u.fullname}!`, 'Success!');
+              this.toastr.success(`Bienvenue ${u.fullname}! 🎉`, 'Success!');
               this.navigate();
               // let user: UserModel = u; 
              

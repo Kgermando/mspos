@@ -26,20 +26,24 @@ export class DataService {
       showSubRoute: true,
       menu: [
         {
-          menuValue: 'Dashboard',
+          menuValue: 'Dashboard', 
           hasSubRoute: true,
           showSubRoute: true,
           icon: 'layout-2',
-          base1: 'dashboard',
+          base: 'dashboard',
           subMenus: [
+            {
+              menuValue: 'Summary',
+              route: routes.msposDashboard,
+            },
             {
               menuValue: 'Numeric distribution',
               route: routes.ndDashboard,
             },
-            {
-              menuValue: 'Weighted distribution',
-              route: routes.wdDashboard,
-            },
+            // {
+            //   menuValue: 'Weighted distribution',
+            //   route: routes.wdDashboard,
+            // },
             {
               menuValue: 'Share in shop handling',
               route: routes.sishDashboard,
@@ -52,10 +56,10 @@ export class DataService {
               menuValue: 'Share of stock',
               route: routes.sosDashboard,
             },
-            {
-              menuValue: 'Sales evolution',
-              route: routes.seDashboard,
-            },
+            // {
+            //   menuValue: 'Sales evolution',
+            //   route: routes.seDashboard,
+            // },
           ]
         }, 
       ],
@@ -118,7 +122,7 @@ export class DataService {
       separateRoute: false,
       menu: [
         {
-          menuValue: 'Users manage',
+          menuValue: 'Users',
           icon: 'users',
           route: routes.userList,
           hasSubRoute: false,
