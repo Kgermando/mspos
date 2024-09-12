@@ -113,14 +113,13 @@
                                         <th mat-sort-header="dhl">DHL</th>
                                         <th mat-sort-header="ar">AR</th>
                                         <th mat-sort-header="sbl">SBL</th>
-                                        <th mat-sort-header="pmt">PMT</th>
+                                        <th mat-sort-header="pmf">PMF</th>
                                         <th mat-sort-header="ticket">TICKET</th>
                                         <th mat-sort-header="mtc">MTC</th>
                                         <th mat-sort-header="ws">WS</th>
                                         <th mat-sort-header="mast">MAST</th>
                                         <th mat-sort-header="oris">ORIS</th>
-                                        <th mat-sort-header="elite">ELITE</th>
-                                        <th mat-sort-header="ck">CK</th>
+                                        <th mat-sort-header="elite">ELITE</th> 
                                         <th mat-sort-header="yes">YES</th>
                                         <th mat-sort-header="time">TIME</th>
                                         <th mat-sort-header="province_id">Province</th>
@@ -140,14 +139,13 @@
                                         <td>{{ data.dhl }}</td>
                                         <td>{{ data.ar }}</td>
                                         <td>{{ data.sbl }}</td>
-                                        <td>{{ data.pmt }}</td>
+                                        <td>{{ data.pmf }}</td>
                                         <td>{{ data.ticket }}</td>
                                         <td>{{ data.mtc }}</td>
                                         <td>{{ data.ws }}</td>
                                         <td>{{ data.mast }}</td>
                                         <td>{{ data.oris }}</td>
-                                        <td>{{ data.elite }}</td>
-                                        <td>{{ data.ck }}</td>
+                                        <td>{{ data.elite }}</td> 
                                         <td>{{ data.yes }}</td>
                                         <td>{{ data.time }}</td>
                                         <td>
@@ -292,9 +290,9 @@
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label class="col-form-label" for="text">PMT <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control" formControlName="pmt" required />
-                            <mat-error *ngIf="formGroup.controls['pmt'].hasError('required')">
+                            <label class="col-form-label" for="text">PMF <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" formControlName="pmf" required />
+                            <mat-error *ngIf="formGroup.controls['pmf'].hasError('required')">
                                 Ce champs est obligatoire
                             </mat-error>
                         </div>
@@ -352,16 +350,7 @@
                                 Ce champs est obligatoire
                             </mat-error>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            <label class="col-form-label" for="text">CK <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control" formControlName="ck" required />
-                            <mat-error *ngIf="formGroup.controls['ck'].hasError('required')">
-                                Ce champs est obligatoire
-                            </mat-error>
-                        </div>
-                    </div>
+                    </div> 
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label class="col-form-label" for="text">YES <span class="text-danger">*</span></label>
@@ -471,9 +460,9 @@
                     </div>
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label class="col-form-label" for="text">PMT <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control" formControlName="pmt" required />
-                            <mat-error *ngIf="formGroup.controls['pmt'].hasError('required')">
+                            <label class="col-form-label" for="text">PMF <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" formControlName="pmf" required />
+                            <mat-error *ngIf="formGroup.controls['pmf'].hasError('required')">
                                 Ce champs est obligatoire
                             </mat-error>
                         </div>
@@ -531,16 +520,7 @@
                                 Ce champs est obligatoire
                             </mat-error>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            <label class="col-form-label" for="text">CK <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control" formControlName="ck" required />
-                            <mat-error *ngIf="formGroup.controls['ck'].hasError('required')">
-                                Ce champs est obligatoire
-                            </mat-error>
-                        </div>
-                    </div>
+                    </div> 
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label class="col-form-label" for="text">YES <span class="text-danger">*</span></label>

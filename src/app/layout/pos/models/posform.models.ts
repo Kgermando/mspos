@@ -6,14 +6,13 @@ export interface IPosForm {
     dhl: number;
     ar: number;
     sbl: number;
-    pmt: number;
+    pmf: number;
     ticket: number;
     mtc: number;
     ws: number;
     mast: number;
     oris: number;
-    elite: number;
-    ck: number;
+    elite: number; 
     yes: number;
     time: number;
     comment: string;
