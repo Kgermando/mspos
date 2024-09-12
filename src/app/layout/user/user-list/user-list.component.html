@@ -8,7 +8,7 @@
           <div class="row align-items-center">
             <div class="col-8">
               <h4 class="page-title">
-                Utilisateurs <span class="count-title">{{ totalUser }}</span>
+                Utilisateurs <span class="count-title">{{ totalPages }}</span> 
               </h4>
             </div>
             <div class="col-4 text-end">
@@ -59,43 +59,6 @@
             <!-- /Search -->
           </div>
           <div class="card-body">
-            <!-- Filter -->
-            <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-2 mb-4">
-              <div class="d-flex align-items-center flex-wrap row-gap-2">
-                <div class="dropdown me-2">
-                  <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown"><i
-                      class="ti ti-sort-ascending-2 me-2"></i>Sort
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-start">
-                    <ul>
-                      <li>
-                        <a href="javascript:void(0);" class="dropdown-item">
-                          <i class="ti ti-circle-chevron-right me-1"></i>Ascending
-                        </a>
-                      </li>
-                      <li>
-                        <a href="javascript:void(0);" class="dropdown-item">
-                          <i class="ti ti-circle-chevron-right me-1"></i>Descending
-                        </a>
-                      </li>
-                      <li>
-                        <a href="javascript:void(0);" class="dropdown-item">
-                          <i class="ti ti-circle-chevron-right me-1"></i>Recently Viewed
-                        </a>
-                      </li>
-                      <li>
-                        <a href="javascript:void(0);" class="dropdown-item">
-                          <i class="ti ti-circle-chevron-right me-1"></i>Recently Added
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <app-date-range-picker></app-date-range-picker>
-              </div>
-            </div>
-            <!-- /Filter -->
-
             <!-- Manage Users List -->
             <div class="table-responsive custom-table">
               <table matSort (matSortChange)="sortData($event)" class="table" id="manage-users-list">
@@ -113,7 +76,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @for (data of tableData; track data) {
+                  @for (data of ELEMENT_DATA; track data) {
                   <tr class="odd">
                     <td>
                       <h2 class="table-avatar d-flex align-items-center">
@@ -194,7 +157,8 @@
                 </tbody>
               </table>
             </div>
-            <app-custom-pagination></app-custom-pagination>
+            <mat-paginator [length]="totalPages" [pageSizeOptions]="pageSizes" showFirstLastButtons></mat-paginator> 
+            <!-- <app-custom-pagination></app-custom-pagination> -->
             <div class="row align-items-center">
               <div class="col-md-6">
                 <div class="datatable-length"></div>

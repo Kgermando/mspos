@@ -37,44 +37,18 @@ import { MatPaginator } from '@angular/material/paginator';
 export class UserListComponent implements OnInit {
   isLoadingData = false;
   public routes = routes;
-
-  ELEMENT_DATA: IUser[] = [];
-  pageSize = 15; // Default page size
-  pageCurrent = 1; // Default page number
-  totalPages = 0; // Stores total pages from API response 
-  
-  dataSource = new MatTableDataSource<IUser>(this.ELEMENT_DATA); 
-
-  @ViewChild(MatSort) sort: MatSort | any;
-  @ViewChild(MatPaginator) paginator: MatPaginator | any;
-
-
-
-  // pagination variables
-  public tableData: IUser[] = [];
-  // public pageSize = 15;
-  public serialNumberArray: number[] = [];
-  public totalData = 0;
-  showFilter = false;
-  // dataSource!: MatTableDataSource<IUser>;
-  public searchDataValue = '';
-  public tableDataCopy: IUser[] = [];
-  public actualData: IUser[] = [];
-  public totalUser: number = 0;
-  //** pagination variables
-  initChecked = false;
   public sidebarPopup1 = false;
   public sidebarPopup2 = false;
-  public password: boolean[] = [false];
 
+  // Forms  
   idItem!: number;
-  dataItem!: IUser; // Single data
-
+  dataItem!: IUser; // Single data 
 
   formGroup!: FormGroup;
   currentUser!: UserModel;
   isLoading = false;
 
+  public password: boolean[] = [false];
   isStatusList: boolean[] = [false, true];
   isTitleList: string[] = [
     'Manager',
@@ -90,10 +64,23 @@ export class UserListComponent implements OnInit {
   areaList: IArea[] = [];
   areaListFilter: IArea[] = [];
   supList: ISup[] = [];
-  supListFilter: ISup[] = []; 
-
+  supListFilter: ISup[] = [];  
   isManager = false; 
 
+
+  // Table
+  ELEMENT_DATA: IUser[] = [];
+  currentPage = 1; // Default page number
+  pageSize = 15; // Default page size 
+  totalPages = 0; // total data from API response 
+  
+  dataSource = new MatTableDataSource<IUser>(this.ELEMENT_DATA); 
+
+  @ViewChild(MatSort) sort: MatSort | any;
+  @ViewChild(MatPaginator) paginator: MatPaginator | any;
+  pageSizes = [5, 10, 20];
+
+  public searchDataValue = ''; 
 
   constructor(
     private pagination: PaginationService,
@@ -107,10 +94,10 @@ export class UserListComponent implements OnInit {
     private toastr: ToastrService
   ) {
 
-  }
-
-
-  ngOnInit(): void {
+  } 
+   
+  
+  ngOnInit() {
     this.formGroup = this._formBuilder.group({
       fullname: ['', Validators.required],
       email: ['', Validators.required],
@@ -129,105 +116,53 @@ export class UserListComponent implements OnInit {
       is_manager: [''],
     }); 
 
-    
-    
-    this.isLoadingData = true; 
+    this.isLoadingData = true;
     this.authService.user().subscribe({
-      next: (user) => {
-        this.currentUser = user; 
-       
-        this.provinceService.getAll().subscribe(res => {
-          this.provinceList = res.data;
-        });
-        this.areaService.getAll().subscribe(res => {
-          this.areaList = res.data;
-        });
-        this.supService.getAll().subscribe(res => {
-          this.supList = res.data;
-        });
-      },
-      error: (error) => {
-        this.router.navigate(['/auth/login']);
-        console.log(error);
-      }
-    });
-
-
-    this.usersService.refreshDataList$.subscribe(() => {
-      this.usersService.getAll().subscribe((apiRes: apiResultFormat) => {
-        this.actualData = apiRes.data;
-        this.totalUser = apiRes.meta.total;
-        this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-          if (this.router.url == this.routes.userList) {
-            this.getTableData({ skip: res.skip, limit: res.limit });
-            this.pageSize = res.pageSize;
-          }
-        });
-      });
-    });
-    this.usersService.getAll().subscribe((apiRes: apiResultFormat) => {
-      this.actualData = apiRes.data;
-      this.totalUser = apiRes.meta.total;
-      console.log("apiRes data", apiRes)
-      this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-        if (this.router.url == this.routes.userList) {
-          this.getTableData({ skip: res.skip, limit: res.limit });
-          this.pageSize = res.pageSize;
+        next: (user) => {
+          this.currentUser = user; 
+          this.provinceService.getAll().subscribe(res => {
+            this.provinceList = res.data;
+          });
+          this.areaService.getAll().subscribe(res => {
+            this.areaList = res.data;
+          });
+          this.supService.getAll().subscribe(res => {
+            this.supList = res.data;
+          });
+          this.usersService.refreshDataList$.subscribe(() => {
+            this.fetchProducts();
+          });
+          this.fetchProducts();
+        },
+        error: (error) => {
+          this.isLoadingData = false;
+          this.router.navigate(['/auth/login']);
+          console.log(error);
         }
-      });
-    });
-    this.fetchProducts();
+      });  
   }
 
 
   private fetchProducts() {
-    this.usersService.getPaginated(this.pageSize, this.pageCurrent)
+    this.usersService.getPaginated(this.currentPage, this.pageSize)
       .subscribe(response => {
         this.ELEMENT_DATA = response.data; 
         this.dataSource = new MatTableDataSource<IUser>(this.ELEMENT_DATA);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
-        this.totalPages = response.pagination.total_pages;
-        console.log("ELEMENT_DATA", this.ELEMENT_DATA)
+        this.totalPages = response.meta.total;
+        console.log("response", response)
         this.isLoadingData = false;
       }
     );
   }
 
-  private getTableData(pageOption: pageSelection): void {
-    this.usersService.getAll().subscribe((apiRes: apiResultFormat) => {
-      this.tableData = [];
-      this.tableDataCopy = [];
-      this.serialNumberArray = [];
-      this.totalData = apiRes.totalData;
-      apiRes.data.map((res: IUser, index: number) => {
-        const serialNumber = index + 1;
-        if (index >= pageOption.skip && serialNumber <= pageOption.limit) {
-          res.ID = serialNumber;
-          this.tableData.push(res);
-          this.serialNumberArray.push(serialNumber);
-          this.tableDataCopy.push(res);
-        }
-      });
-      this.dataSource = new MatTableDataSource<IUser>(this.actualData);
-      this.pagination.calculatePageSize.next({
-        totalData: this.totalData,
-        pageSize: this.pageSize,
-        tableData: this.tableData,
-        tableDataCopy: this.tableDataCopy,
-        serialNumberArray: this.serialNumberArray,
-      });
-      this.isLoadingData = false
-    });
-   
-  }
-
   public sortData(sort: Sort) {
-    const data = this.tableData.slice();
+    const data = this.ELEMENT_DATA.slice();
     if (!sort.active || sort.direction === '') {
-      this.tableData = data;
+      this.ELEMENT_DATA = data;
     } else {
-      this.tableData = data.sort((a, b) => {
+      this.ELEMENT_DATA = data.sort((a, b) => {
         const aValue = (a as never)[sort.active];
         const bValue = (b as never)[sort.active];
         return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
@@ -236,12 +171,75 @@ export class UserListComponent implements OnInit {
   }
   public searchData(value: string): void {
     if (value == '') {
-      this.tableData = this.tableDataCopy;
+      this.ELEMENT_DATA = this.ELEMENT_DATA;
     } else {
       this.dataSource.filter = value.trim().toLowerCase();
-      this.tableData = this.dataSource.filteredData;
+      this.ELEMENT_DATA = this.dataSource.filteredData;
     }
   }
+
+
+
+  // ngOnInits(): void {  
+
+
+  //   this.usersService.refreshDataList$.subscribe(() => {
+  //     this.usersService.getAll().subscribe((apiRes: apiResultFormat) => {
+  //       this.actualData = apiRes.data;
+  //       this.totalUser = apiRes.meta.total;
+  //       this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
+  //         if (this.router.url == this.routes.userList) {
+  //           this.getTableData({ skip: res.skip, limit: res.limit });
+  //           this.pageSize = res.pageSize;
+  //         }
+  //       });
+  //     });
+  //   });
+  //   this.usersService.getAll().subscribe((apiRes: apiResultFormat) => {
+  //     this.actualData = apiRes.data;
+  //     this.totalUser = apiRes.meta.total;
+  //     console.log("apiRes data", apiRes)
+  //     this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
+  //       if (this.router.url == this.routes.userList) {
+  //         this.getTableData({ skip: res.skip, limit: res.limit });
+  //         this.pageSize = res.pageSize;
+  //       }
+  //     });
+  //   });
+  //   this.fetchProducts();
+  // }
+
+
+
+  // private getTableData(pageOption: pageSelection): void {
+  //   this.usersService.getAll().subscribe((apiRes: apiResultFormat) => {
+  //     this.tableData = [];
+  //     this.tableDataCopy = [];
+  //     this.serialNumberArray = [];
+  //     this.totalData = apiRes.totalData;
+  //     apiRes.data.map((res: IUser, index: number) => {
+  //       const serialNumber = index + 1;
+  //       if (index >= pageOption.skip && serialNumber <= pageOption.limit) {
+  //         res.ID = serialNumber;
+  //         this.tableData.push(res);
+  //         this.serialNumberArray.push(serialNumber);
+  //         this.tableDataCopy.push(res);
+  //       }
+  //     });
+  //     this.dataSource = new MatTableDataSource<IUser>(this.actualData);
+  //     this.pagination.calculatePageSize.next({
+  //       totalData: this.totalData,
+  //       pageSize: this.pageSize,
+  //       tableData: this.tableData,
+  //       tableDataCopy: this.tableDataCopy,
+  //       serialNumberArray: this.serialNumberArray,
+  //     });
+  //     this.isLoadingData = false
+  //   });
+   
+  // }
+
+
 
   openSidebarPopup1() {
     this.sidebarPopup1 = !this.sidebarPopup1;
@@ -344,7 +342,7 @@ export class UserListComponent implements OnInit {
   }
 
   findValue(value: string) {
-    this.actualData.forEach(item => {
+    this.ELEMENT_DATA.forEach(item => {
       if (item.fullname === value) {
         this.idItem = item.ID;
         if (this.idItem) {

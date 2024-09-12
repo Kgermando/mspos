@@ -21,6 +21,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatPaginator } from '@angular/material/paginator';
 
 @NgModule({
   imports: [
@@ -44,7 +45,8 @@ import { MatSliderModule } from '@angular/material/slider';
     MatAutocompleteModule,
     MatCardModule,
     MatTooltipModule,
-    MatSliderModule
+    MatSliderModule,
+    MatPaginator,
   ],
   exports: [
     MatButtonModule,
@@ -67,7 +69,8 @@ import { MatSliderModule } from '@angular/material/slider';
     MatAutocompleteModule,
     MatCardModule,
     MatTooltipModule,
-    MatSliderModule
+    MatSliderModule,
+    MatPaginator,
   ],
   providers: [
     {

@@ -21,11 +21,10 @@ export abstract class ApiService {
   get refreshData$() {
     return this._refreshData$;
   }
-
-
-  getPaginated(pageSize: number, pageNumber: number): Observable<any> {
-    const params = { page_size: pageSize, page_number: pageNumber };
-    return this.http.get<any>(this.endpoint, { params });
+ 
+  getPaginated(currentPage: number, pageSize: number): Observable<any> {
+    const params = {page: currentPage, total: pageSize };
+    return this.http.get<any>(`${this.endpoint}/all`, { params });
   }
 
   getPaginatedById(id: number, pageSize: number, pageNumber: number): Observable<any> {
