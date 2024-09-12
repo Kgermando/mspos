@@ -23,7 +23,7 @@ export abstract class ApiService {
   }
  
   getPaginated(currentPage: number, pageSize: number): Observable<any> {
-    const params = {page: currentPage, total: pageSize };
+    const params = {last_page: currentPage, total: pageSize };
     return this.http.get<any>(`${this.endpoint}/all`, { params });
   }
 
