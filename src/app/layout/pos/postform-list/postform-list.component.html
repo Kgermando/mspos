@@ -108,7 +108,7 @@
                             <table matSort (matSortChange)="sortData($event)" class="table" id="contracts-list">
                                 <thead class="thead-light">
                                     <tr>
-                                        <th mat-sort-header="equateur">EQ</th>
+                                        <th mat-sort-header="eq">EQ</th>
                                         <th mat-sort-header="sold">SOLDE</th>
                                         <th mat-sort-header="dhl">DHL</th>
                                         <th mat-sort-header="ar">AR</th>
@@ -134,7 +134,7 @@
                                 <tbody>
                                     @for (data of tableData; track data; let i = $index) {
                                     <tr class="odd">
-                                        <td>{{ data.equateur }}</td>
+                                        <td>{{ data.eq }}</td>
                                         <td>{{ data.sold }}</td>
                                         <td>{{ data.dhl }}</td>
                                         <td>{{ data.ar }}</td>
@@ -246,8 +246,8 @@
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label class="col-form-label" for="text">EQ <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control" formControlName="equateur" required />
-                            <mat-error *ngIf="formGroup.controls['equateur'].hasError('required')">
+                            <input type="number" class="form-control" formControlName="eq" required />
+                            <mat-error *ngIf="formGroup.controls['eq'].hasError('required')">
                                 Ce champs est obligatoire
                             </mat-error>
                         </div>
@@ -416,8 +416,8 @@
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label class="col-form-label" for="text">EQ <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control" formControlName="equateur" required />
-                            <mat-error *ngIf="formGroup.controls['equateur'].hasError('required')">
+                            <input type="number" class="form-control" formControlName="eq" required />
+                            <mat-error *ngIf="formGroup.controls['eq'].hasError('required')">
                                 Ce champs est obligatoire
                             </mat-error>
                         </div>
