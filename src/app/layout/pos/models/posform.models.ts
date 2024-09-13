@@ -12,6 +12,8 @@ export interface IPosForm {
     sbl1: number;
     pmf: number;
     pmf1: number;
+    pmm: number;
+    pmm1: number;
     ticket: number;
     ticket1: number;
     mtc: number;

@@ -114,6 +114,7 @@
                                         <th mat-sort-header="ar">AR</th>
                                         <th mat-sort-header="sbl">SBL</th>
                                         <th mat-sort-header="pmf">PMF</th>
+                                        <th mat-sort-header="pmm">PMM</th>
                                         <th mat-sort-header="ticket">TICKET</th>
                                         <th mat-sort-header="mtc">MTC</th>
                                         <th mat-sort-header="ws">WS</th>
@@ -140,6 +141,7 @@
                                         <td>{{ data.ar }}</td>
                                         <td>{{ data.sbl }}</td>
                                         <td>{{ data.pmf }}</td>
+                                        <td>{{ data.pmm }}</td>
                                         <td>{{ data.ticket }}</td>
                                         <td>{{ data.mtc }}</td>
                                         <td>{{ data.ws }}</td>
@@ -293,6 +295,15 @@
                             <label class="col-form-label" for="text">PMF <span class="text-danger">*</span></label>
                             <input type="number" class="form-control" formControlName="pmf" required />
                             <mat-error *ngIf="formGroup.controls['pmf'].hasError('required')">
+                                Ce champs est obligatoire
+                            </mat-error>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="text">PMM <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" formControlName="pmm" required />
+                            <mat-error *ngIf="formGroup.controls['pmm'].hasError('required')">
                                 Ce champs est obligatoire
                             </mat-error>
                         </div>
@@ -463,6 +474,15 @@
                             <label class="col-form-label" for="text">PMF <span class="text-danger">*</span></label>
                             <input type="number" class="form-control" formControlName="pmf" required />
                             <mat-error *ngIf="formGroup.controls['pmf'].hasError('required')">
+                                Ce champs est obligatoire
+                            </mat-error>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="text">PMM <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" formControlName="pmm" required />
+                            <mat-error *ngIf="formGroup.controls['pmm'].hasError('required')">
                                 Ce champs est obligatoire
                             </mat-error>
                         </div>

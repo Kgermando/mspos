@@ -18,6 +18,12 @@ export interface NDDashboardTableView {
     Time: number,
 }
 
+export interface NDAverage {
+    x: string;
+    y: number;
+}
+ 
+
 export interface NDDashboardByArea {
     Eq: number, 
     Dhl: number,
