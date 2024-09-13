@@ -6,6 +6,7 @@ import { SettingsService } from '../../../shared/settings/settings.service';
 import { Auth } from '../../../auth/classes/auth';
 import { UserModel } from '../../../auth/models/user.model';
 import { AuthService } from '../../../auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -20,11 +21,12 @@ export class HeaderComponent implements OnInit {
   public miniSidebar = false;
   public routes = routes;
 
-  currentUser!: UserModel; 
+  currentUser!: UserModel;
 
 
   constructor(
     private common: CommonService,
+    private router: Router,
     private sidebar: SidebarService,
     private settings: SettingsService,
     private authService: AuthService,
@@ -48,25 +50,25 @@ export class HeaderComponent implements OnInit {
     this.settings.themeMode.subscribe((res: string) => {
       this.themeMode = res;
     });
-    
+
   }
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     Auth.userEmitter.subscribe(
-        user => {
-          this.currentUser = user; 
-        }
+      user => {
+        this.currentUser = user;
+      }
     );
-}
+  }
 
 
-logout() {
-  this.authService.logout().subscribe(res => {
-    console.log(res);
-    this.routes.login;
-});
-}
-  
+  logout() {
+    this.authService.logout().subscribe(res => {
+      console.log(res);
+      this.router.navigate(['/auth/login']);
+    });
+  }
+
 
   public toggleSidebar(): void {
     this.sidebar.switchSideMenuPosition();
@@ -83,9 +85,9 @@ logout() {
       this.sidebar.expandSideBar.next(false);
     }
   }
-   public changeThemeMode(theme: string): void {
-     this.settings.themeMode.next(theme);
-     localStorage.setItem('themeMode', theme);
-   }
-  
+  public changeThemeMode(theme: string): void {
+    this.settings.themeMode.next(theme);
+    localStorage.setItem('themeMode', theme);
+  }
+
 }

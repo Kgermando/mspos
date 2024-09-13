@@ -14,6 +14,7 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { Auth } from '../auth/classes/auth';
+import { routes } from '../shared/routes/routes';
 
 @Component({
   selector: 'app-layout',
@@ -21,6 +22,7 @@ import { Auth } from '../auth/classes/auth';
   styleUrl: './layout.component.scss'
 })
 export class LayoutComponent implements OnInit {
+  public routes = routes;
   public miniSidebar = false;
   public expandMenu = false;
   public mobileSidebar = false;
@@ -121,27 +123,45 @@ export class LayoutComponent implements OnInit {
   }
   isCollapsed = false;
 
-  ngOnInit(): void {
-    this.data.collapse$.subscribe((collapse: boolean) => {
-      this.isCollapsed = collapse;
-    });
-    this.Router.events.subscribe((event) => {
-      if (event instanceof NavigationStart) {
-        const url = event.url;
-        if (
-          url.includes('mspos-dashboard') 
-        ) {
-          this.showPreloader = true;
-          setTimeout(() => {
-            this.showPreloader = false;
-          }, 2000);
-        }
-      }
-    });
-    
+  ngOnInit(): void { 
     this.authService.user().subscribe({
-      next: (user) => Auth.userEmitter.emit(user),
+      next: (user) => {
+        Auth.userEmitter.emit(user);
+
+        this.data.collapse$.subscribe((collapse: boolean) => {
+          this.isCollapsed = collapse;
+        });
+    
+        this.Router.events.subscribe((event) => {
+          if (event instanceof NavigationStart) {
+            const url = event.url;
+            if (
+              url.includes('mspos-dashboard'),
+              url.includes('numeric-distribution'),
+              url.includes('weighted-distribution'),
+              url.includes('share-in-shop-handling'),
+              url.includes('out-of-stock'),
+              url.includes('share-of-stock'),
+
+              url.includes('pos-form-list'),
+              url.includes('user-list'),
+              url.includes('province-list'),
+              url.includes('ares-list'),
+              url.includes('sup-list'),
+              url.includes('asm-list'),
+              url.includes('manager-list'),
+              url.includes('activity')
+            ) {
+              this.showPreloader = true;
+              setTimeout(() => {
+                this.showPreloader = false;
+              }, 2000);
+            }
+          }
+        });
+      },
       error: (error) => {
+        // this.routes.login;
         this.router.navigate(['/auth/login']);
         console.log(error);
       }

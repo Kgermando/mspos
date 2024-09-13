@@ -10,23 +10,26 @@ export class routes {
 
 
   // Auth
+  public static get auth(): string {
+    return this.core + '/auth';
+  }
   public static get login(): string {
-    return this.baseUrl + '/auth/login';
+    return this.auth + '/login';
   }
 
   public static get forgotPassword(): string {
-    return this.baseUrl + '/auth/forgot-password';
+    return this.auth + '/forgot-password';
   }
 
   public static get register(): string {
-    return this.baseUrl + '/auth/register';
+    return this.auth + '/register';
   }
   public static get emailVerification(): string {
-    return this.baseUrl + '/auth/email-verification';
+    return this.auth + '/email-verification';
   }
 
   public static get lockScreen(): string {
-    return this.baseUrl + '/auth/lock-screen';
+    return this.auth + '/lock-screen';
   }
 
 
