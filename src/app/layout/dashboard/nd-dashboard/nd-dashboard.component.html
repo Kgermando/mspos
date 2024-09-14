@@ -14,7 +14,7 @@
                     <mat-select class="select custom-mat-select" (selectionChange)="onProvinceChange($event)"
                       placeholder="Select province" [(ngModel)]="provinceName">
                       @for (item of provinceList; track item) {
-                      <mat-option value="{{item.ID}}">{{item.name}}</mat-option>
+                      <mat-option [value]="item">{{item.name}}</mat-option>
                       }
                     </mat-select>
                   </div>
@@ -39,14 +39,14 @@
       <div class="col-md-6 d-flex">
         <div class="card flex-fill">
           <div class="card-header border-0 pb-0">
-            <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-              <h4><i class="ti ti-grip-vertical me-1"></i>ND Average</h4>
+            <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3"> 
+              <h4><i class="ti ti-grip-vertical me-1"></i>ND Average by province</h4>
               <div class="d-flex align-items-center flex-wrap row-gap-2">
                 <div class="dropdown">
                   <mat-select class="select custom-mat-select" placeholder="Select area"
                     (selectionChange)="onAreaChange($event)">
                     @for (item of areaListFilter; track item) {
-                      <mat-option value="{{item.name}}">{{item.name}}</mat-option>
+                      <mat-option [value]="item">{{item.name}}</mat-option>
                     }
                   </mat-select>
                 </div>
@@ -70,7 +70,7 @@
         <div class="card flex-fill">
           <div class="card-header border-0 pb-0">
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-              <h4><i class="ti ti-grip-vertical me-1"></i>Performance Area pour Equateur</h4>
+              <h4><i class="ti ti-grip-vertical me-1"></i>Performances Area brand Equateur</h4>
             </div>
           </div>
           <div class="card-body">
@@ -90,7 +90,7 @@
         <div class="card w-100">
           <div class="card-header border-0 pb-0">
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-              <h4><i class="ti ti-grip-vertical me-1"></i>Table view</h4>
+              <h4><i class="ti ti-grip-vertical me-1"></i>Table view ND</h4>
             </div>
           </div>
           <div class="card-body">

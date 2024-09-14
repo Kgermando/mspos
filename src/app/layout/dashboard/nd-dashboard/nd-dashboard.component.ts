@@ -50,7 +50,7 @@ export type ChartOptionPie = {
   templateUrl: './nd-dashboard.component.html',
   styleUrl: './nd-dashboard.component.scss'
 })
-export class NdDashboardComponent implements OnInit {
+export class NdDashboardComponent implements OnChanges {
   public routes = routes;
   date = new Date();
   startDate = new Date();
@@ -95,6 +95,13 @@ export class NdDashboardComponent implements OnInit {
   Time = 0;
 
 
+  Funa = 0;
+  Lukunga = 0;
+  Tshiangu = 0;
+  MontAmba = 0;
+  Ngaliema = 0;
+
+
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions1: Partial<ChartOptions> | any;
   public chartOptions!: Partial<ChartOptions>;
@@ -122,6 +129,46 @@ export class NdDashboardComponent implements OnInit {
     if (this.last == 'nd-dashboard') {
       this.renderer.addClass(document.body, 'date-picker-dashboard');
     }
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    const start_date = new Date(this.date.getFullYear(), this.date.getMonth(), 1);
+    const endDate = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0);
+    console.log("Date select", start_date, endDate)
+
+    this.provinceService.getAll().subscribe(res => {
+      this.provinceList = res.data;
+    });
+    this.areaService.getAll().subscribe(res => {
+      this.areaList = res.data;
+      this.areaCount = res.meta.total;
+
+      console.log("areaCount", this.areaCount)
+    });
+
+    this.rangeValue = [start_date, endDate];
+    // Init date
+    this.start_date = formatDate(this.rangeValue[0], 'yyyy-MM-dd', 'en-US');
+    this.end_date = formatDate(this.rangeValue[1], 'yyyy-MM-dd', 'en-US');
+
+    // Select date change
+    this.rangeDate = new FormControl(this.rangeValue);
+    this.rangeDate.valueChanges
+      .pipe(debounceTime(this.debounce), distinctUntilChanged())
+      .subscribe(query => {
+        this.start_date = formatDate(query[0], 'yyyy-MM-dd', 'en-US');
+        this.end_date = formatDate(query[1], 'yyyy-MM-dd', 'en-US');
+        console.log("rangeValue 2", this.start_date, this.end_date)
+
+        this.getTableView(); 
+
+        this.getByAverage(); 
+    
+        this.getPerformanceEQArea();
+    
+        this.getChartByYear();
+      });
+
+   
   }
 
 
@@ -158,142 +205,7 @@ export class NdDashboardComponent implements OnInit {
         console.log("rangeValue 2", this.start_date, this.end_date)
       });
 
-    this.ndService.tableView(this.provinceName, this.start_date, this.end_date).subscribe((res) => {
-      this.tableView = res.data;
-      console.log("tableView 2", this.tableView)
-
-      for (let index = 0; index < this.tableView.length; index++) {
-        const element = this.tableView[index];
-        this.Eq = this.tableView.reduce(function (sum, value) {
-          return sum + value.Eq;
-        }, 0);
-        var eq = 0;
-        if (this.Eq > 0) {
-          eq = this.Eq / this.areaCount;
-        }
-        this.averages.push({ x: 'Eq', y: eq });
-
-        this.Dhl = this.tableView.reduce(function (sum, value) {
-          return sum + value.Dhl;
-        }, 0);
-        var dhl = 0;
-        if (this.Dhl > 0) {
-          dhl = this.Dhl / this.areaCount;
-        }
-        this.averages.push({ x: 'Dhl', y: dhl });
-
-        this.Ar = this.tableView.reduce(function (sum, value) {
-          return sum + value.Ar;
-        }, 0);
-        var ar = 0;
-        if (this.Ar > 0) {
-          ar = this.Ar / this.areaCount;
-        }
-        this.averages.push({ x: 'Ar', y: ar });
-
-        this.Sbl = this.tableView.reduce(function (sum, value) {
-          return sum + value.Sbl;
-        }, 0);
-        var sbl = 0;
-        if (this.Sbl > 0) {
-          sbl = this.Sbl / this.areaCount;
-        }
-        this.averages.push({ x: 'Sbl', y: sbl });
-
-        this.Pmf = this.tableView.reduce(function (sum, value) {
-          return sum + value.Pmf;
-        }, 0);
-        var pmf = 0;
-        if (this.Pmf > 0) {
-          pmf = this.Pmf / this.areaCount;
-        }
-        this.averages.push({ x: 'Pmf', y: pmf });
-
-        this.Pmm = this.tableView.reduce(function (sum, value) {
-          return sum + value.Pmm;
-        }, 0);
-        var pmm = 0;
-        if (this.Pmm > 0) {
-          pmm = this.Pmm / this.areaCount;
-        }
-        this.averages.push({ x: 'Pmm', y: pmm });
-
-        this.Ticket = this.tableView.reduce(function (sum, value) {
-          return sum + value.Ticket;
-        }, 0);
-        var ticket = 0;
-        if (this.Ticket > 0) {
-          ticket = this.Ticket / this.areaCount;
-        }
-        this.averages.push({ x: 'Ticket', y: ticket });
-
-        this.Mtc = this.tableView.reduce(function (sum, value) {
-          return sum + value.Mtc;
-        }, 0);
-        var mtc = 0;
-        if (this.Mtc > 0) {
-          mtc = this.Mtc / this.areaCount;
-        }
-        this.averages.push({ x: 'Mtc', y: mtc });
-
-        this.Ws = this.tableView.reduce(function (sum, value) {
-          return sum + value.Ws;
-        }, 0);
-        var ws = 0;
-        if (this.Ws > 0) {
-          ws = this.Ws / this.areaCount;
-        }
-        this.averages.push({ x: 'Ws', y: ws });
-
-        this.Mast = this.tableView.reduce(function (sum, value) {
-          return sum + value.Mast;
-        }, 0);
-        var mast = 0;
-        if (this.Mast > 0) {
-          mast = this.Mast / this.areaCount;
-        }
-        this.averages.push({ x: 'Mast', y: mast });
-
-        this.Oris = this.tableView.reduce(function (sum, value) {
-          return sum + value.Oris;
-        }, 0);
-        var oris = 0;
-        if (this.Oris > 0) {
-          oris = this.Oris / this.areaCount;
-        }
-        this.averages.push({ x: 'Oris', y: oris });
-
-        this.Elite = this.tableView.reduce(function (sum, value) {
-          return sum + value.Elite;
-        }, 0);
-        var elite = 0;
-        if (this.Elite > 0) {
-          elite = this.Elite / this.areaCount;
-        }
-        this.averages.push({ x: 'Elite', y: this.Elite });
-
-        this.Yes = this.tableView.reduce(function (sum, value) {
-          return sum + value.Yes;
-        }, 0);
-        var yes = 0;
-        if (this.Yes > 0) {
-          yes = this.Yes / this.areaCount;
-        }
-        this.averages.push({ x: 'Yes', y: yes });
-
-        this.Time = this.tableView.reduce(function (sum, value) {
-          return sum + value.Time;
-        }, 0);
-        var time = 0;
-        if (this.Time > 0) {
-          time = this.Time / this.areaCount;
-        }
-        this.averages.push({ x: 'Time', y: this.Time });
-      }
-
-     
-
-    });
+      this.getTableView();
 
     if (!this.area) {
       this.ndService.posByArea(this.provinceName, 'Funa', this.start_date, this.end_date).subscribe((res) => {
@@ -304,7 +216,9 @@ export class NdDashboardComponent implements OnInit {
 
     this.getByAverage();
 
-    this.getPerformanceEQ();
+    this.calculArea();
+
+    this.getPerformanceEQArea();
 
     this.getChartByYear();
   }
@@ -312,33 +226,1498 @@ export class NdDashboardComponent implements OnInit {
 
 
   onProvinceChange(event: any) {
-    const name = this.provinceList.find((v) => v.ID == event.value)?.name;
+    this.province = event.value;
+    this.provinceName = this.province.name;
+    console.log("Province", this.province) 
 
-    const areaArray = this.areaList.filter((v) => v.province_id == event.value);
+    const areaArray = this.areaList.filter((v) => v.province_id == this.province.ID);
     this.areaListFilter = areaArray.filter((obj, index, self) =>
       index === self.findIndex((t) => t.name === obj.name)
     );
 
-    this.ndService.tableView(name!, this.start_date, this.end_date).subscribe((res) => {
-      console.log("tableView", res.data)
-    });
+   this.getTableView();
   }
 
   onAreaChange(event: any) {
-    console.log("area", event.value);
-    this.ndService.posByArea(this.provinceName, this.area.name, this.start_date, this.end_date).subscribe((res) => {
-      this.tableArea = res.data;
-      console.log("tableArea 3", this.tableArea)
+    this.area = event.value
+    console.log("area", this.area); 
+    this.calculAverage();
+    // this.calculArea();
+    // this.ndService.posByArea(this.provinceName, this.area.name, this.start_date, this.end_date).subscribe((res) => {
+    //   this.tableArea = res.data;
+    //   console.log("tableArea 3", this.tableArea) 
+    // });
+  }
+
+  getTableView() {
+    console.log("provinceName", this.provinceName)
+    this.ndService.tableView(this.provinceName, this.start_date, this.end_date).subscribe((res) => {
+      this.tableView = res.data;
+      console.log("tableView 2", this.tableView) 
+      this.calculAverage();
+      this.calculArea();
+
     });
+  }
+
+
+  calculAverage() {
+    if (!this.area) {
+      for (let index = 0; index < this.tableView.length; index++) {
+        const element = this.tableView[index];
+        this.Eq = this.tableView.reduce(function (sum, value) {
+          return sum + value.Eq;
+        }, 0);
+        var eq = 0;
+        if (this.Eq > 0) {
+          eq = this.Eq / this.areaCount;
+        }
+        this.averages.push({ x: 'Eq', y: eq });
+  
+        this.Dhl = this.tableView.reduce(function (sum, value) {
+          return sum + value.Dhl;
+        }, 0);
+        var dhl = 0;
+        if (this.Dhl > 0) {
+          dhl = this.Dhl / this.areaCount;
+        }
+        this.averages.push({ x: 'Dhl', y: dhl });
+  
+        this.Ar = this.tableView.reduce(function (sum, value) {
+          return sum + value.Ar;
+        }, 0);
+        var ar = 0;
+        if (this.Ar > 0) {
+          ar = this.Ar / this.areaCount;
+        }
+        this.averages.push({ x: 'Ar', y: ar });
+  
+        this.Sbl = this.tableView.reduce(function (sum, value) {
+          return sum + value.Sbl;
+        }, 0);
+        var sbl = 0;
+        if (this.Sbl > 0) {
+          sbl = this.Sbl / this.areaCount;
+        }
+        this.averages.push({ x: 'Sbl', y: sbl });
+  
+        this.Pmf = this.tableView.reduce(function (sum, value) {
+          return sum + value.Pmf;
+        }, 0);
+        var pmf = 0;
+        if (this.Pmf > 0) {
+          pmf = this.Pmf / this.areaCount;
+        }
+        this.averages.push({ x: 'Pmf', y: pmf });
+  
+        this.Pmm = this.tableView.reduce(function (sum, value) {
+          return sum + value.Pmm;
+        }, 0);
+        var pmm = 0;
+        if (this.Pmm > 0) {
+          pmm = this.Pmm / this.areaCount;
+        }
+        this.averages.push({ x: 'Pmm', y: pmm });
+  
+        this.Ticket = this.tableView.reduce(function (sum, value) {
+          return sum + value.Ticket;
+        }, 0);
+        var ticket = 0;
+        if (this.Ticket > 0) {
+          ticket = this.Ticket / this.areaCount;
+        }
+        this.averages.push({ x: 'Ticket', y: ticket });
+  
+        this.Mtc = this.tableView.reduce(function (sum, value) {
+          return sum + value.Mtc;
+        }, 0);
+        var mtc = 0;
+        if (this.Mtc > 0) {
+          mtc = this.Mtc / this.areaCount;
+        }
+        this.averages.push({ x: 'Mtc', y: mtc });
+  
+        this.Ws = this.tableView.reduce(function (sum, value) {
+          return sum + value.Ws;
+        }, 0);
+        var ws = 0;
+        if (this.Ws > 0) {
+          ws = this.Ws / this.areaCount;
+        }
+        this.averages.push({ x: 'Ws', y: ws });
+  
+        this.Mast = this.tableView.reduce(function (sum, value) {
+          return sum + value.Mast;
+        }, 0);
+        var mast = 0;
+        if (this.Mast > 0) {
+          mast = this.Mast / this.areaCount;
+        }
+        this.averages.push({ x: 'Mast', y: mast });
+  
+        this.Oris = this.tableView.reduce(function (sum, value) {
+          return sum + value.Oris;
+        }, 0);
+        var oris = 0;
+        if (this.Oris > 0) {
+          oris = this.Oris / this.areaCount;
+        }
+        this.averages.push({ x: 'Oris', y: oris });
+  
+        this.Elite = this.tableView.reduce(function (sum, value) {
+          return sum + value.Elite;
+        }, 0);
+        var elite = 0;
+        if (this.Elite > 0) {
+          elite = this.Elite / this.areaCount;
+        }
+        this.averages.push({ x: 'Elite', y: this.Elite });
+  
+        this.Yes = this.tableView.reduce(function (sum, value) {
+          return sum + value.Yes;
+        }, 0);
+        var yes = 0;
+        if (this.Yes > 0) {
+          yes = this.Yes / this.areaCount;
+        }
+        this.averages.push({ x: 'Yes', y: yes });
+  
+        this.Time = this.tableView.reduce(function (sum, value) {
+          return sum + value.Time;
+        }, 0);
+        var time = 0;
+        if (this.Time > 0) {
+          time = this.Time / this.areaCount;
+        }
+        this.averages.push({ x: 'Time', y: this.Time });
+      }
+    } else { 
+      for (let index = 0; index < this.tableView.length; index++) {
+        const element = this.tableView[index];
+
+        if (element.Area == 'Funa') {
+          console.log("Area", 'Funa') 
+          this.Eq = this.tableView.reduce(function (sum, value) {
+            return sum + value.Eq;
+          }, 0);
+          var eq = 0;
+          if (this.Eq > 0) {
+            eq = this.Eq / this.areaCount;
+          }
+          this.averages.push({ x: 'Eq', y: eq });
+    
+          this.Dhl = this.tableView.reduce(function (sum, value) {
+            return sum + value.Dhl;
+          }, 0);
+          var dhl = 0;
+          if (this.Dhl > 0) {
+            dhl = this.Dhl / this.areaCount;
+          }
+          this.averages.push({ x: 'Dhl', y: dhl });
+    
+          this.Ar = this.tableView.reduce(function (sum, value) {
+            return sum + value.Ar;
+          }, 0);
+          var ar = 0;
+          if (this.Ar > 0) {
+            ar = this.Ar / this.areaCount;
+          }
+          this.averages.push({ x: 'Ar', y: ar });
+    
+          this.Sbl = this.tableView.reduce(function (sum, value) {
+            return sum + value.Sbl;
+          }, 0);
+          var sbl = 0;
+          if (this.Sbl > 0) {
+            sbl = this.Sbl / this.areaCount;
+          }
+          this.averages.push({ x: 'Sbl', y: sbl });
+    
+          this.Pmf = this.tableView.reduce(function (sum, value) {
+            return sum + value.Pmf;
+          }, 0);
+          var pmf = 0;
+          if (this.Pmf > 0) {
+            pmf = this.Pmf / this.areaCount;
+          }
+          this.averages.push({ x: 'Pmf', y: pmf });
+    
+          this.Pmm = this.tableView.reduce(function (sum, value) {
+            return sum + value.Pmm;
+          }, 0);
+          var pmm = 0;
+          if (this.Pmm > 0) {
+            pmm = this.Pmm / this.areaCount;
+          }
+          this.averages.push({ x: 'Pmm', y: pmm });
+    
+          this.Ticket = this.tableView.reduce(function (sum, value) {
+            return sum + value.Ticket;
+          }, 0);
+          var ticket = 0;
+          if (this.Ticket > 0) {
+            ticket = this.Ticket / this.areaCount;
+          }
+          this.averages.push({ x: 'Ticket', y: ticket });
+    
+          this.Mtc = this.tableView.reduce(function (sum, value) {
+            return sum + value.Mtc;
+          }, 0);
+          var mtc = 0;
+          if (this.Mtc > 0) {
+            mtc = this.Mtc / this.areaCount;
+          }
+          this.averages.push({ x: 'Mtc', y: mtc });
+    
+          this.Ws = this.tableView.reduce(function (sum, value) {
+            return sum + value.Ws;
+          }, 0);
+          var ws = 0;
+          if (this.Ws > 0) {
+            ws = this.Ws / this.areaCount;
+          }
+          this.averages.push({ x: 'Ws', y: ws });
+    
+          this.Mast = this.tableView.reduce(function (sum, value) {
+            return sum + value.Mast;
+          }, 0);
+          var mast = 0;
+          if (this.Mast > 0) {
+            mast = this.Mast / this.areaCount;
+          }
+          this.averages.push({ x: 'Mast', y: mast });
+    
+          this.Oris = this.tableView.reduce(function (sum, value) {
+            return sum + value.Oris;
+          }, 0);
+          var oris = 0;
+          if (this.Oris > 0) {
+            oris = this.Oris / this.areaCount;
+          }
+          this.averages.push({ x: 'Oris', y: oris });
+    
+          this.Elite = this.tableView.reduce(function (sum, value) {
+            return sum + value.Elite;
+          }, 0);
+          var elite = 0;
+          if (this.Elite > 0) {
+            elite = this.Elite / this.areaCount;
+          }
+          this.averages.push({ x: 'Elite', y: this.Elite });
+    
+          this.Yes = this.tableView.reduce(function (sum, value) {
+            return sum + value.Yes;
+          }, 0);
+          var yes = 0;
+          if (this.Yes > 0) {
+            yes = this.Yes / this.areaCount;
+          }
+          this.averages.push({ x: 'Yes', y: yes });
+    
+          this.Time = this.tableView.reduce(function (sum, value) {
+            return sum + value.Time;
+          }, 0);
+          var time = 0;
+          if (this.Time > 0) {
+            time = this.Time / this.areaCount;
+          }
+          this.averages.push({ x: 'Time', y: this.Time });
+        } else if (element.Area == 'Lukunga') {
+          console.log("Area", 'Lukunga') 
+          this.Eq = this.tableView.reduce(function (sum, value) {
+            return sum + value.Eq;
+          }, 0);
+          var eq = 0;
+          if (this.Eq > 0) {
+            eq = this.Eq / this.areaCount;
+          }
+          this.averages.push({ x: 'Eq', y: eq });
+    
+          this.Dhl = this.tableView.reduce(function (sum, value) {
+            return sum + value.Dhl;
+          }, 0);
+          var dhl = 0;
+          if (this.Dhl > 0) {
+            dhl = this.Dhl / this.areaCount;
+          }
+          this.averages.push({ x: 'Dhl', y: dhl });
+    
+          this.Ar = this.tableView.reduce(function (sum, value) {
+            return sum + value.Ar;
+          }, 0);
+          var ar = 0;
+          if (this.Ar > 0) {
+            ar = this.Ar / this.areaCount;
+          }
+          this.averages.push({ x: 'Ar', y: ar });
+    
+          this.Sbl = this.tableView.reduce(function (sum, value) {
+            return sum + value.Sbl;
+          }, 0);
+          var sbl = 0;
+          if (this.Sbl > 0) {
+            sbl = this.Sbl / this.areaCount;
+          }
+          this.averages.push({ x: 'Sbl', y: sbl });
+    
+          this.Pmf = this.tableView.reduce(function (sum, value) {
+            return sum + value.Pmf;
+          }, 0);
+          var pmf = 0;
+          if (this.Pmf > 0) {
+            pmf = this.Pmf / this.areaCount;
+          }
+          this.averages.push({ x: 'Pmf', y: pmf });
+    
+          this.Pmm = this.tableView.reduce(function (sum, value) {
+            return sum + value.Pmm;
+          }, 0);
+          var pmm = 0;
+          if (this.Pmm > 0) {
+            pmm = this.Pmm / this.areaCount;
+          }
+          this.averages.push({ x: 'Pmm', y: pmm });
+    
+          this.Ticket = this.tableView.reduce(function (sum, value) {
+            return sum + value.Ticket;
+          }, 0);
+          var ticket = 0;
+          if (this.Ticket > 0) {
+            ticket = this.Ticket / this.areaCount;
+          }
+          this.averages.push({ x: 'Ticket', y: ticket });
+    
+          this.Mtc = this.tableView.reduce(function (sum, value) {
+            return sum + value.Mtc;
+          }, 0);
+          var mtc = 0;
+          if (this.Mtc > 0) {
+            mtc = this.Mtc / this.areaCount;
+          }
+          this.averages.push({ x: 'Mtc', y: mtc });
+    
+          this.Ws = this.tableView.reduce(function (sum, value) {
+            return sum + value.Ws;
+          }, 0);
+          var ws = 0;
+          if (this.Ws > 0) {
+            ws = this.Ws / this.areaCount;
+          }
+          this.averages.push({ x: 'Ws', y: ws });
+    
+          this.Mast = this.tableView.reduce(function (sum, value) {
+            return sum + value.Mast;
+          }, 0);
+          var mast = 0;
+          if (this.Mast > 0) {
+            mast = this.Mast / this.areaCount;
+          }
+          this.averages.push({ x: 'Mast', y: mast });
+    
+          this.Oris = this.tableView.reduce(function (sum, value) {
+            return sum + value.Oris;
+          }, 0);
+          var oris = 0;
+          if (this.Oris > 0) {
+            oris = this.Oris / this.areaCount;
+          }
+          this.averages.push({ x: 'Oris', y: oris });
+    
+          this.Elite = this.tableView.reduce(function (sum, value) {
+            return sum + value.Elite;
+          }, 0);
+          var elite = 0;
+          if (this.Elite > 0) {
+            elite = this.Elite / this.areaCount;
+          }
+          this.averages.push({ x: 'Elite', y: this.Elite });
+    
+          this.Yes = this.tableView.reduce(function (sum, value) {
+            return sum + value.Yes;
+          }, 0);
+          var yes = 0;
+          if (this.Yes > 0) {
+            yes = this.Yes / this.areaCount;
+          }
+          this.averages.push({ x: 'Yes', y: yes });
+    
+          this.Time = this.tableView.reduce(function (sum, value) {
+            return sum + value.Time;
+          }, 0);
+          var time = 0;
+          if (this.Time > 0) {
+            time = this.Time / this.areaCount;
+          }
+          this.averages.push({ x: 'Time', y: this.Time });
+        } else if (element.Area == 'Tshiangu') {
+          console.log("Area", 'Tshiangu') 
+          this.Eq = this.tableView.reduce(function (sum, value) {
+            return sum + value.Eq;
+          }, 0);
+          var eq = 0;
+          if (this.Eq > 0) {
+            eq = this.Eq / this.areaCount;
+          }
+          this.averages.push({ x: 'Eq', y: eq });
+    
+          this.Dhl = this.tableView.reduce(function (sum, value) {
+            return sum + value.Dhl;
+          }, 0);
+          var dhl = 0;
+          if (this.Dhl > 0) {
+            dhl = this.Dhl / this.areaCount;
+          }
+          this.averages.push({ x: 'Dhl', y: dhl });
+    
+          this.Ar = this.tableView.reduce(function (sum, value) {
+            return sum + value.Ar;
+          }, 0);
+          var ar = 0;
+          if (this.Ar > 0) {
+            ar = this.Ar / this.areaCount;
+          }
+          this.averages.push({ x: 'Ar', y: ar });
+    
+          this.Sbl = this.tableView.reduce(function (sum, value) {
+            return sum + value.Sbl;
+          }, 0);
+          var sbl = 0;
+          if (this.Sbl > 0) {
+            sbl = this.Sbl / this.areaCount;
+          }
+          this.averages.push({ x: 'Sbl', y: sbl });
+    
+          this.Pmf = this.tableView.reduce(function (sum, value) {
+            return sum + value.Pmf;
+          }, 0);
+          var pmf = 0;
+          if (this.Pmf > 0) {
+            pmf = this.Pmf / this.areaCount;
+          }
+          this.averages.push({ x: 'Pmf', y: pmf });
+    
+          this.Pmm = this.tableView.reduce(function (sum, value) {
+            return sum + value.Pmm;
+          }, 0);
+          var pmm = 0;
+          if (this.Pmm > 0) {
+            pmm = this.Pmm / this.areaCount;
+          }
+          this.averages.push({ x: 'Pmm', y: pmm });
+    
+          this.Ticket = this.tableView.reduce(function (sum, value) {
+            return sum + value.Ticket;
+          }, 0);
+          var ticket = 0;
+          if (this.Ticket > 0) {
+            ticket = this.Ticket / this.areaCount;
+          }
+          this.averages.push({ x: 'Ticket', y: ticket });
+    
+          this.Mtc = this.tableView.reduce(function (sum, value) {
+            return sum + value.Mtc;
+          }, 0);
+          var mtc = 0;
+          if (this.Mtc > 0) {
+            mtc = this.Mtc / this.areaCount;
+          }
+          this.averages.push({ x: 'Mtc', y: mtc });
+    
+          this.Ws = this.tableView.reduce(function (sum, value) {
+            return sum + value.Ws;
+          }, 0);
+          var ws = 0;
+          if (this.Ws > 0) {
+            ws = this.Ws / this.areaCount;
+          }
+          this.averages.push({ x: 'Ws', y: ws });
+    
+          this.Mast = this.tableView.reduce(function (sum, value) {
+            return sum + value.Mast;
+          }, 0);
+          var mast = 0;
+          if (this.Mast > 0) {
+            mast = this.Mast / this.areaCount;
+          }
+          this.averages.push({ x: 'Mast', y: mast });
+    
+          this.Oris = this.tableView.reduce(function (sum, value) {
+            return sum + value.Oris;
+          }, 0);
+          var oris = 0;
+          if (this.Oris > 0) {
+            oris = this.Oris / this.areaCount;
+          }
+          this.averages.push({ x: 'Oris', y: oris });
+    
+          this.Elite = this.tableView.reduce(function (sum, value) {
+            return sum + value.Elite;
+          }, 0);
+          var elite = 0;
+          if (this.Elite > 0) {
+            elite = this.Elite / this.areaCount;
+          }
+          this.averages.push({ x: 'Elite', y: this.Elite });
+    
+          this.Yes = this.tableView.reduce(function (sum, value) {
+            return sum + value.Yes;
+          }, 0);
+          var yes = 0;
+          if (this.Yes > 0) {
+            yes = this.Yes / this.areaCount;
+          }
+          this.averages.push({ x: 'Yes', y: yes });
+    
+          this.Time = this.tableView.reduce(function (sum, value) {
+            return sum + value.Time;
+          }, 0);
+          var time = 0;
+          if (this.Time > 0) {
+            time = this.Time / this.areaCount;
+          }
+          this.averages.push({ x: 'Time', y: this.Time });
+        } else if (element.Area == 'Mont-amba') {
+          console.log("Area", 'Mont-amba') 
+          this.Eq = this.tableView.reduce(function (sum, value) {
+            return sum + value.Eq;
+          }, 0);
+          var eq = 0;
+          if (this.Eq > 0) {
+            eq = this.Eq / this.areaCount;
+          }
+          this.averages.push({ x: 'Eq', y: eq });
+    
+          this.Dhl = this.tableView.reduce(function (sum, value) {
+            return sum + value.Dhl;
+          }, 0);
+          var dhl = 0;
+          if (this.Dhl > 0) {
+            dhl = this.Dhl / this.areaCount;
+          }
+          this.averages.push({ x: 'Dhl', y: dhl });
+    
+          this.Ar = this.tableView.reduce(function (sum, value) {
+            return sum + value.Ar;
+          }, 0);
+          var ar = 0;
+          if (this.Ar > 0) {
+            ar = this.Ar / this.areaCount;
+          }
+          this.averages.push({ x: 'Ar', y: ar });
+    
+          this.Sbl = this.tableView.reduce(function (sum, value) {
+            return sum + value.Sbl;
+          }, 0);
+          var sbl = 0;
+          if (this.Sbl > 0) {
+            sbl = this.Sbl / this.areaCount;
+          }
+          this.averages.push({ x: 'Sbl', y: sbl });
+    
+          this.Pmf = this.tableView.reduce(function (sum, value) {
+            return sum + value.Pmf;
+          }, 0);
+          var pmf = 0;
+          if (this.Pmf > 0) {
+            pmf = this.Pmf / this.areaCount;
+          }
+          this.averages.push({ x: 'Pmf', y: pmf });
+    
+          this.Pmm = this.tableView.reduce(function (sum, value) {
+            return sum + value.Pmm;
+          }, 0);
+          var pmm = 0;
+          if (this.Pmm > 0) {
+            pmm = this.Pmm / this.areaCount;
+          }
+          this.averages.push({ x: 'Pmm', y: pmm });
+    
+          this.Ticket = this.tableView.reduce(function (sum, value) {
+            return sum + value.Ticket;
+          }, 0);
+          var ticket = 0;
+          if (this.Ticket > 0) {
+            ticket = this.Ticket / this.areaCount;
+          }
+          this.averages.push({ x: 'Ticket', y: ticket });
+    
+          this.Mtc = this.tableView.reduce(function (sum, value) {
+            return sum + value.Mtc;
+          }, 0);
+          var mtc = 0;
+          if (this.Mtc > 0) {
+            mtc = this.Mtc / this.areaCount;
+          }
+          this.averages.push({ x: 'Mtc', y: mtc });
+    
+          this.Ws = this.tableView.reduce(function (sum, value) {
+            return sum + value.Ws;
+          }, 0);
+          var ws = 0;
+          if (this.Ws > 0) {
+            ws = this.Ws / this.areaCount;
+          }
+          this.averages.push({ x: 'Ws', y: ws });
+    
+          this.Mast = this.tableView.reduce(function (sum, value) {
+            return sum + value.Mast;
+          }, 0);
+          var mast = 0;
+          if (this.Mast > 0) {
+            mast = this.Mast / this.areaCount;
+          }
+          this.averages.push({ x: 'Mast', y: mast });
+    
+          this.Oris = this.tableView.reduce(function (sum, value) {
+            return sum + value.Oris;
+          }, 0);
+          var oris = 0;
+          if (this.Oris > 0) {
+            oris = this.Oris / this.areaCount;
+          }
+          this.averages.push({ x: 'Oris', y: oris });
+    
+          this.Elite = this.tableView.reduce(function (sum, value) {
+            return sum + value.Elite;
+          }, 0);
+          var elite = 0;
+          if (this.Elite > 0) {
+            elite = this.Elite / this.areaCount;
+          }
+          this.averages.push({ x: 'Elite', y: this.Elite });
+    
+          this.Yes = this.tableView.reduce(function (sum, value) {
+            return sum + value.Yes;
+          }, 0);
+          var yes = 0;
+          if (this.Yes > 0) {
+            yes = this.Yes / this.areaCount;
+          }
+          this.averages.push({ x: 'Yes', y: yes });
+    
+          this.Time = this.tableView.reduce(function (sum, value) {
+            return sum + value.Time;
+          }, 0);
+          var time = 0;
+          if (this.Time > 0) {
+            time = this.Time / this.areaCount;
+          }
+          this.averages.push({ x: 'Time', y: this.Time });
+        } else if (element.Area == 'Ngaliema') {
+          console.log("Area", 'Ngaliema')
+          this.Eq = this.tableView.reduce(function (sum, value) {
+            return sum + value.Eq;
+          }, 0);
+          var eq = 0;
+          if (this.Eq > 0) {
+            eq = this.Eq / this.areaCount;
+          }
+          this.averages.push({ x: 'Eq', y: eq });
+    
+          this.Dhl = this.tableView.reduce(function (sum, value) {
+            return sum + value.Dhl;
+          }, 0);
+          var dhl = 0;
+          if (this.Dhl > 0) {
+            dhl = this.Dhl / this.areaCount;
+          }
+          this.averages.push({ x: 'Dhl', y: dhl });
+    
+          this.Ar = this.tableView.reduce(function (sum, value) {
+            return sum + value.Ar;
+          }, 0);
+          var ar = 0;
+          if (this.Ar > 0) {
+            ar = this.Ar / this.areaCount;
+          }
+          this.averages.push({ x: 'Ar', y: ar });
+    
+          this.Sbl = this.tableView.reduce(function (sum, value) {
+            return sum + value.Sbl;
+          }, 0);
+          var sbl = 0;
+          if (this.Sbl > 0) {
+            sbl = this.Sbl / this.areaCount;
+          }
+          this.averages.push({ x: 'Sbl', y: sbl });
+    
+          this.Pmf = this.tableView.reduce(function (sum, value) {
+            return sum + value.Pmf;
+          }, 0);
+          var pmf = 0;
+          if (this.Pmf > 0) {
+            pmf = this.Pmf / this.areaCount;
+          }
+          this.averages.push({ x: 'Pmf', y: pmf });
+    
+          this.Pmm = this.tableView.reduce(function (sum, value) {
+            return sum + value.Pmm;
+          }, 0);
+          var pmm = 0;
+          if (this.Pmm > 0) {
+            pmm = this.Pmm / this.areaCount;
+          }
+          this.averages.push({ x: 'Pmm', y: pmm });
+    
+          this.Ticket = this.tableView.reduce(function (sum, value) {
+            return sum + value.Ticket;
+          }, 0);
+          var ticket = 0;
+          if (this.Ticket > 0) {
+            ticket = this.Ticket / this.areaCount;
+          }
+          this.averages.push({ x: 'Ticket', y: ticket });
+    
+          this.Mtc = this.tableView.reduce(function (sum, value) {
+            return sum + value.Mtc;
+          }, 0);
+          var mtc = 0;
+          if (this.Mtc > 0) {
+            mtc = this.Mtc / this.areaCount;
+          }
+          this.averages.push({ x: 'Mtc', y: mtc });
+    
+          this.Ws = this.tableView.reduce(function (sum, value) {
+            return sum + value.Ws;
+          }, 0);
+          var ws = 0;
+          if (this.Ws > 0) {
+            ws = this.Ws / this.areaCount;
+          }
+          this.averages.push({ x: 'Ws', y: ws });
+    
+          this.Mast = this.tableView.reduce(function (sum, value) {
+            return sum + value.Mast;
+          }, 0);
+          var mast = 0;
+          if (this.Mast > 0) {
+            mast = this.Mast / this.areaCount;
+          }
+          this.averages.push({ x: 'Mast', y: mast });
+    
+          this.Oris = this.tableView.reduce(function (sum, value) {
+            return sum + value.Oris;
+          }, 0);
+          var oris = 0;
+          if (this.Oris > 0) {
+            oris = this.Oris / this.areaCount;
+          }
+          this.averages.push({ x: 'Oris', y: oris });
+    
+          this.Elite = this.tableView.reduce(function (sum, value) {
+            return sum + value.Elite;
+          }, 0);
+          var elite = 0;
+          if (this.Elite > 0) {
+            elite = this.Elite / this.areaCount;
+          }
+          this.averages.push({ x: 'Elite', y: this.Elite });
+    
+          this.Yes = this.tableView.reduce(function (sum, value) {
+            return sum + value.Yes;
+          }, 0);
+          var yes = 0;
+          if (this.Yes > 0) {
+            yes = this.Yes / this.areaCount;
+          }
+          this.averages.push({ x: 'Yes', y: yes });
+    
+          this.Time = this.tableView.reduce(function (sum, value) {
+            return sum + value.Time;
+          }, 0);
+          var time = 0;
+          if (this.Time > 0) {
+            time = this.Time / this.areaCount;
+          }
+          this.averages.push({ x: 'Time', y: this.Time });
+        }
+       
+      }
+    }
 
   }
 
 
-  getPerformanceEQ() {
+  calculArea() {
+    for (let index = 0; index < this.tableView.length; index++) {
+      const element = this.tableView[index];
+      if (element.Area == 'Funa') {
+        console.log("Area", 'Funa') 
+
+        this.Eq = this.tableView.reduce(function (sum, value) {
+          return sum + value.Eq;
+        }, 0);
+        var eq = 0;
+        if (this.Eq > 0) {
+          eq = this.Eq / this.areaCount;
+        }
+        this.averages.push({ x: 'Eq', y: eq });
+  
+        this.Dhl = this.tableView.reduce(function (sum, value) {
+          return sum + value.Dhl;
+        }, 0);
+        var dhl = 0;
+        if (this.Dhl > 0) {
+          dhl = this.Dhl / this.areaCount;
+        }
+        this.averages.push({ x: 'Dhl', y: dhl });
+  
+        this.Ar = this.tableView.reduce(function (sum, value) {
+          return sum + value.Ar;
+        }, 0);
+        var ar = 0;
+        if (this.Ar > 0) {
+          ar = this.Ar / this.areaCount;
+        }
+        this.averages.push({ x: 'Ar', y: ar });
+  
+        this.Sbl = this.tableView.reduce(function (sum, value) {
+          return sum + value.Sbl;
+        }, 0);
+        var sbl = 0;
+        if (this.Sbl > 0) {
+          sbl = this.Sbl / this.areaCount;
+        }
+        this.averages.push({ x: 'Sbl', y: sbl });
+  
+        this.Pmf = this.tableView.reduce(function (sum, value) {
+          return sum + value.Pmf;
+        }, 0);
+        var pmf = 0;
+        if (this.Pmf > 0) {
+          pmf = this.Pmf / this.areaCount;
+        }
+        this.averages.push({ x: 'Pmf', y: pmf });
+  
+        this.Pmm = this.tableView.reduce(function (sum, value) {
+          return sum + value.Pmm;
+        }, 0);
+        var pmm = 0;
+        if (this.Pmm > 0) {
+          pmm = this.Pmm / this.areaCount;
+        }
+        this.averages.push({ x: 'Pmm', y: pmm });
+  
+        this.Ticket = this.tableView.reduce(function (sum, value) {
+          return sum + value.Ticket;
+        }, 0);
+        var ticket = 0;
+        if (this.Ticket > 0) {
+          ticket = this.Ticket / this.areaCount;
+        }
+        this.averages.push({ x: 'Ticket', y: ticket });
+  
+        this.Mtc = this.tableView.reduce(function (sum, value) {
+          return sum + value.Mtc;
+        }, 0);
+        var mtc = 0;
+        if (this.Mtc > 0) {
+          mtc = this.Mtc / this.areaCount;
+        }
+        this.averages.push({ x: 'Mtc', y: mtc });
+  
+        this.Ws = this.tableView.reduce(function (sum, value) {
+          return sum + value.Ws;
+        }, 0);
+        var ws = 0;
+        if (this.Ws > 0) {
+          ws = this.Ws / this.areaCount;
+        }
+        this.averages.push({ x: 'Ws', y: ws });
+  
+        this.Mast = this.tableView.reduce(function (sum, value) {
+          return sum + value.Mast;
+        }, 0);
+        var mast = 0;
+        if (this.Mast > 0) {
+          mast = this.Mast / this.areaCount;
+        }
+        this.averages.push({ x: 'Mast', y: mast });
+  
+        this.Oris = this.tableView.reduce(function (sum, value) {
+          return sum + value.Oris;
+        }, 0);
+        var oris = 0;
+        if (this.Oris > 0) {
+          oris = this.Oris / this.areaCount;
+        }
+        this.averages.push({ x: 'Oris', y: oris });
+  
+        this.Elite = this.tableView.reduce(function (sum, value) {
+          return sum + value.Elite;
+        }, 0);
+        var elite = 0;
+        if (this.Elite > 0) {
+          elite = this.Elite / this.areaCount;
+        }
+        this.averages.push({ x: 'Elite', y: this.Elite });
+  
+        this.Yes = this.tableView.reduce(function (sum, value) {
+          return sum + value.Yes;
+        }, 0);
+        var yes = 0;
+        if (this.Yes > 0) {
+          yes = this.Yes / this.areaCount;
+        }
+        this.averages.push({ x: 'Yes', y: yes });
+  
+        this.Time = this.tableView.reduce(function (sum, value) {
+          return sum + value.Time;
+        }, 0);
+        var time = 0;
+        if (this.Time > 0) {
+          time = this.Time / this.areaCount;
+        }
+        this.averages.push({ x: 'Time', y: this.Time });
+
+      this.Funa = this.Eq + this.Dhl + this.Ar + this.Sbl + this.Pmf + 
+              this.Pmm + this.Ticket + this.Mtc + this.Ws + this.Mast + 
+              this.Oris + this.Elite + this.Yes + this.Time;
+
+      } else if (element.Area == 'Lukunga') {
+
+        console.log("Area", 'Lukunga') 
+        this.Eq = this.tableView.reduce(function (sum, value) {
+          return sum + value.Eq;
+        }, 0);
+        var eq = 0;
+        if (this.Eq > 0) {
+          eq = this.Eq / this.areaCount;
+        }
+        this.averages.push({ x: 'Eq', y: eq });
+  
+        this.Dhl = this.tableView.reduce(function (sum, value) {
+          return sum + value.Dhl;
+        }, 0);
+        var dhl = 0;
+        if (this.Dhl > 0) {
+          dhl = this.Dhl / this.areaCount;
+        }
+        this.averages.push({ x: 'Dhl', y: dhl });
+  
+        this.Ar = this.tableView.reduce(function (sum, value) {
+          return sum + value.Ar;
+        }, 0);
+        var ar = 0;
+        if (this.Ar > 0) {
+          ar = this.Ar / this.areaCount;
+        }
+        this.averages.push({ x: 'Ar', y: ar });
+  
+        this.Sbl = this.tableView.reduce(function (sum, value) {
+          return sum + value.Sbl;
+        }, 0);
+        var sbl = 0;
+        if (this.Sbl > 0) {
+          sbl = this.Sbl / this.areaCount;
+        }
+        this.averages.push({ x: 'Sbl', y: sbl });
+  
+        this.Pmf = this.tableView.reduce(function (sum, value) {
+          return sum + value.Pmf;
+        }, 0);
+        var pmf = 0;
+        if (this.Pmf > 0) {
+          pmf = this.Pmf / this.areaCount;
+        }
+        this.averages.push({ x: 'Pmf', y: pmf });
+  
+        this.Pmm = this.tableView.reduce(function (sum, value) {
+          return sum + value.Pmm;
+        }, 0);
+        var pmm = 0;
+        if (this.Pmm > 0) {
+          pmm = this.Pmm / this.areaCount;
+        }
+        this.averages.push({ x: 'Pmm', y: pmm });
+  
+        this.Ticket = this.tableView.reduce(function (sum, value) {
+          return sum + value.Ticket;
+        }, 0);
+        var ticket = 0;
+        if (this.Ticket > 0) {
+          ticket = this.Ticket / this.areaCount;
+        }
+        this.averages.push({ x: 'Ticket', y: ticket });
+  
+        this.Mtc = this.tableView.reduce(function (sum, value) {
+          return sum + value.Mtc;
+        }, 0);
+        var mtc = 0;
+        if (this.Mtc > 0) {
+          mtc = this.Mtc / this.areaCount;
+        }
+        this.averages.push({ x: 'Mtc', y: mtc });
+  
+        this.Ws = this.tableView.reduce(function (sum, value) {
+          return sum + value.Ws;
+        }, 0);
+        var ws = 0;
+        if (this.Ws > 0) {
+          ws = this.Ws / this.areaCount;
+        }
+        this.averages.push({ x: 'Ws', y: ws });
+  
+        this.Mast = this.tableView.reduce(function (sum, value) {
+          return sum + value.Mast;
+        }, 0);
+        var mast = 0;
+        if (this.Mast > 0) {
+          mast = this.Mast / this.areaCount;
+        }
+        this.averages.push({ x: 'Mast', y: mast });
+  
+        this.Oris = this.tableView.reduce(function (sum, value) {
+          return sum + value.Oris;
+        }, 0);
+        var oris = 0;
+        if (this.Oris > 0) {
+          oris = this.Oris / this.areaCount;
+        }
+        this.averages.push({ x: 'Oris', y: oris });
+  
+        this.Elite = this.tableView.reduce(function (sum, value) {
+          return sum + value.Elite;
+        }, 0);
+        var elite = 0;
+        if (this.Elite > 0) {
+          elite = this.Elite / this.areaCount;
+        }
+        this.averages.push({ x: 'Elite', y: this.Elite });
+  
+        this.Yes = this.tableView.reduce(function (sum, value) {
+          return sum + value.Yes;
+        }, 0);
+        var yes = 0;
+        if (this.Yes > 0) {
+          yes = this.Yes / this.areaCount;
+        }
+        this.averages.push({ x: 'Yes', y: yes });
+  
+        this.Time = this.tableView.reduce(function (sum, value) {
+          return sum + value.Time;
+        }, 0);
+        var time = 0;
+        if (this.Time > 0) {
+          time = this.Time / this.areaCount;
+        }
+        this.averages.push({ x: 'Time', y: this.Time });
+
+        this.Lukunga = this.Eq + this.Dhl + this.Ar + this.Sbl + this.Pmf + 
+              this.Pmm + this.Ticket + this.Mtc + this.Ws + this.Mast + 
+              this.Oris + this.Elite + this.Yes + this.Time;
+
+      } else if (element.Area == 'Tshiangu') {
+
+        console.log("Area", 'Tshiangu') 
+        this.Eq = this.tableView.reduce(function (sum, value) {
+          return sum + value.Eq;
+        }, 0);
+        var eq = 0;
+        if (this.Eq > 0) {
+          eq = this.Eq / this.areaCount;
+        }
+        this.averages.push({ x: 'Eq', y: eq });
+  
+        this.Dhl = this.tableView.reduce(function (sum, value) {
+          return sum + value.Dhl;
+        }, 0);
+        var dhl = 0;
+        if (this.Dhl > 0) {
+          dhl = this.Dhl / this.areaCount;
+        }
+        this.averages.push({ x: 'Dhl', y: dhl });
+  
+        this.Ar = this.tableView.reduce(function (sum, value) {
+          return sum + value.Ar;
+        }, 0);
+        var ar = 0;
+        if (this.Ar > 0) {
+          ar = this.Ar / this.areaCount;
+        }
+        this.averages.push({ x: 'Ar', y: ar });
+  
+        this.Sbl = this.tableView.reduce(function (sum, value) {
+          return sum + value.Sbl;
+        }, 0);
+        var sbl = 0;
+        if (this.Sbl > 0) {
+          sbl = this.Sbl / this.areaCount;
+        }
+        this.averages.push({ x: 'Sbl', y: sbl });
+  
+        this.Pmf = this.tableView.reduce(function (sum, value) {
+          return sum + value.Pmf;
+        }, 0);
+        var pmf = 0;
+        if (this.Pmf > 0) {
+          pmf = this.Pmf / this.areaCount;
+        }
+        this.averages.push({ x: 'Pmf', y: pmf });
+  
+        this.Pmm = this.tableView.reduce(function (sum, value) {
+          return sum + value.Pmm;
+        }, 0);
+        var pmm = 0;
+        if (this.Pmm > 0) {
+          pmm = this.Pmm / this.areaCount;
+        }
+        this.averages.push({ x: 'Pmm', y: pmm });
+  
+        this.Ticket = this.tableView.reduce(function (sum, value) {
+          return sum + value.Ticket;
+        }, 0);
+        var ticket = 0;
+        if (this.Ticket > 0) {
+          ticket = this.Ticket / this.areaCount;
+        }
+        this.averages.push({ x: 'Ticket', y: ticket });
+  
+        this.Mtc = this.tableView.reduce(function (sum, value) {
+          return sum + value.Mtc;
+        }, 0);
+        var mtc = 0;
+        if (this.Mtc > 0) {
+          mtc = this.Mtc / this.areaCount;
+        }
+        this.averages.push({ x: 'Mtc', y: mtc });
+  
+        this.Ws = this.tableView.reduce(function (sum, value) {
+          return sum + value.Ws;
+        }, 0);
+        var ws = 0;
+        if (this.Ws > 0) {
+          ws = this.Ws / this.areaCount;
+        }
+        this.averages.push({ x: 'Ws', y: ws });
+  
+        this.Mast = this.tableView.reduce(function (sum, value) {
+          return sum + value.Mast;
+        }, 0);
+        var mast = 0;
+        if (this.Mast > 0) {
+          mast = this.Mast / this.areaCount;
+        }
+        this.averages.push({ x: 'Mast', y: mast });
+  
+        this.Oris = this.tableView.reduce(function (sum, value) {
+          return sum + value.Oris;
+        }, 0);
+        var oris = 0;
+        if (this.Oris > 0) {
+          oris = this.Oris / this.areaCount;
+        }
+        this.averages.push({ x: 'Oris', y: oris });
+  
+        this.Elite = this.tableView.reduce(function (sum, value) {
+          return sum + value.Elite;
+        }, 0);
+        var elite = 0;
+        if (this.Elite > 0) {
+          elite = this.Elite / this.areaCount;
+        }
+        this.averages.push({ x: 'Elite', y: this.Elite });
+  
+        this.Yes = this.tableView.reduce(function (sum, value) {
+          return sum + value.Yes;
+        }, 0);
+        var yes = 0;
+        if (this.Yes > 0) {
+          yes = this.Yes / this.areaCount;
+        }
+        this.averages.push({ x: 'Yes', y: yes });
+  
+        this.Time = this.tableView.reduce(function (sum, value) {
+          return sum + value.Time;
+        }, 0);
+        var time = 0;
+        if (this.Time > 0) {
+          time = this.Time / this.areaCount;
+        }
+        this.averages.push({ x: 'Time', y: this.Time });
+        this.Tshiangu = this.Eq + this.Dhl + this.Ar + this.Sbl + this.Pmf + 
+              this.Pmm + this.Ticket + this.Mtc + this.Ws + this.Mast + 
+              this.Oris + this.Elite + this.Yes + this.Time;
+      } else if (element.Area == 'Mont-amba') {
+        
+        console.log("Area", 'Mont-amba') 
+        this.Eq = this.tableView.reduce(function (sum, value) {
+          return sum + value.Eq;
+        }, 0);
+        var eq = 0;
+        if (this.Eq > 0) {
+          eq = this.Eq / this.areaCount;
+        }
+        this.averages.push({ x: 'Eq', y: eq });
+  
+        this.Dhl = this.tableView.reduce(function (sum, value) {
+          return sum + value.Dhl;
+        }, 0);
+        var dhl = 0;
+        if (this.Dhl > 0) {
+          dhl = this.Dhl / this.areaCount;
+        }
+        this.averages.push({ x: 'Dhl', y: dhl });
+  
+        this.Ar = this.tableView.reduce(function (sum, value) {
+          return sum + value.Ar;
+        }, 0);
+        var ar = 0;
+        if (this.Ar > 0) {
+          ar = this.Ar / this.areaCount;
+        }
+        this.averages.push({ x: 'Ar', y: ar });
+  
+        this.Sbl = this.tableView.reduce(function (sum, value) {
+          return sum + value.Sbl;
+        }, 0);
+        var sbl = 0;
+        if (this.Sbl > 0) {
+          sbl = this.Sbl / this.areaCount;
+        }
+        this.averages.push({ x: 'Sbl', y: sbl });
+  
+        this.Pmf = this.tableView.reduce(function (sum, value) {
+          return sum + value.Pmf;
+        }, 0);
+        var pmf = 0;
+        if (this.Pmf > 0) {
+          pmf = this.Pmf / this.areaCount;
+        }
+        this.averages.push({ x: 'Pmf', y: pmf });
+  
+        this.Pmm = this.tableView.reduce(function (sum, value) {
+          return sum + value.Pmm;
+        }, 0);
+        var pmm = 0;
+        if (this.Pmm > 0) {
+          pmm = this.Pmm / this.areaCount;
+        }
+        this.averages.push({ x: 'Pmm', y: pmm });
+  
+        this.Ticket = this.tableView.reduce(function (sum, value) {
+          return sum + value.Ticket;
+        }, 0);
+        var ticket = 0;
+        if (this.Ticket > 0) {
+          ticket = this.Ticket / this.areaCount;
+        }
+        this.averages.push({ x: 'Ticket', y: ticket });
+  
+        this.Mtc = this.tableView.reduce(function (sum, value) {
+          return sum + value.Mtc;
+        }, 0);
+        var mtc = 0;
+        if (this.Mtc > 0) {
+          mtc = this.Mtc / this.areaCount;
+        }
+        this.averages.push({ x: 'Mtc', y: mtc });
+  
+        this.Ws = this.tableView.reduce(function (sum, value) {
+          return sum + value.Ws;
+        }, 0);
+        var ws = 0;
+        if (this.Ws > 0) {
+          ws = this.Ws / this.areaCount;
+        }
+        this.averages.push({ x: 'Ws', y: ws });
+  
+        this.Mast = this.tableView.reduce(function (sum, value) {
+          return sum + value.Mast;
+        }, 0);
+        var mast = 0;
+        if (this.Mast > 0) {
+          mast = this.Mast / this.areaCount;
+        }
+        this.averages.push({ x: 'Mast', y: mast });
+  
+        this.Oris = this.tableView.reduce(function (sum, value) {
+          return sum + value.Oris;
+        }, 0);
+        var oris = 0;
+        if (this.Oris > 0) {
+          oris = this.Oris / this.areaCount;
+        }
+        this.averages.push({ x: 'Oris', y: oris });
+  
+        this.Elite = this.tableView.reduce(function (sum, value) {
+          return sum + value.Elite;
+        }, 0);
+        var elite = 0;
+        if (this.Elite > 0) {
+          elite = this.Elite / this.areaCount;
+        }
+        this.averages.push({ x: 'Elite', y: this.Elite });
+  
+        this.Yes = this.tableView.reduce(function (sum, value) {
+          return sum + value.Yes;
+        }, 0);
+        var yes = 0;
+        if (this.Yes > 0) {
+          yes = this.Yes / this.areaCount;
+        }
+        this.averages.push({ x: 'Yes', y: yes });
+  
+        this.Time = this.tableView.reduce(function (sum, value) {
+          return sum + value.Time;
+        }, 0);
+        var time = 0;
+        if (this.Time > 0) {
+          time = this.Time / this.areaCount;
+        }
+        this.averages.push({ x: 'Time', y: this.Time });
+
+        this.MontAmba = this.Eq + this.Dhl + this.Ar + this.Sbl + this.Pmf + 
+              this.Pmm + this.Ticket + this.Mtc + this.Ws + this.Mast + 
+              this.Oris + this.Elite + this.Yes + this.Time;
+
+      } else if (element.Area == 'Ngaliema') {
+
+        console.log("Area", 'Ngaliema')
+        this.Eq = this.tableView.reduce(function (sum, value) {
+          return sum + value.Eq;
+        }, 0);
+        var eq = 0;
+        if (this.Eq > 0) {
+          eq = this.Eq / this.areaCount;
+        }
+        this.averages.push({ x: 'Eq', y: eq });
+  
+        this.Dhl = this.tableView.reduce(function (sum, value) {
+          return sum + value.Dhl;
+        }, 0);
+        var dhl = 0;
+        if (this.Dhl > 0) {
+          dhl = this.Dhl / this.areaCount;
+        }
+        this.averages.push({ x: 'Dhl', y: dhl });
+  
+        this.Ar = this.tableView.reduce(function (sum, value) {
+          return sum + value.Ar;
+        }, 0);
+        var ar = 0;
+        if (this.Ar > 0) {
+          ar = this.Ar / this.areaCount;
+        }
+        this.averages.push({ x: 'Ar', y: ar });
+  
+        this.Sbl = this.tableView.reduce(function (sum, value) {
+          return sum + value.Sbl;
+        }, 0);
+        var sbl = 0;
+        if (this.Sbl > 0) {
+          sbl = this.Sbl / this.areaCount;
+        }
+        this.averages.push({ x: 'Sbl', y: sbl });
+  
+        this.Pmf = this.tableView.reduce(function (sum, value) {
+          return sum + value.Pmf;
+        }, 0);
+        var pmf = 0;
+        if (this.Pmf > 0) {
+          pmf = this.Pmf / this.areaCount;
+        }
+        this.averages.push({ x: 'Pmf', y: pmf });
+  
+        this.Pmm = this.tableView.reduce(function (sum, value) {
+          return sum + value.Pmm;
+        }, 0);
+        var pmm = 0;
+        if (this.Pmm > 0) {
+          pmm = this.Pmm / this.areaCount;
+        }
+        this.averages.push({ x: 'Pmm', y: pmm });
+  
+        this.Ticket = this.tableView.reduce(function (sum, value) {
+          return sum + value.Ticket;
+        }, 0);
+        var ticket = 0;
+        if (this.Ticket > 0) {
+          ticket = this.Ticket / this.areaCount;
+        }
+        this.averages.push({ x: 'Ticket', y: ticket });
+  
+        this.Mtc = this.tableView.reduce(function (sum, value) {
+          return sum + value.Mtc;
+        }, 0);
+        var mtc = 0;
+        if (this.Mtc > 0) {
+          mtc = this.Mtc / this.areaCount;
+        }
+        this.averages.push({ x: 'Mtc', y: mtc });
+  
+        this.Ws = this.tableView.reduce(function (sum, value) {
+          return sum + value.Ws;
+        }, 0);
+        var ws = 0;
+        if (this.Ws > 0) {
+          ws = this.Ws / this.areaCount;
+        }
+        this.averages.push({ x: 'Ws', y: ws });
+  
+        this.Mast = this.tableView.reduce(function (sum, value) {
+          return sum + value.Mast;
+        }, 0);
+        var mast = 0;
+        if (this.Mast > 0) {
+          mast = this.Mast / this.areaCount;
+        }
+        this.averages.push({ x: 'Mast', y: mast });
+  
+        this.Oris = this.tableView.reduce(function (sum, value) {
+          return sum + value.Oris;
+        }, 0);
+        var oris = 0;
+        if (this.Oris > 0) {
+          oris = this.Oris / this.areaCount;
+        }
+        this.averages.push({ x: 'Oris', y: oris });
+  
+        this.Elite = this.tableView.reduce(function (sum, value) {
+          return sum + value.Elite;
+        }, 0);
+        var elite = 0;
+        if (this.Elite > 0) {
+          elite = this.Elite / this.areaCount;
+        }
+        this.averages.push({ x: 'Elite', y: this.Elite });
+  
+        this.Yes = this.tableView.reduce(function (sum, value) {
+          return sum + value.Yes;
+        }, 0);
+        var yes = 0;
+        if (this.Yes > 0) {
+          yes = this.Yes / this.areaCount;
+        }
+        this.averages.push({ x: 'Yes', y: yes });
+  
+        this.Time = this.tableView.reduce(function (sum, value) {
+          return sum + value.Time;
+        }, 0);
+        var time = 0;
+        if (this.Time > 0) {
+          time = this.Time / this.areaCount;
+        }
+        this.averages.push({ x: 'Time', y: this.Time });
+
+        this.Ngaliema = this.Eq + this.Dhl + this.Ar + this.Sbl + this.Pmf + 
+          this.Pmm + this.Ticket + this.Mtc + this.Ws + this.Mast + 
+          this.Oris + this.Elite + this.Yes + this.Time;
+      }
+    }
+  }
+
+
+
+
+
+
+  getPerformanceEQArea() { 
+    console.log("Erea", this.Funa, this.Lukunga, this.Tshiangu, this.MontAmba, this.Ngaliema)
     this.chartOptions2 = {
       series: [
         {
-          data: [90, 93, 95, 98],
+          data: [this.Funa, this.Lukunga, this.Tshiangu, this.MontAmba, this.Ngaliema],
           color: '#77D882',
         },
       ],
@@ -356,14 +1735,13 @@ export class NdDashboardComponent implements OnInit {
       },
 
       xaxis: {
-        categories: ['Funa', 'Lukunga', 'Tshiangu', 'Mont-amba'],
+        categories: ['Funa', 'Lukunga', 'Tshiangu', 'Mont-amba', 'Ngaliema'],
       },
     };
   }
 
 
-  getByAverage() {
-
+  getByAverage() { 
     console.log("averages", this.averages)
     this.chartOptions3 = {
       series: [
