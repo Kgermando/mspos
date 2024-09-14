@@ -1,5 +1,5 @@
 
-export interface NDDashboardTableView {
+export interface TableViewModel {
     Area: string,
     Eq: number,
     // Sold   : number,
@@ -18,13 +18,13 @@ export interface NDDashboardTableView {
     Time: number,
 }
 
-export interface NDAverage {
+export interface NDAverageModel {
     x: string;
     y: number;
 }
  
 
-export interface NDDashboardByArea {
+export interface NDByAreaModel {
     Eq: number, 
     Dhl: number,
     Ar: number,
@@ -39,4 +39,14 @@ export interface NDDashboardByArea {
     Elite: number, 
     Yes: number,
     Time: number,
+}
+
+export interface NDPerformanceModel {
+    area: string;
+    data: number;  
+}
+
+export interface NDYearModel {
+    mois: string;
+    eq: number;  
 }

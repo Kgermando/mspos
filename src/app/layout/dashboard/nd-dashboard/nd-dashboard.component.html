@@ -8,28 +8,30 @@
               <h3 class="page-title">Numeric distribution</h3>
             </div>
             <div class="col-md-8 float-end ms-auto">
-              <div class="d-flex title-head">
-                <div class="daterange-picker d-flex align-items-center justify-content-center">
-                  <div class="card mb-0">
-                    <mat-select class="select custom-mat-select" (selectionChange)="onProvinceChange($event)"
-                      placeholder="Select province" [(ngModel)]="provinceName">
-                      @for (item of provinceList; track item) {
-                      <mat-option [value]="item">{{item.name}}</mat-option>
-                      }
-                    </mat-select>
-                  </div>
-                  <div class="form-sort me-2">
-                    <i class="ti ti-calendar"></i>
-                    <input type="text" class="form-control date-range bookingrange" bsDaterangepicker
-                      [bsConfig]="{ adaptivePosition: true }" [formControl]="rangeDate" />
-                  </div>
-                  <div class="head-icons mb-0">
-                    <a [routerLink]="routes.ndDashboard" data-bs-toggle="tooltip" data-bs-placement="top"
-                      data-bs-original-title="Refresh" matTooltip="Refresh"><i class="ti ti-refresh-dot"></i></a>
-                    <app-collapse-header></app-collapse-header>
+              <form [formGroup]="dateRange">
+                <div class="d-flex title-head">
+                  <div class="daterange-picker d-flex align-items-center justify-content-center">
+                    <div class="card mb-0">
+                      <mat-select class="select custom-mat-select" placeholder="Select province" 
+                          formControlName="province">
+                        @for (item of provinceList; track item) {
+                        <mat-option [value]="item">{{item.name}}</mat-option>
+                        }
+                      </mat-select>
+                    </div>
+                    <div class="form-sort me-2">
+                      <i class="ti ti-calendar"></i>
+                      <input type="text" class="form-control date-range bookingrange" bsDaterangepicker
+                        [bsConfig]="{ adaptivePosition: true }"  formControlName="rangeValue" />
+                    </div>
+                    <div class="head-icons mb-0">
+                      <a [routerLink]="routes.ndDashboard" data-bs-toggle="tooltip" data-bs-placement="top"
+                        data-bs-original-title="Refresh" matTooltip="Refresh"><i class="ti ti-refresh-dot"></i></a>
+                      <app-collapse-header></app-collapse-header>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>
@@ -39,30 +41,13 @@
       <div class="col-md-6 d-flex">
         <div class="card flex-fill">
           <div class="card-header border-0 pb-0">
-            <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3"> 
-              <h4><i class="ti ti-grip-vertical me-1"></i>ND Average by province</h4>
-              <div class="d-flex align-items-center flex-wrap row-gap-2">
-                <div class="dropdown">
-                  <mat-select class="select custom-mat-select" placeholder="Select area"
-                    (selectionChange)="onAreaChange($event)">
-                    @for (item of areaListFilter; track item) {
-                      <mat-option [value]="item">{{item.name}}</mat-option>
-                    }
-                  </mat-select>
-                </div>
-              </div>
+            <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+              <h4><i class="ti ti-grip-vertical me-1"></i>ND Average by area</h4> 
             </div>
           </div>
           <div class="card-body">
-            @if (averages.length > 0) {
-              <div id="deals-chart">
-                <apx-chart [series]="chartOptions3.series" [chart]="chartOptions3.chart"
-                  [dataLabels]="chartOptions3.dataLabels" [plotOptions]="chartOptions3.plotOptions"
-                  [yaxis]="chartOptions3.yaxis" [xaxis]="chartOptions3.xaxis" [stroke]="chartOptions3.stroke"
-                  [grid]="chartOptions3.grid" [fill]="chartOptions3.fill" [annotations]="chartOptions3.annotations"
-                  [colors]="chartOptions3.colors"></apx-chart>
-              </div>
-            }
+            <app-nd-average-area [isLoading]="isLoading" [averageAreaList]="averageAreaList" [areaCount]="areaCount"> 
+            </app-nd-average-area>
           </div>
         </div>
       </div>
@@ -74,11 +59,7 @@
             </div>
           </div>
           <div class="card-body">
-            <div id="won-chart">
-              <apx-chart [series]="chartOptions2.series" [chart]="chartOptions2.chart"
-                [dataLabels]="chartOptions2.dataLabels" [plotOptions]="chartOptions2.plotOptions"
-                [xaxis]="chartOptions2.xaxis"></apx-chart>
-            </div>
+            <app-nd-performance-area [isLoading]="isLoading" [performanceAreaList]="performanceAreaList"></app-nd-performance-area>
           </div>
         </div>
       </div>
@@ -94,56 +75,7 @@
             </div>
           </div>
           <div class="card-body">
-            <div class="table-responsive custom-table">
-              <table class="table dataTable" id="deals-project">
-                <thead class="thead-light">
-                  <tr>
-                    <th>AREA</th>
-                    <th>EQ</th>
-                    <th>DHL</th>
-                    <th>AR</th>
-                    <th>SBL</th>
-                    <th>PMF</th>
-                    <th>PMM</th>
-                    <th>TICKET</th>
-                    <th>MTC</th>
-                    <th>WS</th>
-                    <th>MAST</th>
-                    <th>ORIS</th>
-                    <th>ELITE</th>
-                    <th>YES</th>
-                    <th>TIME</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (item of tableView; track $index) {
-                  <tr class="odd">
-                    <td>{{item.Area}}</td>
-                    <td>
-                      @if (item.Eq < 50) { <span class="badge badge-pill bg-danger">{{item.Eq}} %</span>
-                        }
-                        @if (item.Eq >= 50) {
-                        <span class="badge badge-pill bg-success">{{item.Eq}} %</span>
-                        }
-                    </td>
-                    <td>{{item.Dhl}} %</td>
-                    <td>{{item.Ar}} %</td>
-                    <td>{{item.Sbl}} %</td>
-                    <td>{{item.Pmf}} %</td>
-                    <td>{{item.Pmm}} %</td>
-                    <td>{{item.Ticket}} %</td>
-                    <td>{{item.Mtc}} %</td>
-                    <td>{{item.Ws}} %</td>
-                    <td>{{item.Mast}} %</td>
-                    <td>{{item.Oris}} %</td>
-                    <td>{{item.Elite}} %</td>
-                    <td>{{item.Yes}} %</td>
-                    <td>{{item.Time}} %</td>
-                  </tr>
-                  }
-                </tbody>
-              </table>
-            </div>
+            <app-nd-table-view [isLoading]="isLoading" [tableView]="tableView"></app-nd-table-view>
           </div>
         </div>
       </div>
@@ -154,15 +86,11 @@
         <div class="card w-100">
           <div class="card-header border-0 pb-0">
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-              <h4><i class="ti ti-grip-vertical me-1"></i>ND by Year</h4> 
+              <h4><i class="ti ti-grip-vertical me-1"></i>ND by Year</h4>
             </div>
           </div>
           <div class="card-body">
-            <div id="deals-year">
-              <apx-chart [series]="chartOptions4.series" [chart]="chartOptions4.chart" [xaxis]="chartOptions4.xaxis"
-                [dataLabels]="chartOptions4.dataLabels" [grid]="chartOptions4.grid" [stroke]="chartOptions4.stroke"
-                [title]="chartOptions4.title" [colors]="chartOptions4.colors"></apx-chart>
-            </div>
+            <app-nd-by-year [isLoading]="isLoading" [ndYear]="ndYear"></app-nd-by-year>
           </div>
         </div>
       </div>

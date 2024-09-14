@@ -1,0 +1,15 @@
+@if (isLoading) {
+  <div class=" text-center d-flex justify-content-center align-items-center ">
+    <button disabled class="btn btn-primary">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </button>
+  </div>
+  } @else {
+    <div id="won-chart">
+      <apx-chart [series]="chartOptions2.series" [chart]="chartOptions2.chart"
+        [dataLabels]="chartOptions2.dataLabels" [plotOptions]="chartOptions2.plotOptions"
+        [xaxis]="chartOptions2.xaxis"></apx-chart>
+    </div>
+  }

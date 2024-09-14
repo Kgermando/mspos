@@ -12,6 +12,10 @@ import { SishDashboardComponent } from './sish-dashboard/sish-dashboard.componen
 import { OosDashboardComponent } from './oos-dashboard/oos-dashboard.component';
 import { SosDashboardComponent } from './sos-dashboard/sos-dashboard.component';
 import { SeDashboardComponent } from './se-dashboard/se-dashboard.component';
+import { NdAverageAreaComponent } from './nd-dashboard/nd-average-area/nd-average-area.component';
+import { NdPerformanceAreaComponent } from './nd-dashboard/nd-performance-area/nd-performance-area.component';
+import { NdTableViewComponent } from './nd-dashboard/nd-table-view/nd-table-view.component';
+import { NdByYearComponent } from './nd-dashboard/nd-by-year/nd-by-year.component';
 
 
 
@@ -25,7 +29,11 @@ import { SeDashboardComponent } from './se-dashboard/se-dashboard.component';
     SishDashboardComponent,
     OosDashboardComponent,
     SosDashboardComponent,
-    SeDashboardComponent
+    SeDashboardComponent,
+    NdAverageAreaComponent,
+    NdPerformanceAreaComponent,
+    NdTableViewComponent,
+    NdByYearComponent
   ],
   imports: [
     CommonModule,
