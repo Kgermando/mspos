@@ -30,7 +30,7 @@ export class NdByYearComponent implements OnChanges {
   public chartOptions4: Partial<ChartOptions> | any;
 
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(changes: SimpleChanges): void { 
     this.getChartByYear();
   }
 
@@ -40,7 +40,9 @@ export class NdByYearComponent implements OnChanges {
       series: [
         {
           name: 'Equateur',
-          data: this.ndYear.map((val) => val.eq),
+          data: this.ndYear.map((val) => { 
+            return val.Eq;
+          } ),
         },
       ],
       colors: ['#E41F07'],
@@ -58,30 +60,30 @@ export class NdByYearComponent implements OnChanges {
         curve: 'straight',
       },
       xaxis: {
-        categories: this.ndYear.map((val) => {
-          if (val.mois = '1') {
+        categories: this.ndYear.map((val) => { 
+          if (val.Month == '1') {
             return 'Jan';
-          } else if (val.mois = '2') {
+          } else if (val.Month == '2') {
             return 'Feb';
-          } else if (val.mois = '3') {
+          } else if (val.Month == '3') {
             return 'Mar';
-          } else if (val.mois = '4') {
+          } else if (val.Month == '4') {
             return 'Apr';
-          } else if (val.mois = '5') {
+          } else if (val.Month == '5') {
             return 'Mai';
-          } else if (val.mois = '6') {
+          } else if (val.Month == '6') {
             return 'Juin';
-          } else if (val.mois = '7') {
+          } else if (val.Month == '7') {
             return 'Juil';
-          } else if (val.mois = '8') {
+          } else if (val.Month == '8') {
             return 'Aout';
-          } else if (val.mois = '9') {
+          } else if (val.Month == '9') {
             return 'Sep';
-          } else if (val.mois = '10') {
+          } else if (val.Month == '10') {
             return 'Oct';
-          } else if (val.mois = '11') {
+          } else if (val.Month == '11') {
             return 'Nov';
-          } else if (val.mois = '12') {
+          } else if (val.Month == '12') {
             return 'Dec';
           } else {
             return "";

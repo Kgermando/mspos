@@ -20,10 +20,7 @@ import { IArea } from '../../areas/models/area.model';
 import { NdService } from '../services/nd.service';
 import { formatDate } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { debounceTime } from 'rxjs/internal/operators/debounceTime';
-import { distinctUntilChanged } from 'rxjs/internal/operators/distinctUntilChanged';
-import { NDAverageModel, NDByAreaModel, NDYearModel, TableViewModel } from '../models/nd-dashboard.models';
-
+import { NDYearModel, TableViewModel } from '../models/nd-dashboard.models';
 
 
 @Component({
@@ -111,7 +108,6 @@ export class NdDashboardComponent implements OnInit {
       province: new FormControl('kinshasa'),
       rangeValue: new FormControl(this.rangeDate),
     });
-    // this.province = this.dateRange.value.province;
     this.start_date = formatDate(this.dateRange.value.rangeValue[0], 'yyyy-MM-dd', 'en-US');
     this.end_date = formatDate(this.dateRange.value.rangeValue[1], 'yyyy-MM-dd', 'en-US');
 
@@ -120,6 +116,7 @@ export class NdDashboardComponent implements OnInit {
       this.getTableView(this.dateRange.value.province, this.start_date, this.end_date);
       this.getAverageArea(this.dateRange.value.province, this.start_date, this.end_date);
       this.getPerformance(this.dateRange.value.province, this.start_date, this.end_date);
+      this.getNDYear(this.dateRange.value.province);
     }
 
     this.onChanges();
@@ -140,7 +137,7 @@ export class NdDashboardComponent implements OnInit {
       this.getTableView(this.province.name, this.start_date, this.end_date);
       this.getAverageArea(this.province.name, this.start_date, this.end_date);
       this.getPerformance(this.province.name, this.start_date, this.end_date);
-
+      this.getNDYear(this.province.name);
 
 
     });
@@ -156,7 +153,7 @@ export class NdDashboardComponent implements OnInit {
 
   getNDYear(province: string) {
     this.ndService.NdByYear(province).subscribe((res) => {
-      this.ndYear = res.data;  
+      this.ndYear = res.data;
       this.isLoading = false;
     });
   }

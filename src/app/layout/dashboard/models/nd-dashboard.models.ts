@@ -40,13 +40,13 @@ export interface NDByAreaModel {
     Yes: number,
     Time: number,
 }
-
+ 
 export interface NDPerformanceModel {
     area: string;
     data: number;  
 }
 
 export interface NDYearModel {
-    mois: string;
-    eq: number;  
+    Month: string;
+    Eq: number;  
 }
