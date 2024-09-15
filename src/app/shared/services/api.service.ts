@@ -1,6 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject, tap } from 'rxjs'; 
+import { Cacheable } from "ts-cacheable"
+
+// const cacheBuster$ = new Subject<void>();
 
 @Injectable({
   providedIn: 'root'
@@ -22,16 +25,20 @@ export abstract class ApiService {
     return this._refreshData$;
   }
  
+  
+  // @Cacheable({ cacheBusterObserver: cacheBuster$ })
   getPaginated(currentPage: number, pageSize: number): Observable<any> {
     const params = {last_page: currentPage, total: pageSize };
     return this.http.get<any>(`${this.endpoint}/all`, { params });
   }
 
+  // @Cacheable({ cacheBusterObserver: cacheBuster$ })
   getPaginatedById(id: number, pageSize: number, pageNumber: number): Observable<any> {
     const params = { page_size: pageSize, page_number: pageNumber };
     return this.http.get<any>(`${this.endpoint}/paginate/${id}`, { params });
   }
  
+  // @Cacheable({ cacheBusterObserver: cacheBuster$ })
   getAll(): Observable<any> {
     return this.http.get(`${this.endpoint}/all`);
   }
@@ -40,6 +47,7 @@ export abstract class ApiService {
     return this.http.get(`${this.endpoint}/all/${id}`);
   }
   
+  // @Cacheable({ cacheBusterObserver: cacheBuster$ })
   all(page?: number): Observable<any> {
     let url = `${this.endpoint}`;
     if (page) { // page is optional
@@ -57,6 +65,7 @@ export abstract class ApiService {
     return this.http.post(`${this.endpoint}/create`, data).pipe(tap(() => {
       this._refreshDataList$.next();
       this._refreshData$.next();
+      // cacheBuster$.next();
     }));
   }
 
@@ -64,6 +73,7 @@ export abstract class ApiService {
     return this.http.put(`${this.endpoint}/update/${id}`, data).pipe(tap(() => {
       this._refreshDataList$.next();
       this._refreshData$.next();
+      // cacheBuster$.next();
     }));
   }
  
@@ -72,6 +82,7 @@ export abstract class ApiService {
     return this.http.delete<void>(`${this.endpoint}/delete/${id}`).pipe(tap(() => {
       this._refreshDataList$.next();
       this._refreshData$.next();
+      // cacheBuster$.next();
     }));
   }
 
