@@ -166,7 +166,7 @@ export class NdAverageAreaComponent implements OnChanges {
         if (this.Elite > 0) {
           elite = this.Elite / this.areaCount;
         }
-        this.averages.push({ x: 'Elite', y: this.Elite });
+        this.averages.push({ x: 'Elite', y: elite });
 
         this.Yes = this.averageAreaList.reduce(function (sum, value) {
           return sum + value.Yes;

@@ -45,9 +45,9 @@ export class NdPerformanceAreaComponent implements OnChanges {
         if (element.Area == area) {
           this.performanceArea.push({ area: element.Area, data: element.Eq });
         }
-      });
-      this.getPerformanceEQArea(); 
+      }); 
     }
+    this.getPerformanceEQArea(); 
   }
 
   getPerformanceEQArea() {

@@ -117,10 +117,9 @@ export class NdDashboardComponent implements OnInit {
 
 
     if (!this.province && this.start_date && this.end_date) {  
-
-      this.getTableView('kinshasa', this.start_date, this.end_date);
-      this.getAverageArea('kinshasa', this.start_date, this.end_date);
-      this.getPerformance('kinshasa', this.start_date, this.end_date);
+      this.getTableView(this.dateRange.value.province, this.start_date, this.end_date);
+      this.getAverageArea(this.dateRange.value.province, this.start_date, this.end_date);
+      this.getPerformance(this.dateRange.value.province, this.start_date, this.end_date);
     }
 
     this.onChanges();
@@ -146,10 +145,6 @@ export class NdDashboardComponent implements OnInit {
 
     });
   }
-
-  
-
-
 
   getAverageArea(province: string, start_date: string, end_date: string) {
     this.ndService.tableView(province, start_date, end_date).subscribe((res) => {
