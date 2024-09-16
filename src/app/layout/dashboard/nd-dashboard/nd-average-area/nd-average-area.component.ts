@@ -53,13 +53,12 @@ export class NdAverageAreaComponent implements OnChanges {
     this.averages = [];
     this.calculAverage();
     this.getByAverage();
+    this.averages = [];
   }
 
   calculAverage() {
     if (this.averageAreaList.length > 0) {
       for (let index = 0; index < this.averageAreaList.length; index++) {
-        const element = this.averageAreaList[index];
-
         this.Eq = this.averageAreaList.reduce(function (sum, value) {
           return sum + value.Eq;
         }, 0);
