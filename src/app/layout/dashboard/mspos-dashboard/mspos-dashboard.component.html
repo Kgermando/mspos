@@ -13,7 +13,7 @@
                   <div class="form-sort me-2">
                     <i class="ti ti-calendar"></i>
                     <input type="text" class="form-control date-range bookingrange" bsDaterangepicker
-                      [bsConfig]="{ adaptivePosition: true }" [(ngModel)]="bsRangeValue" />
+                      [bsConfig]="{ adaptivePosition: true }"/>
                   </div>
                   <div class="head-icons mb-0">
                     <a [routerLink]="routes.msposDashboard" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -28,7 +28,8 @@
       </div>
     </div>
     <!-- Campaign Status -->
-    <app-stats-total></app-stats-total>
+    <app-stats-total [isLoading]="isLoading" [drCount]="drCount" [posCount]="posCount"
+       [provinceCount]="provinceCount" [areaCount]="areaCount"></app-stats-total>
     <!-- /Campaign Status -->
     <div class="row ">
       <div class="col-md-6 d-flex">

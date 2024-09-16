@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, Renderer2, ViewChild } from '@angular/core';
+import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -10,6 +10,9 @@ import {
 } from 'ng-apexcharts';
 import { routes } from '../../../shared/routes/routes';
 import { CommonService } from '../../../shared/common/common.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { IProvince } from '../../province/models/province.model';
+import { SummaryService } from '../services/summary.service';
 export interface ChartOptions {
   series: ApexAxisChartSeries | any;
   chart: ApexChart | any;
@@ -23,169 +26,35 @@ export interface ChartOptions {
   templateUrl: './mspos-dashboard.component.html',
   styleUrl: './mspos-dashboard.component.scss'
 })
-export class MsposDashboardComponent {
-  public routes =  routes
-  bsValue = new Date();
-  bsRangeValue: Date[];
-  maxDate = new Date();
+export class MsposDashboardComponent implements OnInit {
+  public routes =  routes 
   base = '';
   page = '';
-  last = '';
-  @ViewChild('chart') chart!: ChartComponent;
-  public chartOptions: Partial<ChartOptions>;
-  public chartOptions2: Partial<ChartOptions> | any;
-  public chartOptions3: Partial<ChartOptions> | any;
-  public chartOptions4: Partial<ChartOptions> | any;
+  last = ''; 
 
-  constructor( private common: CommonService, private renderer: Renderer2,) {
-    this.chartOptions = {
-      series: [
-        {
-          data: [400, 220, 448],
-          color: '#FC0027',
-        },
-      ],
-      chart: {
-        type: 'bar',
-        height: 150,
-      },
-      plotOptions: {
-        bar: {
-          horizontal: true,
-        },
-      },
-      dataLabels: {
-        enabled: false,
-      },
+  isLoading = false;
 
-      xaxis: {
-        categories: ['Conversation', 'Follow Up', 'Inpipeline'],
-      },
-    };
-    this.chartOptions2 = {
-      series: [
-        {
-          data: [400, 220, 448],
-          color: '#77D882',
-        },
-      ],
-      chart: {
-        type: 'bar',
-        height: 150,
-      },
-      plotOptions: {
-        bar: {
-          horizontal: true,
-        },
-      },
-      dataLabels: {
-        enabled: false,
-      },
+  dateRange!: FormGroup;
+  start_date!: string;
+  end_date!: string;
 
-      xaxis: {
-        categories: ['Conversation', 'Follow Up', 'Inpipeline'],
-      },
-    };
-    this.chartOptions3 = {
-      series: [
-        {
-          name: 'sales',
-          colors: ['#FFC38F'],
-          data: [
-            {
-              x: 'Inpipeline',
-              y: 400,
-            },
-            {
-              x: 'Follow Up',
-              y: 130,
-            },
-            {
-              x: 'Schedule',
-              y: 248,
-            },
-            {
-              x: 'Conversation',
-              y: 470,
-            },
-            {
-              x: 'Won',
-              y: 470,
-            },
-            {
-              x: 'Lost',
-              y: 180,
-            },
-          ],
-        },
-      ],
-      colors: ['#00918E'],
-      chart: {
-        type: 'bar',
-        height: 275,
-      },
-      plotOptions: {
-        bar: {
-          borderRadiusApplication: 'around',
-          columnWidth: '40%',
-        },
-      },
+  // Filtre 
+  rangeDate: any[] = []; 
 
-      xaxis: {
-        type: 'category',
-        group: {
-          style: {
-            fontSize: '7px',
-            fontWeight: 700,
-          },
-        },
-      },
-      yaxis: {
-        min: 0,  
-        max: 500,  
-        tickAmount: 5,  
-      }
-    };
-    this.chartOptions4 = {
-      series: [
-        {
-          name: 'Deals',
-          data: [10, 20, 30, 15, 22, 40, 30, 20, 30, 18, 30, 60],
-        },
-      ],
-      colors: ['#E41F07'],
-      chart: {
-        height: 273,
-        type: 'area',
-        zoom: {
-          enabled: false,
-        },
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      stroke: {
-        curve: 'straight',
-      },
-      xaxis: {
-        categories: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
-        ],
-      },
-    };
-    this.maxDate.setDate(this.maxDate.getDate() + 7);
-    this.bsRangeValue = [this.bsValue, this.maxDate];
+
+  drCount = 0;
+  posCount = 0;
+  provinceCount = 0;
+  areaCount = 0;
+
+   
+  constructor(
+    private common: CommonService,
+    private _formBuilder: FormBuilder,
+    private renderer: Renderer2,
+    private summaryService: SummaryService, 
+  ) {
+
     this.common.base.subscribe((base: string) => {
       this.base = base;
     });
@@ -195,10 +64,51 @@ export class MsposDashboardComponent {
     this.common.last.subscribe((last: string) => {
       this.last = last;
     });
-    if (this.page == 'deals-dashboard') {
+    if (this.last == 'nd-dashboard') {
       this.renderer.addClass(document.body, 'date-picker-dashboard');
     }
   }
- 
+
+
+  ngOnInit(): void {
+    this.isLoading = true;
+    this.getDrCount();
+    this.getPOSCount();
+    this.getProvinceCount();
+    this.getAreaCount();
+  }
+
+
+
+  getDrCount() {
+    this.summaryService.DrCount().subscribe((res) => {
+      this.drCount = res.data.Count;
+      this.isLoading = false;
+    });
+  }
+
+  getPOSCount() {
+    this.summaryService.POSCount().subscribe((res) => {
+      this.posCount = res.data.Count;
+      this.isLoading = false;
+    });
+  }
+
+  getProvinceCount() {
+    this.summaryService.ProvinceCount().subscribe((res) => {
+      this.provinceCount = res.data.Count;
+      this.isLoading = false;
+    });
+  }
+
+  getAreaCount() {
+    this.summaryService.AreaCount().subscribe((res) => {
+      this.areaCount = res.data.Count;
+      this.isLoading = false;
+    });
+  }
+
+
+  
 }
 

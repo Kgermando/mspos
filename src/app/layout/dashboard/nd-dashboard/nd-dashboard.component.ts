@@ -1,16 +1,4 @@
 import { Component, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
-import {
-  ApexAxisChartSeries,
-  ApexChart,
-  ChartComponent,
-  ApexDataLabels,
-  ApexXAxis,
-  ApexPlotOptions,
-  ApexNonAxisChartSeries,
-  ApexTooltip,
-  ApexLegend,
-  ApexStroke,
-} from 'ng-apexcharts';
 import { routes } from '../../../shared/routes/routes';
 import { ProvinceService } from '../../province/province.service';
 import { AreaService } from '../../areas/area.service';

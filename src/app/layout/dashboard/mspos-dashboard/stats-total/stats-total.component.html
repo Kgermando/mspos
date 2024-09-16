@@ -1,46 +1,85 @@
 <div class="row">
-    <div class="col-xl-3 col-lg-6">
-      <div class="campaign-box bg-danger-light">
-        <div class="campaign-img">
-          <span>
-            <i class="ti ti-user"></i>
-          </span>
-          <p>DR</p>
-        </div>
-        <h2>474</h2>
+  <div class="col-xl-3 col-lg-6">
+    <div class="campaign-box bg-danger-light">
+      <div class="campaign-img">
+        <span>
+          <i class="ti ti-user"></i>
+        </span>
+        <p>DR</p>
       </div>
-    </div>
-    <div class="col-xl-3 col-lg-6">
-      <div class="campaign-box bg-warning-light">
-        <div class="campaign-img">
-          <span>
-            <i class="ti ti-send"></i>
-          </span>
-          <p>POS</p>
+      <h2> @if (isLoading) {
+        <div class=" text-center d-flex justify-content-center align-items-center ">
+          <div class="spinner-border bs-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
         </div>
-        <h2>454</h2>
-      </div>
-    </div>
-    <div class="col-xl-3 col-lg-6">
-      <div class="campaign-box bg-purple-light">
-        <div class="campaign-img">
-          <span>
-            <i class="ti ti-brand-feedly"></i>
-          </span>
-          <p>Province</p>
-        </div>
-        <h2>658</h2>
-      </div>
-    </div>
-    <div class="col-xl-3 col-lg-6">
-      <div class="campaign-box bg-success-light">
-        <div class="campaign-img">
-          <span>
-            <i class="ti ti-brand-pocket"></i>
-          </span>
-          <p>Areas</p>
-        </div>
-        <h2>747</h2>
-      </div>
+        } @else {
+        {{ drCount }}
+        } 
+      </h2>
     </div>
   </div>
+  <div class="col-xl-3 col-lg-6">
+    <div class="campaign-box bg-warning-light">
+      <div class="campaign-img">
+        <span>
+          <i class="ti ti-send"></i>
+        </span>
+        <p>POS</p>
+      </div>
+      <h2>@if (isLoading) {
+        <div class=" text-center d-flex justify-content-center align-items-center ">
+          <div class="spinner-border bs-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+        } @else {
+        {{ posCount }}
+        }
+
+      </h2>
+    </div>
+  </div>
+  <div class="col-xl-3 col-lg-6">
+    <div class="campaign-box bg-purple-light">
+      <div class="campaign-img">
+        <span>
+          <i class="ti ti-brand-feedly"></i>
+        </span>
+        <p>Province</p>
+      </div>
+      <h2>@if (isLoading) {
+        <div class=" text-center d-flex justify-content-center align-items-center ">
+          <div class="spinner-border bs-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+        } @else {
+        {{ provinceCount }}
+        }
+
+      </h2>
+    </div>
+  </div>
+  <div class="col-xl-3 col-lg-6">
+    <div class="campaign-box bg-success-light">
+      <div class="campaign-img">
+        <span>
+          <i class="ti ti-brand-pocket"></i>
+        </span>
+        <p>Areas</p>
+      </div>
+      <h2>
+        @if (isLoading) {
+        <div class=" text-center d-flex justify-content-center align-items-center ">
+          <div class="spinner-border bs-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+        } @else {
+        {{ areaCount }}
+        }
+      </h2>
+    </div>
+  </div>
+</div>
