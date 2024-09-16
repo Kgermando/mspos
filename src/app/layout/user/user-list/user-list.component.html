@@ -168,7 +168,12 @@
                 </tbody>
               </table>
             </div>
-            <mat-paginator [length]="totalPages" [pageSizeOptions]="pageSizes" showFirstLastButtons></mat-paginator> 
+            <button (click)="fetchProducts(currentPage - 1)" [disabled]="currentPage === 1">Précédent</button>
+              <button (click)="fetchProducts(currentPage + 1)" [disabled]="currentPage === totalPages">Suivant</button>
+
+              
+            <!-- <pagination-controls (pageChange)="currentPage = $event"></pagination-controls> -->
+            <!-- <mat-paginator [length]="totalPages" [pageSizeOptions]="pageSizes" showFirstLastButtons></mat-paginator>  -->
             <!-- <app-custom-pagination></app-custom-pagination> -->
             <div class="row align-items-center">
               <div class="col-md-6">

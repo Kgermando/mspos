@@ -70,9 +70,12 @@ export class UserListComponent implements OnInit, AfterViewInit {
 
   // Table
   ELEMENT_DATA: IUser[] = [];
-  currentPage = 1; // Default page number
-  pageSize = 15; // Default page size 
-  totalPages = 0; // total data from API response 
+  currentPage = 1;
+  totalPages = 0;
+
+  // currentPage = 1; // Default page number
+  // pageSize = 15; // Default page size 
+  // totalPages = 0; // total data from API response 
   
   dataSource = new MatTableDataSource<IUser>(this.ELEMENT_DATA); 
 
@@ -97,9 +100,9 @@ export class UserListComponent implements OnInit, AfterViewInit {
   } 
   ngAfterViewInit(): void {
     this.usersService.refreshDataList$.subscribe(() => {
-      this.fetchProducts();
+      this.fetchProducts(this.currentPage);
     });
-    this.fetchProducts();
+    this.fetchProducts(this.currentPage);
   }
    
   
@@ -146,20 +149,30 @@ export class UserListComponent implements OnInit, AfterViewInit {
   }
 
 
-  private fetchProducts() {
-    this.usersService.getPaginated(this.currentPage, this.pageSize)
-      .subscribe(response => {
-        this.ELEMENT_DATA = response.data; 
-        this.dataSource = new MatTableDataSource<IUser>(this.ELEMENT_DATA);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.totalPages = response.meta.total;
-        console.log("response", response)
-        console.log("totalPages", this.totalPages)
-        console.log("ELEMENT_DATA", this.ELEMENT_DATA)
-        this.isLoadingData = false;
-      }
-    );
+   fetchProducts(page: number) {
+    this.usersService.getData(page).subscribe(response => {
+      this.ELEMENT_DATA = response.data;
+      this.totalPages = response.totalPages;
+      // this.currentPage = response.page;
+      this.dataSource = new MatTableDataSource<IUser>(this.ELEMENT_DATA);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      console.log("response", response)
+      this.isLoadingData = false;
+    });
+    // this.usersService.getPaginated(this.currentPage, this.pageSize)
+    //   .subscribe(response => {
+    //     this.ELEMENT_DATA = response.data; 
+    //     this.dataSource = new MatTableDataSource<IUser>(this.ELEMENT_DATA);
+    //     this.dataSource.sort = this.sort;
+    //     this.dataSource.paginator = this.paginator;
+    //     this.totalPages = response.meta.total;
+    //     console.log("response", response)
+    //     console.log("totalPages", this.totalPages)
+    //     console.log("ELEMENT_DATA", this.ELEMENT_DATA)
+    //     this.isLoadingData = false;
+    //   }
+    // );
   }
 
   public sortData(sort: Sort) {

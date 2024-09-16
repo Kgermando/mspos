@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject, tap } from 'rxjs'; 
 import { Cacheable } from "ts-cacheable"
+import { ApiResponse } from '../model/api-response.model';
 
 // const cacheBuster$ = new Subject<void>();
 
@@ -25,6 +26,13 @@ export abstract class ApiService {
     return this._refreshData$;
   }
  
+  getData(page: number): Observable<ApiResponse> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('total', '15');
+
+    return this.http.get<ApiResponse>(`${this.endpoint}/all`, { params });
+  }
   
   // @Cacheable({ cacheBusterObserver: cacheBuster$ })
   getPaginated(currentPage: number, pageSize: number): Observable<any> {
