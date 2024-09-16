@@ -1,0 +1,23 @@
+
+    <div
+      class="card-header d-flex justify-content-between align-items-center flex-wrap row-gap-2"
+    >
+      <h4>Deals by Year</h4> 
+    </div>
+    <div class="card-body">
+      <div id="deals-report">
+        <apx-chart
+          [series]="chartOptions3.series"
+          [chart]="chartOptions3.chart"
+          [dataLabels]="chartOptions3.dataLabels"
+          [plotOptions]="chartOptions3.plotOptions"
+          [yaxis]="chartOptions3.yaxis"
+          [xaxis]="chartOptions3.xaxis"
+          [stroke]="chartOptions3.stroke"
+          [grid]="chartOptions3.grid"
+          [fill]="chartOptions3.fill"
+          [annotations]="chartOptions3.annotations"
+          [colors]="chartOptions3.colors"
+        ></apx-chart>
+      </div>
+    </div> 

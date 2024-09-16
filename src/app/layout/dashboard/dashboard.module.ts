@@ -16,6 +16,11 @@ import { NdAverageAreaComponent } from './nd-dashboard/nd-average-area/nd-averag
 import { NdPerformanceAreaComponent } from './nd-dashboard/nd-performance-area/nd-performance-area.component';
 import { NdTableViewComponent } from './nd-dashboard/nd-table-view/nd-table-view.component';
 import { NdByYearComponent } from './nd-dashboard/nd-by-year/nd-by-year.component';
+import { TrackingDrComponent } from './mspos-dashboard/tracking-dr/tracking-dr.component';
+import { SumaryChartBarComponent } from './mspos-dashboard/sumary-chart-bar/sumary-chart-bar.component';
+import { MapAreaComponent } from './mspos-dashboard/map-area/map-area.component';
+import { StatsTotalComponent } from './mspos-dashboard/stats-total/stats-total.component';
+import { ShishPieComponent } from './mspos-dashboard/shish-pie/shish-pie.component';
 
 
 
@@ -33,7 +38,12 @@ import { NdByYearComponent } from './nd-dashboard/nd-by-year/nd-by-year.componen
     NdAverageAreaComponent,
     NdPerformanceAreaComponent,
     NdTableViewComponent,
-    NdByYearComponent
+    NdByYearComponent,
+    TrackingDrComponent,
+    SumaryChartBarComponent,
+    MapAreaComponent,
+    StatsTotalComponent,
+    ShishPieComponent
   ],
   imports: [
     CommonModule,

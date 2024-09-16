@@ -40,7 +40,7 @@ export interface NDByAreaModel {
     Yes: number,
     Time: number,
 }
- 
+
 export interface NDPerformanceModel {
     area: string;
     data: number;  
