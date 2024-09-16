@@ -45,22 +45,22 @@ export class SumaryChartBarComponent implements OnChanges, OnInit {
     this.chartOptions3 = {
       series: [{
         name: 'Numeric distribution',
-        data: [110, 85, 100, 90, 85, 105, 90, 115, 95]
-      }, 
+        data: [110, 85, 100, 90, 85, 105, 90, 115, 95, 30]
+      },
       {
-        name: ')Out of stock',
-        data: [67, 55, 50, 55, 40, 60, 55, 60, 66]
+        name: 'Out of stock',
+        data: [67, 35, 50, 55, 40, 60, 55, 40, 60, 70]
       },
       {
         name: 'Share of stock',
-        data: [45, 55, 50, 55, 40, 60, 40, 60, 66]
+        data: [45, 55, 50, 55, 40, 60, 40, 60, 30, 80]
       },
       {
         name: 'SISH',
-        data: [45, 55, 50, 30, 40, 60, 55, 35, 66]
+        data: [45, 55, 50, 30, 40, 60, 20, 55, 35, 45]
       },
-    ],
-      colors: ['#009596', '#EC7A08', '#9C36B5', '#F50027'],
+      ],
+      colors: ['#00E396', '#FEB019', '#008FFB', '#FF4560'],
       chart: {
         height: 270,
         type: 'bar',
@@ -77,7 +77,7 @@ export class SumaryChartBarComponent implements OnChanges, OnInit {
       },
 
       xaxis: {
-        categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+        categories: ['Kinshasa', 'Province orientale', 'Kongo central', 'Grand bandundu', 'Katanga', 'Maniema', 'Grand kivu', 'Tshikapa', 'Kananga', 'Kasai oriental'],
       },
     };
   }
