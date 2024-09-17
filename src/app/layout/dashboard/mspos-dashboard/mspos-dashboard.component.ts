@@ -10,9 +10,11 @@ import {
 } from 'ng-apexcharts';
 import { routes } from '../../../shared/routes/routes';
 import { CommonService } from '../../../shared/common/common.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { IProvince } from '../../province/models/province.model';
 import { SummaryService } from '../services/summary.service';
+import { SOSPieModel } from '../models/summary-dashboard.model';
+import { formatDate } from '@angular/common';
 export interface ChartOptions {
   series: ApexAxisChartSeries | any;
   chart: ApexChart | any;
@@ -47,6 +49,8 @@ export class MsposDashboardComponent implements OnInit {
   provinceCount = 0;
   areaCount = 0;
 
+  sosPieLIst: SOSPieModel[] = [];
+
    
   constructor(
     private common: CommonService,
@@ -64,7 +68,7 @@ export class MsposDashboardComponent implements OnInit {
     this.common.last.subscribe((last: string) => {
       this.last = last;
     });
-    if (this.last == 'nd-dashboard') {
+    if (this.last == 'mspos-dashboard') {
       this.renderer.addClass(document.body, 'date-picker-dashboard');
     }
   }
@@ -76,7 +80,40 @@ export class MsposDashboardComponent implements OnInit {
     this.getPOSCount();
     this.getProvinceCount();
     this.getAreaCount();
+
+    const date = new Date();
+    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    this.rangeDate = [firstDay, lastDay];
+
+    this.dateRange = this._formBuilder.group({ 
+      rangeValue: new FormControl(this.rangeDate),
+    });
+    this.start_date = formatDate(this.dateRange.value.rangeValue[0], 'yyyy-MM-dd', 'en-US');
+    this.end_date = formatDate(this.dateRange.value.rangeValue[1], 'yyyy-MM-dd', 'en-US');
+
+
+    if (this.start_date && this.end_date) {  
+      this.getSOSPie(this.start_date, this.end_date);
+ 
+    }
+
+    this.onChanges();
   }
+
+  onChanges(): void {
+    this.dateRange.valueChanges.subscribe(val => { 
+      this.start_date = formatDate(val.rangeValue[0], 'yyyy-MM-dd', 'en-US');
+      this.end_date = formatDate(val.rangeValue[1], 'yyyy-MM-dd', 'en-US');  
+ 
+
+      this.getSOSPie(this.start_date, this.end_date);
+ 
+
+
+    });
+  }
+
 
 
 
@@ -109,6 +146,12 @@ export class MsposDashboardComponent implements OnInit {
   }
 
 
-  
+  getSOSPie(start_date: string, end_date: string) {
+    this.summaryService.SOSPie(start_date, end_date).subscribe((res) => {
+      this.sosPieLIst = res.data;  
+      console.log("sosPieLIst", this.sosPieLIst)
+      this.isLoading = false;
+    });
+  }
 }
 

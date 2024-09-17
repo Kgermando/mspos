@@ -50,3 +50,4 @@ export interface NDYearModel {
     Month: string;
     Eq: number;  
 }
+

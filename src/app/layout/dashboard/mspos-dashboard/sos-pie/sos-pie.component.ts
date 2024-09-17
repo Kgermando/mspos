@@ -1,4 +1,4 @@
-import { Component, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -7,6 +7,7 @@ import {
   ApexXAxis,
   ApexPlotOptions,
 } from 'ng-apexcharts'; 
+import { SOSPieModel } from '../../models/summary-dashboard.model';
 export interface ChartOptions {
   series: ApexAxisChartSeries | any;
   chart: ApexChart | any;
@@ -15,13 +16,15 @@ export interface ChartOptions {
   xaxis: ApexXAxis | any;
 }
 
+
 @Component({
-  selector: 'app-shish-pie',
-  templateUrl: './shish-pie.component.html',
-  styleUrl: './shish-pie.component.scss'
+  selector: 'app-sos-pie',
+  templateUrl: './sos-pie.component.html',
+  styleUrl: './sos-pie.component.scss'
 })
-export class ShishPieComponent implements OnChanges {
- 
+export class SosPieComponent implements OnChanges {
+  @Input() isLoading!: boolean;
+  @Input() sosPieLIst: SOSPieModel[] = [];
 
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions3: Partial<ChartOptions> | any;
@@ -37,7 +40,7 @@ export class ShishPieComponent implements OnChanges {
 
   getChart() {
     this.chartOptions3 = {
-      series: [44, 55, 13, 43],
+      series: this.sosPieLIst.map((val) => val.Eq),
       chart: {
         width: 400,
         type: 'pie',
@@ -48,7 +51,7 @@ export class ShishPieComponent implements OnChanges {
           return val + ' - ' + opts.w.globals.series[opts.seriesIndex];
         },
       },
-      labels: ['Inpipeline', 'Follow Up', 'Schedule Service', 'Conversation'],
+      labels: this.sosPieLIst.map((val) => val.Province),
       responsive: [
         {
           breakpoint: 480,

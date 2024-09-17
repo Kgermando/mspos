@@ -27,7 +27,9 @@ export class SummaryService extends ApiService {
   }
 
 
-
-  
+  SOSPie(start_date: string, end_date: string): Observable<any> {
+    return this.http.get(`${this.endpoint}/sos-pie/${start_date}/${end_date}`);
+  }
+ 
  
 }

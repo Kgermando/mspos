@@ -20,7 +20,7 @@ import { TrackingDrComponent } from './mspos-dashboard/tracking-dr/tracking-dr.c
 import { SumaryChartBarComponent } from './mspos-dashboard/sumary-chart-bar/sumary-chart-bar.component';
 import { MapAreaComponent } from './mspos-dashboard/map-area/map-area.component';
 import { StatsTotalComponent } from './mspos-dashboard/stats-total/stats-total.component';
-import { ShishPieComponent } from './mspos-dashboard/shish-pie/shish-pie.component';
+import { SosPieComponent } from './mspos-dashboard/sos-pie/sos-pie.component'; 
 
 
 
@@ -43,7 +43,7 @@ import { ShishPieComponent } from './mspos-dashboard/shish-pie/shish-pie.compone
     SumaryChartBarComponent,
     MapAreaComponent,
     StatsTotalComponent,
-    ShishPieComponent
+    SosPieComponent, 
   ],
   imports: [
     CommonModule,
