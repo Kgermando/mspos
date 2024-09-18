@@ -13,8 +13,9 @@ import { CommonService } from '../../../shared/common/common.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { IProvince } from '../../province/models/province.model';
 import { SummaryService } from '../services/summary.service';
-import { PerfVisitModel, SOSPieModel } from '../models/summary-dashboard.model';
+import { PerfVisitModel, SOSPieModel, SumChartBarModel } from '../models/summary-dashboard.model';
 import { formatDate } from '@angular/common';
+import { getBusinessDaysBetweenDates } from '../../../utils/calcul-date-except-weekend';
 export interface ChartOptions {
   series: ApexAxisChartSeries | any;
   chart: ApexChart | any;
@@ -52,6 +53,8 @@ export class MsposDashboardComponent implements OnInit {
   sosPieLIst: SOSPieModel[] = [];
 
   perfVisitDRList: PerfVisitModel[] = [];
+
+  summaryChartList: SumChartBarModel[] = [];
 
    
   constructor(
@@ -97,7 +100,8 @@ export class MsposDashboardComponent implements OnInit {
 
     if (this.start_date && this.end_date) {  
       this.getSOSPie(this.start_date, this.end_date);
-      this.getTrackingVisit(this.start_date, this.end_date);
+      this.getTrackingVisit('20', this.start_date, this.end_date);
+      this.getSummryChart(this.start_date, this.end_date);
     }
 
     this.onChanges();
@@ -105,12 +109,15 @@ export class MsposDashboardComponent implements OnInit {
 
   onChanges(): void {
     this.dateRange.valueChanges.subscribe(val => { 
+      const days = getBusinessDaysBetweenDates(val.rangeValue[0], val.rangeValue[1])
       this.start_date = formatDate(val.rangeValue[0], 'yyyy-MM-dd', 'en-US');
       this.end_date = formatDate(val.rangeValue[1], 'yyyy-MM-dd', 'en-US');  
+
+      
  
       this.getSOSPie(this.start_date, this.end_date);
-      this.getTrackingVisit(this.start_date, this.end_date);
-
+      this.getTrackingVisit(days.toString(), this.start_date, this.end_date);
+      this.getSummryChart(this.start_date, this.end_date);
     });
   }
 
@@ -153,9 +160,16 @@ export class MsposDashboardComponent implements OnInit {
     });
   }
 
-  getTrackingVisit(start_date: string, end_date: string) {
-    this.summaryService.TrackingVisitDR(start_date, end_date).subscribe((res) => {
+  getTrackingVisit(days: string, start_date: string, end_date: string) {
+    this.summaryService.TrackingVisitDR(days, start_date, end_date).subscribe((res) => {
       this.perfVisitDRList = res.data;  
+      this.isLoading = false;
+    });
+  }
+
+  getSummryChart(start_date: string, end_date: string) {
+    this.summaryService.SummaryChartBar(start_date, end_date).subscribe((res) => {
+      this.summaryChartList = res.data;  
       this.isLoading = false;
     });
   }

@@ -1,7 +1,5 @@
-import { Component, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-
-import { Router } from '@angular/router';
-import { Sort } from '@angular/material/sort';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+ 
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -10,34 +8,36 @@ import {
   ApexXAxis,
   ApexPlotOptions,
 } from 'ng-apexcharts';
+import { PerfVisitModel, SumChartBarModel } from '../../models/summary-dashboard.model';
 
 export interface ChartOptions {
   series: ApexAxisChartSeries | any;
   chart: ApexChart | any;
   dataLabels: ApexDataLabels | any;
   plotOptions: ApexPlotOptions | any;
-  xaxis: ApexXAxis | any;
-
+  xaxis: ApexXAxis | any; 
 }
-
-
+ 
 @Component({
   selector: 'app-sumary-chart-bar',
   templateUrl: './sumary-chart-bar.component.html',
   styleUrl: './sumary-chart-bar.component.scss'
 })
-export class SumaryChartBarComponent implements OnChanges, OnInit {
+export class SumaryChartBarComponent implements OnChanges {
+  @Input() isLoading!: boolean;
+  @Input() summaryChartList: SumChartBarModel[] = [];
 
+  sumChartList: SumChartBarModel[] = [];
 
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions3: Partial<ChartOptions> | any;
 
-
-  ngOnInit(): void {
-    this.getChart();
-  }
+ 
 
   ngOnChanges(changes: SimpleChanges): void {
+    this.sumChartList = this.summaryChartList
+
+    console.log("sumChartList",this.sumChartList )
     this.getChart();
   }
 
@@ -45,22 +45,24 @@ export class SumaryChartBarComponent implements OnChanges, OnInit {
     this.chartOptions3 = {
       series: [{
         name: 'Numeric distribution',
-        data: [110, 85, 100, 90, 85, 105, 90, 115, 95, 30]
-      },
-      {
-        name: 'Out of stock',
-        data: [67, 35, 50, 55, 40, 60, 55, 40, 60, 70]
+        data: this.sumChartList.map((val) => {
+          return val.Nd;
+        }),
       },
       {
         name: 'Share of stock',
-        data: [45, 55, 50, 55, 40, 60, 40, 60, 30, 80]
-      },
+        data: this.sumChartList.map((val => {
+          return val.Sos;
+        })),
+      }, 
       {
-        name: 'SISH',
-        data: [45, 55, 50, 30, 40, 60, 20, 55, 35, 45]
-      },
+        name: 'Out of stock',
+        data: this.sumChartList.map((val => {
+          return val.Oos;
+        })),
+      }, 
       ],
-      colors: ['#00E396', '#FEB019', '#008FFB', '#FF4560'],
+      colors: ['#00E396', '#FF4560', '#008FFB'],
       chart: {
         height: 270,
         type: 'bar',
@@ -77,7 +79,10 @@ export class SumaryChartBarComponent implements OnChanges, OnInit {
       },
 
       xaxis: {
-        categories: ['Kinshasa', 'Province orientale', 'Kongo central', 'Grand bandundu', 'Katanga', 'Maniema', 'Grand kivu', 'Tshikapa', 'Kananga', 'Kasai oriental'],
+        categories: this.sumChartList.map((val => {
+          return val.Province;
+        })),
+        // categories: ['Kinshasa', 'Province orientale', 'Kongo central', 'Grand bandundu', 'Katanga', 'Maniema', 'Grand kivu', 'Tshikapa', 'Kananga', 'Kasai oriental'],
       },
     };
   }

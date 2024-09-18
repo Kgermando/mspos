@@ -46,7 +46,14 @@
     <div class="row">
       <div class="col-md-12 d-flex">
         <div class="card shadow flex-fill">
-          <app-sumary-chart-bar></app-sumary-chart-bar>
+          <div
+          class="card-header d-flex justify-content-between align-items-center flex-wrap row-gap-2"
+        >
+          <h4>Report of provinces</h4> 
+        </div>
+        <div class="card-body">
+          <app-sumary-chart-bar [isLoading]="isLoading" [summaryChartList]="summaryChartList"></app-sumary-chart-bar> 
+        </div>  
         </div> 
       </div>
     </div>

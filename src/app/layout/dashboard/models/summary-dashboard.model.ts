@@ -16,3 +16,9 @@ export interface PerfVisitModel {
 	Perf: number;
 }
 
+export interface SumChartBarModel {
+	Province: string
+	Nd: number;
+	Sos: number;
+	Oos: number; 
+} 

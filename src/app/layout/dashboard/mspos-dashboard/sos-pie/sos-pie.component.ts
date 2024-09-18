@@ -26,21 +26,25 @@ export class SosPieComponent implements OnChanges {
   @Input() isLoading!: boolean;
   @Input() sosPieLIst: SOSPieModel[] = [];
 
+  sosPieData: SOSPieModel[] = [];
+
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions3: Partial<ChartOptions> | any;
 
 
   ngOnInit(): void {
+    this.sosPieData = this.sosPieLIst;
     this.getChart();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+
     this.getChart();
   }
 
   getChart() {
     this.chartOptions3 = {
-      series: this.sosPieLIst.map((val) => val.Eq),
+      series: this.sosPieData.map((val) => val.Eq),
       chart: {
         width: 400,
         type: 'pie',
@@ -51,7 +55,7 @@ export class SosPieComponent implements OnChanges {
           return val + ' - ' + opts.w.globals.series[opts.seriesIndex];
         },
       },
-      labels: this.sosPieLIst.map((val) => val.Province),
+      labels: this.sosPieData.map((val) => val.Province),
       responsive: [
         {
           breakpoint: 480,

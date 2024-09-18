@@ -41,15 +41,18 @@
                             }
                         </td>
                         <td>
-                            @if (item.Sos < 50) { <span class="badge badge-pill bg-success">{{item.Sos}} %</span>
+                            @if (item.Sos > 50) { <span class="badge badge-pill bg-success">{{item.Sos}} %</span>
                                 } @else {
                                 <span class="badge badge-pill bg-danger">{{item.Sos}} %</span>
                                 }
                         </td>
-                        <td>{{item.Oos}} %</td>
                         <td>
-                            <span class="badge badge-pill bg-success">{{item.Dr}}</span>
+                            @if (item.Oos < 50) { <span class="badge badge-pill bg-success">{{item.Oos}} %</span>
+                                } @else {
+                                <span class="badge badge-pill bg-danger">{{item.Oos}} %</span>
+                                }
                         </td>
+                        <td>{{item.Dr}}</td>
                         <td>{{item.Visit}} </td>
                         <td>{{item.Obj }} </td>
                         <td>
