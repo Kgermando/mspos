@@ -63,8 +63,7 @@ export class NdAverageAreaComponent implements OnChanges {
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions3: Partial<ChartOptions> | any;
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.averages = [];
+  ngOnChanges(changes: SimpleChanges): void { 
     this.calculAverage();
     this.getByAverage(); 
   }
@@ -85,6 +84,7 @@ export class NdAverageAreaComponent implements OnChanges {
       }  
       this.Ar = this.averageAreaList.reduce(function (sum, value) {
         return sum + value.Ar;
+
       }, 0); 
       if (this.Ar > 0) {
         this.Ar1 = this.Ar / this.areaCount;
@@ -173,7 +173,7 @@ export class NdAverageAreaComponent implements OnChanges {
     this.averages.push({ x: 'Yes', y: this.Yes1 });
     this.averages.push({ x: 'Time', y: this.Time1 });
 
-    console.log("averages", this.averages);
+    console.log("averages", this.averages); 
   }
 
 

@@ -19,9 +19,9 @@
                         }
                       </mat-select>
                     </div>
-                    <div class="card mb-0">
-                      <mat-select class="select custom-mat-select" placeholder="Select province" 
-                          formControlName="province">
+                    <div class="card m-2">
+                      <mat-select class="select custom-mat-select" placeholder="Select area" 
+                          formControlName="area">
                         @for (item of areaListFilter; track item) {
                         <mat-option [value]="item">{{item.name}}</mat-option>
                         }

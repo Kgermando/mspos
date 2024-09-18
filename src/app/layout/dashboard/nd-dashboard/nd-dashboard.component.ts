@@ -125,7 +125,7 @@ export class NdDashboardComponent implements OnInit {
       this.areaListFilter = areaArray.filter((obj, index, self) =>
         index === self.findIndex((t) => t.name === obj.name) 
       );
-      this.areaCount = this.areaListFilter.length;
+      this.areaCount = this.areaListFilter.length; 
 
       this.getTableView(this.province.name, this.start_date, this.end_date);
       this.getAverageArea(this.province.name, this.area.name, this.start_date, this.end_date);
@@ -135,7 +135,7 @@ export class NdDashboardComponent implements OnInit {
   }
  
 
-  getAverageArea(province: string, area: string, start_date: string, end_date: string) {
+  getAverageArea(province: string, area: string, start_date: string, end_date: string) { 
     this.ndService.tableView(province, start_date, end_date).subscribe((res) => {
       this.averageAreaData = res.data;
       this.averageAreaList  = this.averageAreaData.filter((val) => val.Area == area);
