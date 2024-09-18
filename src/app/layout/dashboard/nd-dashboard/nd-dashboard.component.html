@@ -19,6 +19,14 @@
                         }
                       </mat-select>
                     </div>
+                    <div class="card mb-0">
+                      <mat-select class="select custom-mat-select" placeholder="Select province" 
+                          formControlName="province">
+                        @for (item of areaListFilter; track item) {
+                        <mat-option [value]="item">{{item.name}}</mat-option>
+                        }
+                      </mat-select>
+                    </div>
                     <div class="form-sort me-2">
                       <i class="ti ti-calendar"></i>
                       <input type="text" class="form-control date-range bookingrange" bsDaterangepicker
@@ -75,7 +83,7 @@
             </div>
           </div>
           <div class="card-body">
-            <app-nd-table-view [isLoading]="isLoading" [tableView]="tableView"></app-nd-table-view>
+            <app-nd-table-view [isLoading]="isLoading" [tableView]="tableViewList"></app-nd-table-view>
           </div>
         </div>
       </div>
@@ -90,7 +98,7 @@
             </div>
           </div>
           <div class="card-body">
-            <app-nd-by-year [isLoading]="isLoading" [ndYear]="ndYear"></app-nd-by-year>
+            <app-nd-by-year [isLoading]="isLoading" [ndYear]="ndYearList"></app-nd-by-year>
           </div>
         </div>
       </div>

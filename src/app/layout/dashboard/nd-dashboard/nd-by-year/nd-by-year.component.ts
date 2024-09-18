@@ -26,12 +26,14 @@ export class NdByYearComponent implements OnChanges {
   @Input() isLoading!: boolean;
   @Input() ndYear: NDYearModel[] = [];
 
+  ndYearList: NDYearModel[] = [];
 
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions4: Partial<ChartOptions> | any;
 
 
   ngOnChanges(changes: SimpleChanges): void {
+    this.ndYearList = this.ndYear;
     this.getChartByYear();
   }
 
@@ -41,7 +43,7 @@ export class NdByYearComponent implements OnChanges {
       series: [
         {
           name: 'Equateur',
-          data: this.ndYear.map((val) => {
+          data: this.ndYearList.map((val) => {
             return val.Eq;
           }),
         },
@@ -61,7 +63,7 @@ export class NdByYearComponent implements OnChanges {
         curve: 'straight',
       },
       xaxis: {
-        categories: this.ndYear.map((val) => {
+        categories: this.ndYearList.map((val) => {
           if (val.Month == '1') {
             return 'Jan';
           } else if (val.Month == '2') {

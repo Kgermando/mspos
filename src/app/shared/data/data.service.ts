@@ -43,10 +43,10 @@ export class DataService {
             //   menuValue: 'Weighted distribution',
             //   route: routes.wdDashboard,
             // },
-            {
-              menuValue: 'Share in shop handling',
-              route: routes.sishDashboard,
-            },
+            // {
+            //   menuValue: 'Share in shop handling',
+            //   route: routes.sishDashboard,
+            // },
             {
               menuValue: 'Out of stock',
               route: routes.oosDashboard,

@@ -38,10 +38,13 @@ export class NdDashboardComponent implements OnInit {
   areaCount = 1; // For found length area for divide by ND
 
 
-  tableView: TableViewModel[] = [];   
+  tableViewData: TableViewModel[] = [];   
+  tableViewList: TableViewModel[] = [];   
+  averageAreaData: TableViewModel[] = [];
   averageAreaList: TableViewModel[] = [];
+  performanceAreaData: TableViewModel[] = []; 
   performanceAreaList: TableViewModel[] = []; 
-  ndYear: NDYearModel[] = [];
+  ndYearList: NDYearModel[] = [];
 
 
   constructor(
@@ -95,14 +98,15 @@ export class NdDashboardComponent implements OnInit {
     this.dateRange = this._formBuilder.group({
       province: new FormControl('kinshasa'),
       rangeValue: new FormControl(this.rangeDate),
+      area: new FormControl('Funa'), 
     });
     this.start_date = formatDate(this.dateRange.value.rangeValue[0], 'yyyy-MM-dd', 'en-US');
     this.end_date = formatDate(this.dateRange.value.rangeValue[1], 'yyyy-MM-dd', 'en-US');
 
 
     if (!this.province && this.start_date && this.end_date) {  
-      this.getTableView(this.dateRange.value.province, this.start_date, this.end_date);
-      this.getAverageArea(this.dateRange.value.province, this.start_date, this.end_date);
+      this.getTableView(this.dateRange.value.province,this.start_date, this.end_date);
+      this.getAverageArea(this.dateRange.value.province, this.dateRange.value.area, this.start_date, this.end_date);
       this.getPerformance(this.dateRange.value.province, this.start_date, this.end_date);
       this.getNDYear(this.dateRange.value.province);
     }
@@ -115,25 +119,26 @@ export class NdDashboardComponent implements OnInit {
       this.province = val.province;
       this.start_date = formatDate(val.rangeValue[0], 'yyyy-MM-dd', 'en-US');
       this.end_date = formatDate(val.rangeValue[1], 'yyyy-MM-dd', 'en-US');  
+      this.area = val.area;
 
       const areaArray = this.areaList.filter((v) => v.province_id == this.province.ID);
       this.areaListFilter = areaArray.filter((obj, index, self) =>
         index === self.findIndex((t) => t.name === obj.name) 
       );
-      this.areaCount = this.areaListFilter.length; 
+      this.areaCount = this.areaListFilter.length;
 
       this.getTableView(this.province.name, this.start_date, this.end_date);
-      this.getAverageArea(this.province.name, this.start_date, this.end_date);
+      this.getAverageArea(this.province.name, this.area.name, this.start_date, this.end_date);
       this.getPerformance(this.province.name, this.start_date, this.end_date);
       this.getNDYear(this.province.name);
-
-
     });
   }
+ 
 
-  getAverageArea(province: string, start_date: string, end_date: string) {
+  getAverageArea(province: string, area: string, start_date: string, end_date: string) {
     this.ndService.tableView(province, start_date, end_date).subscribe((res) => {
-      this.averageAreaList = res.data;  
+      this.averageAreaData = res.data;
+      this.averageAreaList  = this.averageAreaData.filter((val) => val.Area == area);
       this.isLoading = false;
     });
   }
@@ -141,7 +146,7 @@ export class NdDashboardComponent implements OnInit {
 
   getNDYear(province: string) {
     this.ndService.NdByYear(province).subscribe((res) => {
-      this.ndYear = res.data;
+      this.ndYearList = res.data; 
       this.isLoading = false;
     });
   }
@@ -149,7 +154,7 @@ export class NdDashboardComponent implements OnInit {
 
   getPerformance(province: string, start_date: string, end_date: string) {
     this.ndService.tableView(province, start_date, end_date).subscribe((res) => {
-      this.performanceAreaList = res.data;
+      this.performanceAreaList = res.data; 
       this.isLoading = false;
     });
   }
@@ -157,10 +162,9 @@ export class NdDashboardComponent implements OnInit {
 
   getTableView(province: string, start_date: string, end_date: string) {
     this.ndService.tableView(province, start_date, end_date).subscribe((res) => {
-      this.tableView = res.data;
+      this.tableViewList = res.data; 
       this.isLoading = false;
     });
-
   }
 
  
