@@ -29,16 +29,10 @@ export class SosPieComponent implements OnChanges {
   sosPieData: SOSPieModel[] = [];
 
   @ViewChild('chart') chart!: ChartComponent;
-  public chartOptions3: Partial<ChartOptions> | any;
-
-
-  ngOnInit(): void {
-    this.sosPieData = this.sosPieLIst;
-    this.getChart();
-  }
+  public chartOptions3: Partial<ChartOptions> | any; 
 
   ngOnChanges(changes: SimpleChanges): void {
-
+    this.sosPieData = this.sosPieLIst;
     this.getChart();
   }
 
