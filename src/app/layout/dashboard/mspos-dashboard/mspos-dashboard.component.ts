@@ -13,7 +13,7 @@ import { CommonService } from '../../../shared/common/common.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { IProvince } from '../../province/models/province.model';
 import { SummaryService } from '../services/summary.service';
-import { SOSPieModel } from '../models/summary-dashboard.model';
+import { PerfVisitModel, SOSPieModel } from '../models/summary-dashboard.model';
 import { formatDate } from '@angular/common';
 export interface ChartOptions {
   series: ApexAxisChartSeries | any;
@@ -50,6 +50,8 @@ export class MsposDashboardComponent implements OnInit {
   areaCount = 0;
 
   sosPieLIst: SOSPieModel[] = [];
+
+  perfVisitDRList: PerfVisitModel[] = [];
 
    
   constructor(
@@ -95,7 +97,7 @@ export class MsposDashboardComponent implements OnInit {
 
     if (this.start_date && this.end_date) {  
       this.getSOSPie(this.start_date, this.end_date);
- 
+      this.getTrackingVisit(this.start_date, this.end_date);
     }
 
     this.onChanges();
@@ -106,10 +108,8 @@ export class MsposDashboardComponent implements OnInit {
       this.start_date = formatDate(val.rangeValue[0], 'yyyy-MM-dd', 'en-US');
       this.end_date = formatDate(val.rangeValue[1], 'yyyy-MM-dd', 'en-US');  
  
-
       this.getSOSPie(this.start_date, this.end_date);
- 
-
+      this.getTrackingVisit(this.start_date, this.end_date);
 
     });
   }
@@ -148,8 +148,14 @@ export class MsposDashboardComponent implements OnInit {
 
   getSOSPie(start_date: string, end_date: string) {
     this.summaryService.SOSPie(start_date, end_date).subscribe((res) => {
-      this.sosPieLIst = res.data;  
-      console.log("sosPieLIst", this.sosPieLIst)
+      this.sosPieLIst = res.data;
+      this.isLoading = false;
+    });
+  }
+
+  getTrackingVisit(start_date: string, end_date: string) {
+    this.summaryService.TrackingVisitDR(start_date, end_date).subscribe((res) => {
+      this.perfVisitDRList = res.data;  
       this.isLoading = false;
     });
   }
