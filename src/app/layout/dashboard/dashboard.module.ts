@@ -28,7 +28,10 @@ import { OosTableViewComponent } from './oos-dashboard/oos-table-view/oos-table-
 import { SosPieChartComponent } from './sos-dashboard/sos-pie-chart/sos-pie-chart.component';
 import { SosTableViewComponent } from './sos-dashboard/sos-table-view/sos-table-view.component';
 import { SosByYearComponent } from './sos-dashboard/sos-by-year/sos-by-year.component';
-import { SosChartBarComponent } from './sos-dashboard/sos-chart-bar/sos-chart-bar.component'; 
+import { SosChartBarComponent } from './sos-dashboard/sos-chart-bar/sos-chart-bar.component';
+import { BetterDrComponent } from './mspos-dashboard/better-dr/better-dr.component';
+import { BetterSupComponent } from './mspos-dashboard/better-sup/better-sup.component';
+import { StatusEquipementsComponent } from './mspos-dashboard/status-equipements/status-equipements.component'; 
 
 
 
@@ -59,7 +62,10 @@ import { SosChartBarComponent } from './sos-dashboard/sos-chart-bar/sos-chart-ba
     SosPieChartComponent,
     SosTableViewComponent,
     SosByYearComponent,
-    SosChartBarComponent, 
+    SosChartBarComponent,
+    BetterDrComponent,
+    BetterSupComponent,
+    StatusEquipementsComponent, 
   ],
   imports: [
     CommonModule,

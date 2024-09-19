@@ -47,11 +47,9 @@
       <div class="col-md-6 d-flex">
         <app-map-area></app-map-area>
       </div>
-      <!-- <div class="col-md-6 d-flex">
-        <div class="card flex-fill">
-           <app-sos-pie [isLoading]="isLoading" [sosPieLIst]="sosPieLIst"></app-sos-pie>
-        </div>
-      </div> -->
+      <div class="col-md-6 d-flex">
+         <app-status-equipements [isLoading]="isLoading" [statusEquipementList]="statusEquipementList"></app-status-equipements>
+      </div>
     </div>
     <div class="row">
       <div class="col-md-12 d-flex">
@@ -67,5 +65,18 @@
         </div> 
       </div>
     </div>
+    <div class="row">
+      <div class="col-md-6 d-flex">
+        <div class="card flex-fill">
+          <app-better-dr [isLoading]="isLoading" [betterDRList]="betterDRList"></app-better-dr>
+        </div>
+      </div>
+      <div class="col-md-6 d-flex">
+        <div class="card flex-fill">
+          <app-better-sup [isLoading]="isLoading" [betterSupList]="betterSupList"></app-better-sup>
+        </div>
+      </div>
+    </div> 
+    
   </div>
 </div>

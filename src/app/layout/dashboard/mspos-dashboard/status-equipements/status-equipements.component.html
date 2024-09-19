@@ -1,0 +1,26 @@
+
+<div class="card w-100">
+    <div class="card-header border-0 pb-0">
+      <div
+        class="d-flex align-items-center justify-content-between flex-wrap row-gap-3"
+      >
+        <h4>
+          <i class="ti ti-grip-vertical me-1"></i>Status equipements
+        </h4> 
+      </div>
+    </div>
+    <div class="card-body">
+      <div id="contacts-analysis">
+        <apx-chart
+          [series]="chartOptions3.series"
+          [chart]="chartOptions3.chart"
+          [labels]="chartOptions3.labels"
+          [fill]="chartOptions3.fill"
+          [dataLabels]="chartOptions3.dataLabels"
+          [responsive]="chartOptions3.responsive"
+          [colors]="chartOptions3.colors"
+          [legend]="chartOptions3.legend"
+        ></apx-chart>
+      </div>
+    </div>
+  </div>

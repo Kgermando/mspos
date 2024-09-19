@@ -22,3 +22,16 @@ export interface SumChartBarModel {
 	Sos: number;
 	Oos: number; 
 } 
+
+
+export interface BetterModel {
+	Fullname: string;
+	Province: string;
+	Area: string;
+	Ventes: number;
+}
+
+export interface StatusEquipementModel {
+	Equipement: string;
+	Count: number; 
+}

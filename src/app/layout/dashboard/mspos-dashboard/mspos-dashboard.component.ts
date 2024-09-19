@@ -13,7 +13,7 @@ import { CommonService } from '../../../shared/common/common.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { IProvince } from '../../province/models/province.model';
 import { SummaryService } from '../services/summary.service';
-import { PerfVisitModel, SOSPieModel, SumChartBarModel } from '../models/summary-dashboard.model';
+import { BetterModel, PerfVisitModel, SOSPieModel, StatusEquipementModel, SumChartBarModel } from '../models/summary-dashboard.model';
 import { formatDate } from '@angular/common';
 import { getBusinessDaysBetweenDates } from '../../../utils/calcul-date-except-weekend';
 export interface ChartOptions {
@@ -56,7 +56,12 @@ export class MsposDashboardComponent implements OnInit {
 
   summaryChartList: SumChartBarModel[] = [];
 
-   
+  betterDRList: BetterModel[] = [];
+
+  betterSupList: BetterModel[] = [];
+
+  statusEquipementList: StatusEquipementModel[] = [];
+
   constructor(
     private common: CommonService,
     private _formBuilder: FormBuilder,
@@ -102,6 +107,9 @@ export class MsposDashboardComponent implements OnInit {
       this.getSOSPie(this.start_date, this.end_date);
       this.getTrackingVisit('20', this.start_date, this.end_date);
       this.getSummryChart(this.start_date, this.end_date);
+      this.getBetterDR(this.start_date, this.end_date);
+      this.getBestSup(this.start_date, this.end_date);
+      this.getStatusEquiment(this.start_date, this.end_date);
     }
 
     this.onChanges();
@@ -118,6 +126,9 @@ export class MsposDashboardComponent implements OnInit {
       this.getSOSPie(this.start_date, this.end_date);
       this.getTrackingVisit(days.toString(), this.start_date, this.end_date);
       this.getSummryChart(this.start_date, this.end_date);
+      this.getBetterDR(this.start_date, this.end_date);
+      this.getBestSup(this.start_date, this.end_date);
+      this.getStatusEquiment(this.start_date, this.end_date);
     });
   }
 
@@ -170,6 +181,27 @@ export class MsposDashboardComponent implements OnInit {
   getSummryChart(start_date: string, end_date: string) {
     this.summaryService.SummaryChartBar(start_date, end_date).subscribe((res) => {
       this.summaryChartList = res.data;  
+      this.isLoading = false;
+    });
+  }
+
+  getBetterDR(start_date: string, end_date: string) {
+    this.summaryService.BetterDR(start_date, end_date).subscribe((res) => {
+      this.betterDRList = res.data;
+      this.isLoading = false;
+    });
+  }
+
+  getBestSup(start_date: string, end_date: string) {
+    this.summaryService.SOSPie(start_date, end_date).subscribe((res) => {
+      this.betterSupList = res.data;
+      this.isLoading = false;
+    });
+  }
+
+  getStatusEquiment(start_date: string, end_date: string) {
+    this.summaryService.StatusEquipement(start_date, end_date).subscribe((res) => {
+      this.statusEquipementList = res.data;
       this.isLoading = false;
     });
   }
