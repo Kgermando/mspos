@@ -2,11 +2,11 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { TableViewModel } from '../../models/nd-dashboard.models';
 
 @Component({
-  selector: 'app-nd-table-view',
-  templateUrl: './nd-table-view.component.html',
-  styleUrl: './nd-table-view.component.scss'
+  selector: 'app-oos-table-view',
+  templateUrl: './oos-table-view.component.html',
+  styleUrl: './oos-table-view.component.scss'
 })
-export class NdTableViewComponent implements OnChanges {
+export class OosTableViewComponent implements OnChanges {
   
   @Input() tableView: TableViewModel[] = [];
   @Input() isLoading!: boolean;

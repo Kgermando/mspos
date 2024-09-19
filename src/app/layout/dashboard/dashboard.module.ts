@@ -20,7 +20,11 @@ import { TrackingDrComponent } from './mspos-dashboard/tracking-dr/tracking-dr.c
 import { SumaryChartBarComponent } from './mspos-dashboard/sumary-chart-bar/sumary-chart-bar.component';
 import { MapAreaComponent } from './mspos-dashboard/map-area/map-area.component';
 import { StatsTotalComponent } from './mspos-dashboard/stats-total/stats-total.component';
-import { SosPieComponent } from './mspos-dashboard/sos-pie/sos-pie.component'; 
+import { SosPieComponent } from './mspos-dashboard/sos-pie/sos-pie.component';
+import { OosAverageAreaComponent } from './oos-dashboard/oos-average-area/oos-average-area.component';
+import { OosByYearComponent } from './oos-dashboard/oos-by-year/oos-by-year.component';
+import { OosPerformanceAreaComponent } from './oos-dashboard/oos-performance-area/oos-performance-area.component';
+import { OosTableViewComponent } from './oos-dashboard/oos-table-view/oos-table-view.component'; 
 
 
 
@@ -43,7 +47,11 @@ import { SosPieComponent } from './mspos-dashboard/sos-pie/sos-pie.component';
     SumaryChartBarComponent,
     MapAreaComponent,
     StatsTotalComponent,
-    SosPieComponent, 
+    SosPieComponent,
+    OosAverageAreaComponent,
+    OosByYearComponent,
+    OosPerformanceAreaComponent,
+    OosTableViewComponent, 
   ],
   imports: [
     CommonModule,
