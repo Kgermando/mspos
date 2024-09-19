@@ -1,130 +1,164 @@
+$marker-width: 20px;
+$marker-height: 20px;
+$marker-color: rgba(255, 0, 0, 0.7);
+$marker-border-color: red;
+
 .map-container {
-    position: relative;
-    display: inline-block;
-    /* Map image styling */
-    /* Markers */
-    /* Media query for responsiveness */
-  }
-  .map-container .map-image {
+  position: relative;
+  display: inline-block;
+
+  /* Map image styling */
+  .map-image {
     display: block;
     max-width: 100%;
     height: auto;
   }
-  .map-container .map-marker {
+
+  /* Markers */
+  .map-marker {
     position: absolute;
-    width: 20px;
-    height: 20px;
-    background-color: rgba(255, 0, 0, 0.7);
-    border: 2px solid red;
+    width: $marker-width;
+    height: $marker-height;
+    background-color: $marker-color;
+    border: 2px solid $marker-border-color;
     border-radius: 50%;
-  }
-  .map-container .map-marker.marker-1 {
-    top: 38%;
-    left: 47%;
-  }
-  .map-container .map-marker.marker-2 {
-    top: 55%;
-    left: 45%;
-  }
-  .map-container .map-marker.marker-3 {
-    top: 60%;
-    left: 50%;
-  }
-  .map-container .map-marker.marker-4 {
-    top: 48%;
-    left: 72%;
-  }
-  .map-container .map-marker.marker-5 {
-    top: 74%;
-    left: 70%;
-  }
-  .map-container .map-marker.marker-6 {
-    top: 73%;
-    left: 53%;
-  }
-  .map-container .map-marker.marker-7 {
-    top: 66%;
-    left: 62%;
-  }
-  .map-container .map-marker.marker-8 {
-    top: 30%;
-    left: 75%;
-  }
-  .map-container .map-marker.marker-9 {
-    top: 38%;
-    left: 73%;
-  }
-  .map-container .map-marker.marker-10 {
-    top: 60%;
-    left: 70%;
-  }
-  .map-container .map-marker.marker-11 {
-    top: 59%;
-    left: 58%;
-  }
-  .map-container .map-marker.marker-12 {
-    top: 59%;
-    left: 54%;
-  }
-  .map-container .map-marker.marker-13 {
-    top: 48%;
-    left: 55%;
-  }
-  .map-container .map-marker.marker-14 {
-    top: 45%;
-    left: 35%;
-  }
-  .map-container .map-marker.marker-15 {
-    top: 34%;
-    left: 38%;
-  }
-  .map-container .map-marker.marker-16 {
-    top: 33%;
-    left: 60%;
-  }
-  .map-container .map-marker.marker-17 {
-    top: 24%;
-    left: 39%;
-  }
-  .map-container .map-marker.marker-18 {
-    top: 23%;
-    left: 74%;
-  }
-  .map-container .map-marker.marker-19 {
-    top: 22%;
-    left: 60%;
-  }
-  .map-container .map-marker.marker-20 {
-    top: 47%;
-    left: 64%;
-  }
-  .map-container .map-marker.marker-21 {
-    top: 56%;
-    left: 20%;
-  }
-  .map-container .map-marker.marker-22 {
-    top: 60%;
-    left: 33%;
-  }
-  .map-container .map-marker.marker-23 {
-    top: 54%;
-    left: 36%;
-  }
-  .map-container .map-marker.marker-24 {
-    top: 21%;
-    left: 45%;
-  }
-  .map-container .map-marker.marker-25 {
-    top: 27%;
-    left: 47%;
-  }
-  .map-container .map-marker.marker-26 {
-    top: 52%;
-    left: 26%;
-  }
-  @media screen and (max-width: 600px) {
-    .map-container {
-      width: 100%;
-      /* Map container becomes responsive */
+
+    &.marker-1 {
+      top: 33%;
+      left: 47%;
     }
-  }/*# sourceMappingURL=styles.css.map */
+
+    &.marker-2 {
+      top: 55%;
+      left: 45%;
+    }
+
+    &.marker-3 {
+      top: 61%;
+      left: 50%;
+    }
+
+    &.marker-4 {
+      top: 48%;
+      left: 72%;
+    }
+
+    &.marker-5 {
+      top: 74%;
+      left: 70%;
+    }
+
+    &.marker-6 {
+      top: 73%;
+      left: 53%;
+    }
+
+    &.marker-7 {
+      top: 66%;
+      left: 62%;
+    }
+
+    &.marker-8 {
+      top: 30%;
+      left: 75%;
+    }
+
+    &.marker-9 {
+      top: 38%;
+      left: 73%;
+    }
+
+    &.marker-10 {
+      top: 60%;
+      left: 70%;
+    }
+
+    &.marker-11 {
+      top: 59%;
+      left: 58%;
+    }
+
+    &.marker-12 {
+      top: 59%;
+      left: 54%;
+    }
+
+    &.marker-13 {
+      top: 48%;
+      left: 55%;
+    }
+
+    &.marker-14 {
+      top: 45%;
+      left: 35%;
+    }
+
+    &.marker-15 {
+      top: 34%;
+      left: 38%;
+    }
+
+    &.marker-16 {
+      top: 33%;
+      left: 60%;
+      // width: 70px;
+      // height: 70px;
+    }
+
+    &.marker-17 {
+      top: 24%;
+      left: 39%;
+    }
+
+    &.marker-18 {
+      top: 23%;
+      left: 74%;
+    }
+
+    &.marker-19 {
+      top: 22%;
+      left: 60%;
+    }
+
+    &.marker-20 {
+      top: 47%;
+      left: 64%;
+    }
+
+    &.marker-21 {
+      top: 56%;
+      left: 20%;
+    }
+
+    &.marker-22 {
+      top: 60%;
+      left: 33%;
+    }
+
+    &.marker-23 {
+      top: 54%;
+      left: 36%;
+    }
+
+    &.marker-24 {
+      top: 21%;
+      left: 45%;
+    }
+
+    &.marker-25 {
+      top: 27%;
+      left: 47%;
+    }
+
+    &.marker-26 {
+      top: 52%;
+      left: 26%;
+    }
+  }
+
+  /* Media query for responsiveness */
+  @media screen and (max-width: 600px) {
+    width: 100%;
+    /* Map container becomes responsive */
+  }
+}
