@@ -64,7 +64,7 @@ export class OosDashboardComponent implements OnInit {
     this.common.last.subscribe((last: string) => {
       this.last = last;
     });
-    if (this.last == 'nd-dashboard') {
+    if (this.last == 'out-of-stock') {
       this.renderer.addClass(document.body, 'date-picker-dashboard');
     }
   }

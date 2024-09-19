@@ -24,7 +24,11 @@ import { SosPieComponent } from './mspos-dashboard/sos-pie/sos-pie.component';
 import { OosAverageAreaComponent } from './oos-dashboard/oos-average-area/oos-average-area.component';
 import { OosByYearComponent } from './oos-dashboard/oos-by-year/oos-by-year.component';
 import { OosPerformanceAreaComponent } from './oos-dashboard/oos-performance-area/oos-performance-area.component';
-import { OosTableViewComponent } from './oos-dashboard/oos-table-view/oos-table-view.component'; 
+import { OosTableViewComponent } from './oos-dashboard/oos-table-view/oos-table-view.component';
+import { SosPieChartComponent } from './sos-dashboard/sos-pie-chart/sos-pie-chart.component';
+import { SosTableViewComponent } from './sos-dashboard/sos-table-view/sos-table-view.component';
+import { SosByYearComponent } from './sos-dashboard/sos-by-year/sos-by-year.component';
+import { SosChartBarComponent } from './sos-dashboard/sos-chart-bar/sos-chart-bar.component'; 
 
 
 
@@ -51,7 +55,11 @@ import { OosTableViewComponent } from './oos-dashboard/oos-table-view/oos-table-
     OosAverageAreaComponent,
     OosByYearComponent,
     OosPerformanceAreaComponent,
-    OosTableViewComponent, 
+    OosTableViewComponent,
+    SosPieChartComponent,
+    SosTableViewComponent,
+    SosByYearComponent,
+    SosChartBarComponent, 
   ],
   imports: [
     CommonModule,

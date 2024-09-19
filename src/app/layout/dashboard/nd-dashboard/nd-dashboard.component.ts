@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, Renderer2} from '@angular/core';
 import { routes } from '../../../shared/routes/routes';
 import { ProvinceService } from '../../province/province.service';
 import { AreaService } from '../../areas/area.service';
