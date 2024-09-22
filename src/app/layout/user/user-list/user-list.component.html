@@ -8,7 +8,7 @@
           <div class="row align-items-center">
             <div class="col-8">
               <h4 class="page-title">
-                Utilisateurs <span class="count-title">{{ totalPages }}</span> 
+                Utilisateurs <span class="count-title">{{ length }}</span> 
               </h4>
             </div>
             <div class="col-4 text-end">
@@ -76,7 +76,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @for (data of ELEMENT_DATA; track data) {
+                  @for (data of dataList; track data) {
                   <tr class="odd">
                     <td>
                       <h2 class="table-avatar d-flex align-items-center">
@@ -97,27 +97,24 @@
                     <td>{{ data.email }}</td>
                     <td>{{ data.phone }}</td>
                     <td>
-                      @if (data.province_id > 0) {
-                      <app-province-user [province_id]="data.province_id"></app-province-user>
-                      }
-                      @if (data.province_id == 0) {
-                      --
-                      }
+                      @if (data.province) {
+                        {{ data.province }}
+                        } @else {
+                          --
+                        }
+                    </td>
+                    <td> 
+                      @if (data.area) {
+                        {{ data.area }}
+                        } @else {
+                          --
+                        }
                     </td>
                     <td>
-                      @if (data.area_id > 0) {
-                      <app-user-area [id]="data.area_id"></app-user-area>
-                      }
-                      @if (data.area_id == 0) {
-                      --
-                      }
-                    </td>
-                    <td>
-                      @if (data.sup_id > 0) {
-                      <app-user-sup [id]="data.sup_id"></app-user-sup>
-                      }
-                      @if (data.sup_id == 0) {
-                      --
+                      @if (data.sup) {
+                      {{ data.sup }}
+                      } @else {
+                        --
                       }
                     </td>
                     <td>
@@ -138,14 +135,14 @@
                           aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                         <div class="dropdown-menu dropdown-menu-right">
 
-                          <a class="dropdown-item" href="javascript:void(0);" (click)="findValue(data.fullname)"
+                          <a class="dropdown-item" href="javascript:void(0);" (click)="findValue(data.id)"
                             data-bs-toggle="offcanvas" data-bs-target="#offcanvas_edit">
                             <i class="ti ti-edit text-blue"></i>
                             Edit
                           </a>
 
                           <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal"
-                            (click)="findValue(data.fullname)" data-bs-target="#delete_contact"><i
+                            (click)="findValue(data.id)" data-bs-target="#delete_contact"><i
                               class="ti ti-trash text-danger"></i>
                             Delete
                           </a>
@@ -154,8 +151,8 @@
                     </td>
                   </tr>
                   }
-                  <tr class="odd">
-                    @if (isLoadingData) {
+                  @if (isLoadingData) {
+                    <tr class="odd">
                       <div class=" text-center d-flex justify-content-center align-items-center ">
                         <button disabled class="btn btn-primary">
                           <div class="spinner-border" role="status">
@@ -163,18 +160,18 @@
                           </div>
                       </button>
                       </div> 
-                  }
-                  </tr>
+                    </tr>
+                  } 
                 </tbody>
               </table>
-            </div>
-            <button (click)="fetchProducts(currentPage - 1)" [disabled]="currentPage === 1">Précédent</button>
-              <button (click)="fetchProducts(currentPage + 1)" [disabled]="currentPage === totalPages">Suivant</button>
-
-              
-            <!-- <pagination-controls (pageChange)="currentPage = $event"></pagination-controls> -->
-            <!-- <mat-paginator [length]="totalPages" [pageSizeOptions]="pageSizes" showFirstLastButtons></mat-paginator>  -->
-            <!-- <app-custom-pagination></app-custom-pagination> -->
+            </div>  
+            <mat-paginator [length]="length"
+                 [pageSize]="pageSize"
+                 [pageSizeOptions]="[15, 20, 30, 40, 50, 80, 100]"
+                 showFirstLastButtons
+                 (page)="onPageChange($event)"
+                 aria-label="Select page">
+              </mat-paginator>
             <div class="row align-items-center">
               <div class="col-md-6">
                 <div class="datatable-length"></div>

@@ -3,6 +3,7 @@ import { IPos } from "../../pos-vente/models/pos.model";
 
 export interface IArea {
     ID: number;
+    id: number;
     name: string;
     province_id: number;
     sup_id: number;
@@ -10,4 +11,7 @@ export interface IArea {
     signature: string; 
     CreatedAt: Date;
     UpdatedAt: Date;
+
+    province: string;
+    sup: string;
 }

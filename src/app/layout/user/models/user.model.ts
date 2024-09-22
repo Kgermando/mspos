@@ -1,6 +1,7 @@
 
 export interface IUser {
     ID: number;
+    id: number;
     fullname: string;
     email: string;
     title: string;
@@ -18,4 +19,9 @@ export interface IUser {
     signature: string; 
     CreatedAt: Date;
     UpdatedAt: Date;
+
+
+    province: string;
+    area: string; 
+    sup: string; 
 }

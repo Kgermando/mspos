@@ -1,9 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { apiResultFormat } from '../../../shared/model/pages.model';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { PaginationService, pageSelection, tablePageSize } from '../../../shared/custom-pagination/pagination.service';
 import { Router } from '@angular/router';
-import { Sort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { routes } from '../../../shared/routes/routes';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserModel } from '../../../auth/models/user.model';
@@ -15,6 +13,7 @@ import { ISup } from '../models/sup.model';
 import { SupService } from '../sup.service';
 import { IAsm } from '../../asm/models/asm.model';
 import { AsmService } from '../../asm/asm.service';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 
 @Component({
@@ -23,36 +22,36 @@ import { AsmService } from '../../asm/asm.service';
   styleUrl: './sup-list.component.scss'
 })
 export class SupListComponent implements OnInit {
+  isLoadingData = false;
   public routes = routes;
-  text: string | undefined;
-  public tableData: ISup[] = [];
-  public pageSize = 10;
-  public serialNumberArray: number[] = [];
-  public totalData = 0;
-  showFilter = false;
-  dataSource!: MatTableDataSource<ISup>;
-  public searchDataValue = '';
-  public tableDataCopy: ISup[] = [];
-  public actualData: ISup[] = [];
-  bsValue = new Date();
-  bsRangeValue!: Date[];
-  maxDate = new Date();
+  // Table 
+  dataList: ISup[] = [];
+  totalItems: number = 0;
+  pageSize: number = 15;
+  pageIndex: number = 0;
+  length: number = 0;
 
+  // Table 
+  dataSource = new MatTableDataSource<ISup>(this.dataList);
+
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  public searchDataValue = '';
+
+  // Forms  
+  idItem!: number;
+  dataItem!: ISup; // Single data 
 
   formGroup!: FormGroup;
   currentUser!: UserModel;
   isLoading = false;
-
-  totalUser = 0;
+ 
   provinceList: IProvince[] = [];
   asmList: IAsm[] = []; 
-  
 
-  idItem!: number;
-  dataItem!: ISup; // Single data
 
-  constructor(
-    private pagination: PaginationService,
+  constructor( 
     private router: Router,
     private _formBuilder: FormBuilder,
     private authService: AuthService,
@@ -75,69 +74,39 @@ export class SupListComponent implements OnInit {
   selectedDatas4: any[] | undefined;
 
 
-   
-  ngOnInit() {
-    this.formGroup = this._formBuilder.group({
-      name: ['', Validators.required], 
-      province_id: ['', Validators.required], 
-      asm_id: ['', Validators.required], 
-    });
-
+  ngAfterViewInit(): void { 
     this.authService.user().subscribe({
       next: (user) => {
         this.currentUser = user;
+        this.supService.refreshDataList$.subscribe(() => {
+          this.fetchProducts(this.pageIndex, this.pageSize);
+        });
+        this.fetchProducts(this.pageIndex, this.pageSize);
+
         this.provinceService.getAll().subscribe(res => {
           this.provinceList = res.data;
         });
         this.asmService.getAll().subscribe(res => {
           this.asmList = res.data;
         });
-        this.supService.refreshDataList$.subscribe(() => {
-          this.supService.getAll().subscribe((apiRes: apiResultFormat) => {
-            this.actualData = apiRes.data;  
-            this.totalUser = apiRes.meta.total;
-            this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-              if (this.router.url == this.routes.supList) {
-                this.getTableData({ skip: res.skip, limit: res.limit });
-                this.pageSize = res.pageSize;
-              }
-            });
-          });
-        }); 
-        this.supService.getAll().subscribe((apiRes: apiResultFormat) => {
-          this.actualData = apiRes.data;  
-          this.totalUser = apiRes.meta.total;
-          this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-            if (this.router.url == this.routes.supList) {
-              this.getTableData({ skip: res.skip, limit: res.limit });
-              this.pageSize = res.pageSize;
-            }
-          });
-        });
-        console.log("id", this.idItem)
-        if (this.idItem) {
-          this.supService.get(this.idItem).subscribe(item => { 
-            this.dataItem = item.data;
-              this.formGroup.patchValue({
-                name: this.dataItem.name, 
-                province_id: this.dataItem.province_id,  
-                asm_id: this.dataItem.asm_id,  
-              });
-            }
-          );
-        }
       },
       error: (error) => {
+        this.isLoadingData = false;
         this.router.navigate(['/auth/login']);
         console.log(error);
       }
-    }); 
-    
-   
-    
-    this.maxDate.setDate(this.maxDate.getDate() + 7);
-    this.bsRangeValue = [this.bsValue, this.maxDate];
+    });
+  }
 
+   
+  ngOnInit() {
+    this.isLoadingData = true;
+    this.formGroup = this._formBuilder.group({
+      name: ['', Validators.required], 
+      province_id: ['', Validators.required], 
+      asm_id: ['', Validators.required], 
+    });
+ 
     this.selectedValue1 = [
       { name: 'Mobile App' },
       { name: 'Meeting' }
@@ -156,46 +125,76 @@ export class SupListComponent implements OnInit {
       { name: 'Meeting' }
     ];
   }
- 
 
-  private getTableData(pageOption: pageSelection): void {
-    this.supService.getAll().subscribe((apiRes: apiResultFormat) => {
-      this.tableData = [];
-      this.tableDataCopy = [];
-      this.serialNumberArray = [];
-      this.totalData = apiRes.totalData;
-      apiRes.data.map((res: ISup, index: number) => {
-        const serialNumber = index + 1;
-        if (index >= pageOption.skip && serialNumber <= pageOption.limit) {
-          res.ID = serialNumber;
-          this.tableData.push(res);
-          this.serialNumberArray.push(serialNumber);
-          this.tableDataCopy.push(res);
-        }
-      });
-      this.dataSource = new MatTableDataSource<ISup>(this.actualData);
-      this.pagination.calculatePageSize.next({
-        totalData: this.totalData,
-        pageSize: this.pageSize,
-        tableData: this.tableData,
-        tableDataCopy: this.tableDataCopy,
-        serialNumberArray: this.serialNumberArray,
-      });
+  onPageChange(event: PageEvent): void {
+    this.isLoadingData = true; 
+    this.fetchProducts(event.pageIndex, event.pageSize);
+  } 
+
+  fetchProducts(pageIndex: number, pageSize: number) {
+    this.supService.getPaginated(pageIndex, pageSize).subscribe(res => {
+      this.dataList = res.data;
+      this.totalItems = res.pagination.total_pages;
+      this.length = res.pagination.length;
+      this.dataSource = new MatTableDataSource<ISup>(this.dataList);
+      //  this.dataSource.paginator = this.paginator; 
+      this.paginator.length = res.pagination.length;
+      this.dataSource.sort = this.sort; 
+
+      this.isLoadingData = false;
     });
   }
 
+ 
+
+  // private getTableData(pageOption: pageSelection): void {
+  //   this.supService.getAll().subscribe((apiRes: apiResultFormat) => {
+  //     this.tableData = [];
+  //     this.tableDataCopy = [];
+  //     this.serialNumberArray = [];
+  //     this.totalData = apiRes.totalData;
+  //     apiRes.data.map((res: ISup, index: number) => {
+  //       const serialNumber = index + 1;
+  //       if (index >= pageOption.skip && serialNumber <= pageOption.limit) {
+  //         res.ID = serialNumber;
+  //         this.tableData.push(res);
+  //         this.serialNumberArray.push(serialNumber);
+  //         this.tableDataCopy.push(res);
+  //       }
+  //     });
+  //     this.dataSource = new MatTableDataSource<ISup>(this.actualData);
+  //     this.pagination.calculatePageSize.next({
+  //       totalData: this.totalData,
+  //       pageSize: this.pageSize,
+  //       tableData: this.tableData,
+  //       tableDataCopy: this.tableDataCopy,
+  //       serialNumberArray: this.serialNumberArray,
+  //     });
+  //   });
+  // }
+
   public sortData(sort: Sort) {
-    const data = this.tableData.slice();
+    const data = this.dataList.slice();
     if (!sort.active || sort.direction === '') {
-      this.tableData = data;
+      this.dataList = data;
     } else {
-      this.tableData = data.sort((a, b) => {
+      this.dataList = data.sort((a, b) => {
         const aValue = (a as never)[sort.active];
         const bValue = (b as never)[sort.active];
         return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
       });
     }
   }
+
+  public searchData(value: string): void {
+    if (value == '') {
+      this.dataList = this.dataList;
+    } else {
+      this.dataSource.filter = value.trim().toLowerCase();
+      this.dataList = this.dataSource.filteredData;
+    }
+  }
+
   public sidebarPopup = false;
   public sidebarPopup2 = false;
   openSidebarPopup() {
@@ -204,15 +203,7 @@ export class SupListComponent implements OnInit {
   openSidebarPopup2() {
     this.sidebarPopup2 = !this.sidebarPopup2;
   }
-  public searchData(value: string): void {
-    if (value == '') {
-      this.tableData = this.tableDataCopy;
-    } else {
-      this.dataSource.filter = value.trim().toLowerCase();
-      this.tableData = this.dataSource.filteredData;
-    }
-  }
-  initChecked = false;
+  
  
  
   onSubmit() {
@@ -272,22 +263,31 @@ export class SupListComponent implements OnInit {
     }
   }
  
-  findValue(value: string) { 
-    this.actualData.forEach(item => { 
-      if (item.name === value) {
-        this.idItem = item.ID;
-        if (this.idItem) {
-          this.supService.get(this.idItem).subscribe(item => { 
-            this.dataItem = item.data;
-              this.formGroup.patchValue({
-                name: this.dataItem.name, 
-                province_id: this.dataItem.province_id,  
-              });
-            }
-          );
-        }
+  findValue(value: number) { 
+    this.idItem = value;
+    this.supService.get(this.idItem).subscribe(item => { 
+      this.dataItem = item.data;
+        this.formGroup.patchValue({
+          name: this.dataItem.name, 
+          province_id: this.dataItem.province_id,  
+        });
       }
-    });
+    );
+    // this.dataList.forEach(item => { 
+    //   if (item.name === value) {
+    //     this.idItem = item.ID;
+    //     if (this.idItem) {
+    //       this.supService.get(this.idItem).subscribe(item => { 
+    //         this.dataItem = item.data;
+    //           this.formGroup.patchValue({
+    //             name: this.dataItem.name, 
+    //             province_id: this.dataItem.province_id,  
+    //           });
+    //         }
+    //       );
+    //     }
+    //   }
+    // });
   }
 
  
@@ -308,7 +308,7 @@ export class SupListComponent implements OnInit {
   } 
 
   compareFn(c1: IProvince, c2: IProvince): boolean {
-    return c1 && c2 ? c1.ID === c2.ID : c1 === c2;
+    return c1 && c2 ? c1.id === c2.id : c1 === c2;
   }
 
   compareFn1(c1: IAsm, c2: IAsm): boolean {

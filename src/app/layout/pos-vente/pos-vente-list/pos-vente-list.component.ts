@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { apiResultFormat } from '../../../shared/model/pages.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { PaginationService, pageSelection, tablePageSize } from '../../../shared/custom-pagination/pagination.service';
 import { Router } from '@angular/router';
-import { Sort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { routes } from '../../../shared/routes/routes';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserModel } from '../../../auth/models/user.model';
@@ -15,6 +15,7 @@ import { IPos } from '../models/pos.model';
 import { AreaService } from '../../areas/area.service';
 import { PosVenteService } from '../pos-vente.service';
 import { IArea } from '../../areas/models/area.model';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-pos-vente-list',
@@ -22,23 +23,35 @@ import { IArea } from '../../areas/models/area.model';
   styleUrl: './pos-vente-list.component.scss'
 })
 export class PosVenteListComponent implements OnInit {
+  isLoadingData = false;
   public routes = routes;
-  text: string | undefined;
-  public tableData: IPos[] = [];
-  public pageSize = 10;
-  public serialNumberArray: number[] = [];
-  public totalData = 0;
-  showFilter = false;
-  dataSource!: MatTableDataSource<IPos>;
-  public searchDataValue = '';
-  public tableDataCopy: IPos[] = [];
-  public actualData: IPos[] = [];
-  bsValue = new Date();
-  bsRangeValue!: Date[];
-  maxDate = new Date();
+  // Table 
+  dataList: IPos[] = [];
+  totalItems: number = 0;
+  pageSize: number = 15;
+  pageIndex: number = 0;
+  length: number = 0;
 
+  // Table 
+  dataSource = new MatTableDataSource<IPos>(this.dataList);
+
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  public searchDataValue = '';
+
+  // Forms  
   idItem!: number;
-  dataItem!: IPos; // Single data
+  dataItem!: IPos; // Single data 
+
+  formGroup!: FormGroup;
+  currentUser!: UserModel;
+  isLoading = false;
+
+  provinceList: IProvince[] = [];
+  areaList: IArea[] = [];
+  areaListFilter: IArea[] = [];
+
 
   constructor(
     private pagination: PaginationService,
@@ -62,19 +75,35 @@ export class PosVenteListComponent implements OnInit {
   selectedDatas2: any[] | undefined;
   selectedDatas3: any[] | undefined;
   selectedDatas4: any[] | undefined;
+  
 
+  ngAfterViewInit(): void { 
+    this.authService.user().subscribe({
+      next: (user) => {
+        this.currentUser = user;
+        this.posVenteService.refreshDataList$.subscribe(() => {
+          this.fetchProducts(this.pageIndex, this.pageSize);
+        });
+        this.fetchProducts(this.pageIndex, this.pageSize);
 
-  formGroup!: FormGroup;
-  currentUser!: UserModel;
-  isLoading = false;
-
-  totalUser = 0;
-  provinceList: IProvince[] = [];
-  areaList: IArea[] = [];
-  areaListFilter: IArea[] = [];
+        this.provinceService.getAll().subscribe(res => {
+          this.provinceList = res.data;
+        });
+        this.areaService.getAll().subscribe(res => {
+          this.areaList = res.data;
+        });
+      },
+      error: (error) => {
+        this.isLoadingData = false;
+        this.router.navigate(['/auth/login']);
+        console.log(error);
+      }
+    });
+  }
  
 
   ngOnInit() {
+    this.isLoadingData = true;
     this.formGroup = this._formBuilder.group({
       name: ['', Validators.required],
       shop: ['', Validators.required],
@@ -96,75 +125,7 @@ export class PosVenteListComponent implements OnInit {
       status: ['', Validators.required],
     });
 
-    this.authService.user().subscribe({
-      next: (user) => {
-        this.currentUser = user;
-        this.provinceService.getAll().subscribe(res => {
-          this.provinceList = res.data;
-        });
-        this.areaService.getAll().subscribe(res => {
-          this.areaList = res.data;
-        });
-        this.posVenteService.refreshDataList$.subscribe(() => {
-          this.posVenteService.getAll().subscribe((apiRes: apiResultFormat) => {
-            this.actualData = apiRes.data;
-            this.totalUser = apiRes.meta.total;
-            this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-              if (this.router.url == this.routes.posVente) {
-                this.getTableData({ skip: res.skip, limit: res.limit });
-                this.pageSize = res.pageSize;
-              }
-            });
-          });
-        });
-        this.posVenteService.getAll().subscribe((apiRes: apiResultFormat) => {
-          this.actualData = apiRes.data;
-          this.totalUser = apiRes.meta.total;
-          this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-            if (this.router.url == this.routes.posVente) {
-              this.getTableData({ skip: res.skip, limit: res.limit });
-              this.pageSize = res.pageSize;
-            }
-          });
-        });
-        if (this.idItem) {
-          this.posVenteService.get(this.idItem).subscribe(item => {
-            this.dataItem = item.data;
-            this.formGroup.patchValue({
-              name: this.dataItem.name,
-              shop: this.dataItem.shop,
-              manager: this.dataItem.manager,
-              commune: this.dataItem.commune,
-              avenue: this.dataItem.avenue,
-              quartier: this.dataItem.quartier,
-              reference: this.dataItem.reference,
-              telephone: this.dataItem.telephone,
-              eparasol: this.dataItem.eparasol,
-              etable: this.dataItem.etable,
-              ekiosk: this.dataItem.ekiosk,
-              inputgroupselector: this.dataItem.inputgroupselector,
-              cparasol: this.dataItem.cparasol,
-              ctable: this.dataItem.ctable,
-              ckiosk: this.dataItem.ckiosk,
-              province_id: this.dataItem.province_id,
-              area_id: this.dataItem.area_id,
-              status: this.dataItem.status,
-            });
-          }
-          );
-        }
-      },
-      error: (error) => {
-        this.router.navigate(['/auth/login']);
-        console.log(error);
-      }
-    });
-
-
-
-    this.maxDate.setDate(this.maxDate.getDate() + 7);
-    this.bsRangeValue = [this.bsValue, this.maxDate];
-
+    
     this.selectedValue1 = [
       { name: 'Mobile App' },
       { name: 'Meeting' }
@@ -184,45 +145,25 @@ export class PosVenteListComponent implements OnInit {
     ];
   }
 
+  onPageChange(event: PageEvent): void {
+    this.isLoadingData = true;
+    this.fetchProducts(event.pageIndex, event.pageSize);
+  }
 
-  private getTableData(pageOption: pageSelection): void {
-    this.posVenteService.getAll().subscribe((apiRes: apiResultFormat) => {
-      this.tableData = [];
-      this.tableDataCopy = [];
-      this.serialNumberArray = [];
-      this.totalData = apiRes.totalData;
-      apiRes.data.map((res: IPos, index: number) => {
-        const serialNumber = index + 1;
-        if (index >= pageOption.skip && serialNumber <= pageOption.limit) {
-          res.ID = serialNumber;
-          this.tableData.push(res);
-          this.serialNumberArray.push(serialNumber);
-          this.tableDataCopy.push(res);
-        }
-      });
-      this.dataSource = new MatTableDataSource<IPos>(this.actualData);
-      this.pagination.calculatePageSize.next({
-        totalData: this.totalData,
-        pageSize: this.pageSize,
-        tableData: this.tableData,
-        tableDataCopy: this.tableDataCopy,
-        serialNumberArray: this.serialNumberArray,
-      });
+  fetchProducts(pageIndex: number, pageSize: number) {
+    this.posVenteService.getPaginated(pageIndex, pageSize).subscribe(res => {
+      this.dataList = res.data;
+      this.totalItems = res.pagination.total_pages;
+      this.length = res.pagination.length;
+      this.dataSource = new MatTableDataSource<IPos>(this.dataList);
+      //  this.dataSource.paginator = this.paginator; 
+      this.paginator.length = res.pagination.length;
+      this.dataSource.sort = this.sort;
+
+      this.isLoadingData = false;
     });
   }
-
-  public sortData(sort: Sort) {
-    const data = this.tableData.slice();
-    if (!sort.active || sort.direction === '') {
-      this.tableData = data;
-    } else {
-      this.tableData = data.sort((a, b) => {
-        const aValue = (a as never)[sort.active];
-        const bValue = (b as never)[sort.active];
-        return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
-      });
-    }
-  }
+  
   public sidebarPopup = false;
   public sidebarPopup2 = false;
   openSidebarPopup() {
@@ -231,14 +172,21 @@ export class PosVenteListComponent implements OnInit {
   openSidebarPopup2() {
     this.sidebarPopup2 = !this.sidebarPopup2;
   }
-  public searchData(value: string): void {
-    if (value == '') {
-      this.tableData = this.tableDataCopy;
+
+
+ public sortData(sort: Sort) {
+    const data = this.dataList.slice();
+    if (!sort.active || sort.direction === '') {
+      this.dataList = data;
     } else {
-      this.dataSource.filter = value.trim().toLowerCase();
-      this.tableData = this.dataSource.filteredData;
+      this.dataList = data.sort((a, b) => {
+        const aValue = (a as never)[sort.active];
+        const bValue = (b as never)[sort.active];
+        return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
+      });
     }
   }
+
   initChecked = false;
 
 
@@ -329,38 +277,63 @@ export class PosVenteListComponent implements OnInit {
     }
   }
 
-  findValue(value: string) {
-    this.actualData.forEach(item => {
-      if (item.name === value) {
-        this.idItem = item.ID;
-        if (this.idItem) {
-          this.posVenteService.get(this.idItem).subscribe(item => {
-            this.dataItem = item.data;
-            this.formGroup.patchValue({
-              name: this.dataItem.name,
-              province_id: this.dataItem.province_id,
-              area_id: this.dataItem.area_id,
-              shop: this.dataItem.shop,
-              manager: this.dataItem.manager,
-              commune: this.dataItem.commune,
-              avenue: this.dataItem.avenue,
-              quartier: this.dataItem.quartier,
-              reference: this.dataItem.reference,
-              telephone: this.dataItem.telephone,
-              eparasol: this.dataItem.eparasol,
-              etable: this.dataItem.etable,
-              ekiosk: this.dataItem.ekiosk,
-              inputgroupselector: this.dataItem.inputgroupselector,
-              cparasol: this.dataItem.cparasol,
-              ctable: this.dataItem.ctable,
-              ckiosk: this.dataItem.ckiosk,
-              status: this.dataItem.status,
-            });
-          }
-          );
-        }
-      }
-    });
+  findValue(value: number) {
+    this.idItem = value;
+    this.posVenteService.get(this.idItem).subscribe(item => {
+      this.dataItem = item.data;
+      this.formGroup.patchValue({
+        name: this.dataItem.name,
+        province_id: this.dataItem.province_id,
+        area_id: this.dataItem.area_id,
+        shop: this.dataItem.shop,
+        manager: this.dataItem.manager,
+        commune: this.dataItem.commune,
+        avenue: this.dataItem.avenue,
+        quartier: this.dataItem.quartier,
+        reference: this.dataItem.reference,
+        telephone: this.dataItem.telephone,
+        eparasol: this.dataItem.eparasol,
+        etable: this.dataItem.etable,
+        ekiosk: this.dataItem.ekiosk,
+        inputgroupselector: this.dataItem.inputgroupselector,
+        cparasol: this.dataItem.cparasol,
+        ctable: this.dataItem.ctable,
+        ckiosk: this.dataItem.ckiosk,
+        status: this.dataItem.status,
+      });
+    }
+    );
+    // this.actualData.forEach(item => {
+    //   if (item.name === value) {
+    //     this.idItem = item.ID;
+    //     if (this.idItem) {
+    //       this.posVenteService.get(this.idItem).subscribe(item => {
+    //         this.dataItem = item.data;
+    //         this.formGroup.patchValue({
+    //           name: this.dataItem.name,
+    //           province_id: this.dataItem.province_id,
+    //           area_id: this.dataItem.area_id,
+    //           shop: this.dataItem.shop,
+    //           manager: this.dataItem.manager,
+    //           commune: this.dataItem.commune,
+    //           avenue: this.dataItem.avenue,
+    //           quartier: this.dataItem.quartier,
+    //           reference: this.dataItem.reference,
+    //           telephone: this.dataItem.telephone,
+    //           eparasol: this.dataItem.eparasol,
+    //           etable: this.dataItem.etable,
+    //           ekiosk: this.dataItem.ekiosk,
+    //           inputgroupselector: this.dataItem.inputgroupselector,
+    //           cparasol: this.dataItem.cparasol,
+    //           ctable: this.dataItem.ctable,
+    //           ckiosk: this.dataItem.ckiosk,
+    //           status: this.dataItem.status,
+    //         });
+    //       }
+    //       );
+    //     }
+    //   }
+    // });
   }
 
   delete(): void {

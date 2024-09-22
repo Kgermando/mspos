@@ -1,5 +1,5 @@
-export interface IPosForm {
-    ID: number;
+export interface IPosForm { 
+    id: number;
     id_unique: string;
     eq: number;
     eq1: number;
@@ -37,4 +37,12 @@ export interface IPosForm {
     sup_id: number;
     pos_id: number; 
     signature : string;
+    CreatedAt: Date;
+    UpdatedAt: Date;
+
+    user: string;
+    province: string;
+    area : string;
+    sup: string;
+    pos: string; 
 }

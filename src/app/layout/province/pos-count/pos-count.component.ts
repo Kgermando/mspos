@@ -9,20 +9,20 @@ import { IPos } from '../../pos-vente/models/pos.model';
 })
 export class PosCountComponent implements OnInit {
   @Input() id!: number;
- 
-  posList: IPos[] = []; 
+
+  posList: IPos[] = [];
   totalPOS = 0;
 
-  constructor( 
+  constructor(
     private posServce: PosVenteService,
-  ) { 
-  } 
+  ) {
+  }
 
 
   ngOnInit(): void {
     this.posServce.getAllById(this.id).subscribe(res => {
-    this.posList = res.data;
-    this.totalPOS = this.posList.length
-  })
+      this.posList = res.data;
+      this.totalPOS = this.posList.length;
+    });
   }
 }

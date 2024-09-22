@@ -1,6 +1,9 @@
 export interface ApiResponse {
- data: any[];
- page: number;
- totalElements: number;
- totalPages: number;
-}
+    data: any[];
+    pagination: {
+        page: number;
+        page_size: number;
+        total_pages: number;
+        length: number;
+    }
+} 

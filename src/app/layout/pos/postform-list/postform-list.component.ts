@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { apiResultFormat } from '../../../shared/model/pages.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { PaginationService, pageSelection, tablePageSize } from '../../../shared/custom-pagination/pagination.service';
 import { Router } from '@angular/router';
-import { Sort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { routes } from '../../../shared/routes/routes';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserModel } from '../../../auth/models/user.model';
@@ -18,6 +18,7 @@ import { ISup } from '../../sups/models/sup.model';
 import { IPos } from '../../pos-vente/models/pos.model';
 import { generateRandomString } from '../../../utils/generate-random';
 import { PosVenteService } from '../../pos-vente/pos-vente.service';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 
 @Component({
@@ -26,29 +27,30 @@ import { PosVenteService } from '../../pos-vente/pos-vente.service';
   styleUrl: './postform-list.component.scss'
 })
 export class PostformListComponent implements OnInit {
+  isLoadingData = false;
   public routes = routes;
-  text: string | undefined;
-  public tableData: IPosForm[] = [];
-  public pageSize = 10;
-  public serialNumberArray: number[] = [];
-  public totalData = 0;
-  showFilter = false;
-  dataSource!: MatTableDataSource<IPosForm>;
-  public searchDataValue = '';
-  public tableDataCopy: IPosForm[] = [];
-  public actualData: IPosForm[] = [];
-  bsValue = new Date();
-  bsRangeValue!: Date[];
-  maxDate = new Date();
+  // Table 
+  dataList: IPosForm[] = [];
+  totalItems: number = 0;
+  pageSize: number = 15;
+  pageIndex: number = 0;
+  length: number = 0;
 
+  // Table 
+  dataSource = new MatTableDataSource<IPosForm>(this.dataList);
+
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  public searchDataValue = '';
+
+  // Forms  
+  idItem!: number;
+  dataItem!: IPosForm; // Single data 
 
   formGroup!: FormGroup;
   currentUser!: UserModel;
   isLoading = false;
-
-  totalUser = 0;
-  idItem!: number;
-  dataItem!: IPosForm; // Single data
 
 
   userList: IUser[] = [];
@@ -79,8 +81,35 @@ export class PostformListComponent implements OnInit {
   selectedDatas3: any[] | undefined;
   selectedDatas4: any[] | undefined;
 
+  ngAfterViewInit(): void { 
+    this.authService.user().subscribe({
+      next: (user) => {
+        this.currentUser = user;
+        this.posformService.refreshDataList$.subscribe(() => {
+          this.fetchProducts(this.pageIndex, this.pageSize);
+        });
+        this.fetchProducts(this.pageIndex, this.pageSize);
+
+        this.posService.getAll().subscribe(res => {
+          this.posList = res.data;
+          this.posListFilter = this.posList.filter((v) => v.area_id == this.currentUser.area_id)
+          console.log("area_id", this.currentUser.area_id);
+          console.log("posList", this.posList);
+          console.log("posListFilter", this.posListFilter);
+        });
+      },
+      error: (error) => {
+        this.isLoadingData = false;
+        this.router.navigate(['/auth/login']);
+        console.log(error);
+      }
+    });
+  }
+
 
   ngOnInit() {
+    this.isLoadingData = true;
+    
     this.formGroup = this._formBuilder.group({
       pos_id: ['', Validators.required],
       eq: ['', Validators.required],
@@ -101,86 +130,85 @@ export class PostformListComponent implements OnInit {
       comment: ['Rien à signaler', Validators.required],
     });
 
-    this.authService.user().subscribe({
-      next: (user) => {
-        this.currentUser = user;
-        this.posService.getAll().subscribe(res => {
-          this.posList = res.data;
-          this.posListFilter = this.posList.filter((v) => v.area_id == this.currentUser.area_id)
-        });
-        this.posformService.refreshDataList$.subscribe(() => {
-          this.posformService.getAll().subscribe((apiRes: apiResultFormat) => {
-            this.actualData = apiRes.data;
-            this.totalUser = apiRes.meta.total;
-            this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-              if (this.router.url == this.routes.posForm) {
-                this.getTableData({ skip: res.skip, limit: res.limit });
-                this.pageSize = res.pageSize;
-              }
-            });
-          });
-        });
-        this.posformService.getAll().subscribe((apiRes: apiResultFormat) => {
-          this.actualData = apiRes.data;
-          this.totalUser = apiRes.meta.total;
-          this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-            if (this.router.url == this.routes.posForm) {
-              this.getTableData({ skip: res.skip, limit: res.limit });
-              this.pageSize = res.pageSize;
-            }
-          });
-        });
-        if (this.idItem) {
-          this.posformService.get(this.idItem).subscribe(item => {
-            this.dataItem = item.data;
-            this.formGroup.patchValue({
-              // id_unique: this.dataItem.id_unique,  
-              pos_id: this.dataItem.pos_id,
-              eq: this.dataItem.eq,
-              eq1: this.dataItem.eq1,
-              sold: this.dataItem.sold,
-              dhl: this.dataItem.dhl,
-              dhl1: this.dataItem.dhl1,
-              ar: this.dataItem.ar,
-              ar1: this.dataItem.ar1,
-              sbl: this.dataItem.sbl,
-              sbl1: this.dataItem.sbl1,
-              pmf: this.dataItem.pmf,
-              pmf1: this.dataItem.pmf1,
-              pmm: this.dataItem.pmm,
-              pmm1: this.dataItem.pmm1,
-              ticket: this.dataItem.ticket,
-              ticket1: this.dataItem.ticket1,
-              mtc: this.dataItem.mtc,
-              mtc1: this.dataItem.mtc1,
-              ws: this.dataItem.ws,
-              ws1: this.dataItem.ws1,
-              mast: this.dataItem.mast,
-              mast1: this.dataItem.mast1,
-              oris: this.dataItem.oris,
-              oris1: this.dataItem.oris1,
-              elite: this.dataItem.elite, 
-              elite1: this.dataItem.elite1, 
-              yes: this.dataItem.yes,
-              yes1: this.dataItem.yes1,
-              time: this.dataItem.time,
-              time1: this.dataItem.time1,
-              comment: this.dataItem.comment,
-            });
-          }
-          );
-        }
-      },
-      error: (error) => {
-        this.router.navigate(['/auth/login']);
-        console.log(error);
-      }
-    });
-
-
-
-    this.maxDate.setDate(this.maxDate.getDate() + 7);
-    this.bsRangeValue = [this.bsValue, this.maxDate];
+    // this.authService.user().subscribe({
+    //   next: (user) => {
+    //     this.currentUser = user;
+    //     this.posService.getAll().subscribe(res => {
+    //       this.posList = res.data;
+    //       this.posListFilter = this.posList.filter((v) => v.area_id == this.currentUser.area_id)
+    //       console.log("area_id", this.currentUser.area_id);
+    //       console.log("posList", this.posList);
+    //       console.log("posListFilter", this.posListFilter);
+    //     });
+    //     this.posformService.refreshDataList$.subscribe(() => {
+    //       this.posformService.getAll().subscribe((apiRes: apiResultFormat) => {
+    //         this.actualData = apiRes.data;
+    //         this.totalUser = apiRes.meta.total;
+    //         this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
+    //           if (this.router.url == this.routes.posForm) {
+    //             this.getTableData({ skip: res.skip, limit: res.limit });
+    //             this.pageSize = res.pageSize;
+    //           }
+    //         });
+    //       });
+    //     });
+    //     this.posformService.getAll().subscribe((apiRes: apiResultFormat) => {
+    //       this.actualData = apiRes.data;
+    //       this.totalUser = apiRes.meta.total;
+    //       this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
+    //         if (this.router.url == this.routes.posForm) {
+    //           this.getTableData({ skip: res.skip, limit: res.limit });
+    //           this.pageSize = res.pageSize;
+    //         }
+    //       });
+    //     });
+    //     if (this.idItem) {
+    //       this.posformService.get(this.idItem).subscribe(item => {
+    //         this.dataItem = item.data;
+    //         this.formGroup.patchValue({
+    //           // id_unique: this.dataItem.id_unique,  
+    //           pos_id: this.dataItem.pos_id,
+    //           eq: this.dataItem.eq,
+    //           eq1: this.dataItem.eq1,
+    //           sold: this.dataItem.sold,
+    //           dhl: this.dataItem.dhl,
+    //           dhl1: this.dataItem.dhl1,
+    //           ar: this.dataItem.ar,
+    //           ar1: this.dataItem.ar1,
+    //           sbl: this.dataItem.sbl,
+    //           sbl1: this.dataItem.sbl1,
+    //           pmf: this.dataItem.pmf,
+    //           pmf1: this.dataItem.pmf1,
+    //           pmm: this.dataItem.pmm,
+    //           pmm1: this.dataItem.pmm1,
+    //           ticket: this.dataItem.ticket,
+    //           ticket1: this.dataItem.ticket1,
+    //           mtc: this.dataItem.mtc,
+    //           mtc1: this.dataItem.mtc1,
+    //           ws: this.dataItem.ws,
+    //           ws1: this.dataItem.ws1,
+    //           mast: this.dataItem.mast,
+    //           mast1: this.dataItem.mast1,
+    //           oris: this.dataItem.oris,
+    //           oris1: this.dataItem.oris1,
+    //           elite: this.dataItem.elite, 
+    //           elite1: this.dataItem.elite1, 
+    //           yes: this.dataItem.yes,
+    //           yes1: this.dataItem.yes1,
+    //           time: this.dataItem.time,
+    //           time1: this.dataItem.time1,
+    //           comment: this.dataItem.comment,
+    //         });
+    //       }
+    //       );
+    //     }
+    //   },
+    //   error: (error) => {
+    //     this.router.navigate(['/auth/login']);
+    //     console.log(error);
+    //   }
+    // });
+ 
 
     this.selectedValue1 = [
       { name: 'Mobile App' },
@@ -201,45 +229,49 @@ export class PostformListComponent implements OnInit {
     ];
   }
 
+  onPageChange(event: PageEvent): void {
+    this.isLoadingData = true; 
+    this.fetchProducts(event.pageIndex, event.pageSize);
+  } 
 
-  private getTableData(pageOption: pageSelection): void {
-    this.posformService.getAll().subscribe((apiRes: apiResultFormat) => {
-      this.tableData = [];
-      this.tableDataCopy = [];
-      this.serialNumberArray = [];
-      this.totalData = apiRes.totalData;
-      apiRes.data.map((res: IPosForm, index: number) => {
-        const serialNumber = index + 1;
-        if (index >= pageOption.skip && serialNumber <= pageOption.limit) {
-          res.ID = serialNumber;
-          this.tableData.push(res);
-          this.serialNumberArray.push(serialNumber);
-          this.tableDataCopy.push(res);
-        }
-      });
-      this.dataSource = new MatTableDataSource<IPosForm>(this.actualData);
-      this.pagination.calculatePageSize.next({
-        totalData: this.totalData,
-        pageSize: this.pageSize,
-        tableData: this.tableData,
-        tableDataCopy: this.tableDataCopy,
-        serialNumberArray: this.serialNumberArray,
-      });
+  fetchProducts(pageIndex: number, pageSize: number) {
+    this.posformService.getPaginated(pageIndex, pageSize).subscribe(res => {
+      this.dataList = res.data;
+      this.totalItems = res.pagination.total_pages;
+      this.length = res.pagination.length;
+      this.dataSource = new MatTableDataSource<IPosForm>(this.dataList);
+      //  this.dataSource.paginator = this.paginator; 
+      this.paginator.length = res.pagination.length;
+      this.dataSource.sort = this.sort; 
+
+      this.isLoadingData = false;
     });
   }
+ 
 
   public sortData(sort: Sort) {
-    const data = this.tableData.slice();
+    const data = this.dataList.slice();
     if (!sort.active || sort.direction === '') {
-      this.tableData = data;
+      this.dataList = data;
     } else {
-      this.tableData = data.sort((a, b) => {
+      this.dataList = data.sort((a, b) => {
         const aValue = (a as never)[sort.active];
         const bValue = (b as never)[sort.active];
         return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
       });
     }
   }
+
+  public searchData(value: string): void {
+    if (value == '') {
+      this.dataList = this.dataList;
+    } else {
+      this.dataSource.filter = value.trim().toLowerCase();
+      this.dataList = this.dataSource.filteredData;
+    }
+  }
+
+
   public sidebarPopup = false;
   public sidebarPopup2 = false;
   openSidebarPopup() {
@@ -247,17 +279,7 @@ export class PostformListComponent implements OnInit {
   }
   openSidebarPopup2() {
     this.sidebarPopup2 = !this.sidebarPopup2;
-  }
-  public searchData(value: string): void {
-    if (value == '') {
-      this.tableData = this.tableDataCopy;
-    } else {
-      this.dataSource.filter = value.trim().toLowerCase();
-      this.tableData = this.dataSource.filteredData;
-    }
-  }
-  initChecked = false;
-
+  }  
 
   onSubmit() {
     try {
@@ -381,52 +403,46 @@ export class PostformListComponent implements OnInit {
     }
   }
 
-  findValue(value: string) {
-    this.actualData.forEach(item => {
-      if (item.id_unique === value) {
-        this.idItem = item.ID;
-        if (this.idItem) {
-          this.posformService.get(this.idItem).subscribe(item => {
-            this.dataItem = item.data;
-            this.formGroup.patchValue({
-              // id_unique: this.dataItem.id_unique,  
-              pos_id: this.dataItem.pos_id,
-              eq: this.dataItem.eq,
-              eq1: this.dataItem.eq1,
-              sold: this.dataItem.sold,
-              dhl: this.dataItem.dhl,
-              dhl1: this.dataItem.dhl1,
-              ar: this.dataItem.ar,
-              ar1: this.dataItem.ar1,
-              sbl: this.dataItem.sbl,
-              sbl1: this.dataItem.sbl1,
-              pmf: this.dataItem.pmf,
-              pmf1: this.dataItem.pmf1,
-              pmm: this.dataItem.pmm,
-              pmm1: this.dataItem.pmm1,
-              ticket: this.dataItem.ticket,
-              ticket1: this.dataItem.ticket1,
-              mtc: this.dataItem.mtc,
-              mtc1: this.dataItem.mtc1,
-              ws: this.dataItem.ws,
-              ws1: this.dataItem.ws1,
-              mast: this.dataItem.mast,
-              mast1: this.dataItem.mast1,
-              oris: this.dataItem.oris,
-              oris1: this.dataItem.oris1,
-              elite: this.dataItem.elite, 
-              elite1: this.dataItem.elite1, 
-              yes: this.dataItem.yes,
-              yes1: this.dataItem.yes1,
-              time: this.dataItem.time,
-              time1: this.dataItem.time1,
-              comment: this.dataItem.comment,
-            });
-          }
-          );
-        }
-      }
-    });
+  findValue(value: number) {
+    this.idItem = value;
+    this.posformService.get(this.idItem).subscribe(item => {
+      this.dataItem = item.data;
+      this.formGroup.patchValue({
+        // id_unique: this.dataItem.id_unique,  
+        pos_id: this.dataItem.pos_id,
+        eq: this.dataItem.eq,
+        eq1: this.dataItem.eq1,
+        sold: this.dataItem.sold,
+        dhl: this.dataItem.dhl,
+        dhl1: this.dataItem.dhl1,
+        ar: this.dataItem.ar,
+        ar1: this.dataItem.ar1,
+        sbl: this.dataItem.sbl,
+        sbl1: this.dataItem.sbl1,
+        pmf: this.dataItem.pmf,
+        pmf1: this.dataItem.pmf1,
+        pmm: this.dataItem.pmm,
+        pmm1: this.dataItem.pmm1,
+        ticket: this.dataItem.ticket,
+        ticket1: this.dataItem.ticket1,
+        mtc: this.dataItem.mtc,
+        mtc1: this.dataItem.mtc1,
+        ws: this.dataItem.ws,
+        ws1: this.dataItem.ws1,
+        mast: this.dataItem.mast,
+        mast1: this.dataItem.mast1,
+        oris: this.dataItem.oris,
+        oris1: this.dataItem.oris1,
+        elite: this.dataItem.elite, 
+        elite1: this.dataItem.elite1, 
+        yes: this.dataItem.yes,
+        yes1: this.dataItem.yes1,
+        time: this.dataItem.time,
+        time1: this.dataItem.time1,
+        comment: this.dataItem.comment,
+      });
+    }
+    );
   }
 
 

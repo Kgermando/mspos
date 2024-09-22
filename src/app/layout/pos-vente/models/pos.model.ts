@@ -1,5 +1,7 @@
 export interface IPos {
     ID: number;
+    id: number;
+
     name: string;
     shop: string;
     manager: string;
@@ -19,4 +21,9 @@ export interface IPos {
     area_id:  number;
     status: boolean;
     signature: string;
+    CreatedAt: Date;
+    UpdatedAt: Date;
+
+    province:  string;
+    area:  string;
 }
