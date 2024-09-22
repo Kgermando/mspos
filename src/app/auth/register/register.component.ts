@@ -58,27 +58,8 @@ export class RegisterComponent implements OnInit {
       email: ['', Validators.required], 
       phone: ['', Validators.required],
       password: ['', Validators.required],
-      password_confirm: ['', Validators.required],
-      province_id: [''],
-      area_id: [''],
-      sup_id: [''],
-      pos_id: [''],
-      status: [''],
-      is_manager: [''],
-    });
-
-    this.provinceService.getAll().subscribe(res => {
-      this.provinceList = res.data;
-    });
-    this.areaService.getAll().subscribe(res => {
-      this.areaList = res.data;
-    });
-    this.supService.getAll().subscribe(res => {
-      this.supList = res.data;
-    });
-    this.posService.getAll().subscribe(res => {
-      this.posList = res.data;
-    });
+      password_confirm: ['', Validators.required],  
+    }); 
   }
  
 
@@ -86,48 +67,7 @@ export class RegisterComponent implements OnInit {
     this.password[index] = !this.password[index]
   }
 
-
-  onChangeCheck(event: any) { 
-    this.isManager = event.target.checked;
-  }
-
-
-  onProvinceChange(event: any) {
-    const areaArray = this.areaList.filter((v) => v.province_id == event.value);
-    this.areaListFilter = areaArray.filter((obj, index, self) =>
-      index === self.findIndex((t) => t.name === obj.name)
-    );
-    const supArray = this.supList.filter((v) => v.province_id == event.value);
-    this.supListFilter = supArray.filter((obj, index, self) =>
-      index === self.findIndex((t) => t.name === obj.name)
-    );
-
-  }
-
-  onAreaChange(event: any) {
-    const posArray = this.posList.filter((v) => v.area_id == event.value);
-    this.posListFilter = posArray.filter((obj, index, self) =>
-      index === self.findIndex((t) => t.name === obj.name)
-    );
-  }
-
-
-  compareFn(c1: IProvince, c2: IProvince): boolean {
-    return c1 && c2 ? c1.ID === c2.ID : c1 === c2;
-  }
-
-  compareFnArea(c1: IArea, c2: IArea): boolean {
-    return c1 && c2 ? c1.ID === c2.ID : c1 === c2;
-  }
-
-  compareFnSup(c1: ISup, c2: ISup): boolean {
-    return c1 && c2 ? c1.ID === c2.ID : c1 === c2;
-  }
-
-  compareFnPOS(c1: IPos, c2: IPos): boolean {
-    return c1 && c2 ? c1.ID === c2.ID : c1 === c2;
-  }
-
+ 
 
   onSubmit() {
     try {
@@ -140,14 +80,14 @@ export class RegisterComponent implements OnInit {
           phone: this.formGroup.value.phone,
           password: this.formGroup.value.password,
           password_confirm: this.formGroup.value.password_confirm,
-          province_id: (this.isManager) ? 0 : parseInt(this.formGroup.value.province_id),
-          area_id: (this.isManager) ? 0 : parseInt(this.formGroup.value.area_id), 
-          sup_id: (this.isManager) ? 0 : parseInt(this.formGroup.value.sup_id), 
-          pos_id: (this.isManager) ? 0 : parseInt(this.formGroup.value.pos_id), 
+          province_id: 0,
+          area_id: 0, 
+          sup_id: 0, 
+          pos_id: 0, 
           role: 'DR', // Role et title c'est la meme chose mais le role cest pour le code source
           permission: 'V',
           status: false,
-          is_manager: (this.formGroup.value.is_manager) ? this.formGroup.value.is_manager : false,
+          is_manager: false,
           signature: this.formGroup.value.fullname,
         };
         this.authService.register(body).subscribe({ 

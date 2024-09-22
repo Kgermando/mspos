@@ -92,10 +92,7 @@ export class PostformListComponent implements OnInit {
 
         this.posService.getAll().subscribe(res => {
           this.posList = res.data;
-          this.posListFilter = this.posList.filter((v) => v.area_id == this.currentUser.area_id)
-          console.log("area_id", this.currentUser.area_id);
-          console.log("posList", this.posList);
-          console.log("posListFilter", this.posListFilter);
+          this.posListFilter = this.posList.filter((v) => v.area_id == this.currentUser.area_id) 
         });
       },
       error: (error) => {
