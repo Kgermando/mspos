@@ -154,7 +154,7 @@ export class NdAverageAreaComponent implements OnChanges {
       }, 0); 
       if (this.Time > 0) {
         this.Time1 = this.Time / this.areaCount;
-      } 
+      }
     }
 
     this.averages = [];
@@ -173,7 +173,7 @@ export class NdAverageAreaComponent implements OnChanges {
     this.averages.push({ x: 'Yes', y: this.Yes1 });
     this.averages.push({ x: 'Time', y: this.Time1 });
 
-    console.log("averages", this.averages); 
+    // console.log("averages", this.averages);  
   }
 
 
@@ -196,7 +196,7 @@ export class NdAverageAreaComponent implements OnChanges {
           borderRadiusApplication: 'around',
           columnWidth: '40%',
         },
-      },
+      }, 
       xaxis: {
         type: 'category',
         group: {
@@ -210,7 +210,39 @@ export class NdAverageAreaComponent implements OnChanges {
         min: 0,
         max: 100,
         tickAmount: 5,
+      },
+      events: {
+        dataPointSelection: function(event:any, chartContext:any, config:any) {
+          var selectedPoints = config.selectedDataPoints;
+          // Ici, vous pouvez accéder aux données des points sélectionnés
+          console.log(selectedPoints);
+    
+          // Exemple : Mettre en évidence les points sélectionnés
+          chartContext.config.options.markers.colors = ['red', 'red', 'red']; // Mettre tous les marqueurs en rouge
+          chartContext.updateOptions(chartContext.config.options);
+        }
       }
     };
   }
+
+  onBarClicked(data: any) {
+    // Votre logique ici pour gérer le clic
+    const nomDeLaDonnee = data.x;
+    console.log('Vous avez sélectionné :', nomDeLaDonnee);
+ 
+    // Par exemple, afficher un modal :
+    // this.openModal(data);  
+  }
+
+  selectedDataPoints: any[] = [];
+  onSelectedDataPoints(event: any) {
+    // this.selectedDataPoints = event;
+
+    // // Retrieve the name of the selected data point section
+    // const selectedDataPoint = event[0]; // Assuming you want the first selected data point
+    // const seriesIndex = this.chartOptions3.series.findIndex((series: { data: string | any[]; }) => series.data.indexOf(selectedDataPoint.value) !== -1);
+    // const selectedSectionName = this.chartOptions3.series[seriesIndex].name;
+    // console.log('Selected section name:', selectedSectionName);
+  }
+ 
 }

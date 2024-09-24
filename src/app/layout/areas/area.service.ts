@@ -12,4 +12,8 @@ export class AreaService extends ApiService {
   getAllSupAreaById(id: number): Observable<any> {
     return this.http.get(`${this.endpoint}/all-area/${id}`);
   }
+
+  getAreaDropdown(): Observable<any> {
+    return this.http.get(`${this.endpoint}/all/dropdown`);
+  }
 }

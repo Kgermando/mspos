@@ -15,3 +15,9 @@ export interface IArea {
     province: string;
     sup: string;
 }
+
+export interface IAreaDropdown {
+    id: number;
+    name: string; 
+    province_id: number;
+}  

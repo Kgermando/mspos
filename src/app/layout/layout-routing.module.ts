@@ -59,7 +59,7 @@ const routes: Routes = [
       {
         path: 'pos',
         loadChildren: () =>
-          import('./pos/pos.module').then(
+          import('./posform/pos.module').then(
             (m) => m.PosModule
           ),
       },

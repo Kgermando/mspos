@@ -6,3 +6,8 @@ export interface IProvince {
     CreatedAt: Date;
     UpdatedAt: Date;
 } 
+
+export interface IProvinceDropdown {
+    id: number;
+    name: string; 
+}  

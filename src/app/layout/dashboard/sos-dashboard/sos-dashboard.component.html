@@ -14,7 +14,7 @@
                       <div class="card mb-0">
                         <mat-select class="select custom-mat-select" placeholder="Select province" 
                             formControlName="province">
-                          @for (item of provinceList; track item) {
+                          @for (item of provinceDropdownList; track item) {
                           <mat-option [value]="item">{{item.name}}</mat-option>
                           }
                         </mat-select>

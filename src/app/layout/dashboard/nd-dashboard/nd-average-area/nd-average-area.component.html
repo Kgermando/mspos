@@ -10,6 +10,8 @@
         [dataLabels]="chartOptions3.dataLabels" [plotOptions]="chartOptions3.plotOptions"
         [yaxis]="chartOptions3.yaxis" [xaxis]="chartOptions3.xaxis" [stroke]="chartOptions3.stroke"
         [grid]="chartOptions3.grid" [fill]="chartOptions3.fill" [annotations]="chartOptions3.annotations"
-        [colors]="chartOptions3.colors"></apx-chart>
+        [colors]="chartOptions3.colors"
+        (click)="onSelectedDataPoints($event)"
+        ></apx-chart>
     </div>
   }

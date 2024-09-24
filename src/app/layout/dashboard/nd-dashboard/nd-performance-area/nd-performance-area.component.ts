@@ -47,15 +47,15 @@ export class NdPerformanceAreaComponent implements OnChanges {
         }
       }); 
     }
-    this.getPerformanceEQArea(); 
+    this.getPerformanceEQArea(this.performanceArea);
   }
 
-  getPerformanceEQArea() {
+  getPerformanceEQArea(performanceArea: NDPerformanceModel[]) {
     if (this.performanceArea) {
       this.chartOptions2 = {
         series: [
           {
-            data: this.performanceArea.map((val) => val.data),
+            data: performanceArea.map((val) => val.data),
             color: '#77D882',
           },
         ],
@@ -73,7 +73,7 @@ export class NdPerformanceAreaComponent implements OnChanges {
         },
 
         xaxis: {
-          categories: this.performanceArea.map((val) => val.area),
+          categories: performanceArea.map((val) => val.area),
         },
       };
     }

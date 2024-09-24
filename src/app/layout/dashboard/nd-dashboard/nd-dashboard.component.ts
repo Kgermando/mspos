@@ -3,8 +3,8 @@ import { routes } from '../../../shared/routes/routes';
 import { ProvinceService } from '../../province/province.service';
 import { AreaService } from '../../areas/area.service';
 import { CommonService } from '../../../shared/common/common.service';
-import { IProvince } from '../../province/models/province.model';
-import { IArea } from '../../areas/models/area.model';
+import { IProvince, IProvinceDropdown } from '../../province/models/province.model';
+import { IArea, IAreaDropdown } from '../../areas/models/area.model';
 import { NdService } from '../services/nd.service';
 import { formatDate } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -30,11 +30,11 @@ export class NdDashboardComponent implements OnInit {
 
   // Filtre 
   rangeDate: any[] = [];
-  provinceList: IProvince[] = [];
-  province!: IProvince;
-  areaList: IArea[] = [];
-  areaListFilter: IArea[] = [];
-  area!: IArea;
+  provinceDropdownList: IProvinceDropdown[] = [];
+  provinceDropdown!: IProvinceDropdown;
+  areaList: IAreaDropdown[] = [];
+  areaListFilter: IAreaDropdown[] = [];
+  area!: IAreaDropdown;
   areaCount = 1; // For found length area for divide by ND
 
 
@@ -73,19 +73,19 @@ export class NdDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.provinceService.getAll().subscribe((res) => {
-      this.provinceList = res.data; 
-      this.areaService.getAll().subscribe((r) => {
+    this.provinceService.getProvinceDropdown().subscribe((res) => {
+      this.provinceDropdownList = res.data; 
+      this.areaService.getAreaDropdown().subscribe((r) => {
         this.areaList = r.data; 
-        if (!this.province) {
-          const dataList = this.provinceList.filter((v) => v.name == 'kinshasa');  
-          const areaArray = this.areaList.filter((v) => v.province_id == dataList[0].ID);
+        if (!this.provinceDropdown) {
+          const dataList = this.provinceDropdownList.filter((v) => v.name == 'Kinshasa');
+          console.log("dataList[0].id", dataList[0].id)   
+          const areaArray = this.areaList.filter((v) => v.province_id == dataList[0].id);
           this.areaListFilter = areaArray.filter((obj, index, self) =>
             index === self.findIndex((t) => t.name === obj.name) 
           );
           this.areaCount = this.areaListFilter.length; // Total Area par province selectionner 
         }
-        
       }); 
     });
   
@@ -96,7 +96,7 @@ export class NdDashboardComponent implements OnInit {
     this.rangeDate = [firstDay, lastDay];
 
     this.dateRange = this._formBuilder.group({
-      province: new FormControl('kinshasa'),
+      province: new FormControl('Kinshasa'),
       rangeValue: new FormControl(this.rangeDate),
       area: new FormControl('Funa'), 
     });
@@ -104,7 +104,7 @@ export class NdDashboardComponent implements OnInit {
     this.end_date = formatDate(this.dateRange.value.rangeValue[1], 'yyyy-MM-dd', 'en-US');
 
 
-    if (!this.province && this.start_date && this.end_date) {  
+    if (!this.provinceDropdown && this.start_date && this.end_date) {
       this.getTableView(this.dateRange.value.province,this.start_date, this.end_date);
       this.getAverageArea(this.dateRange.value.province, this.dateRange.value.area, this.start_date, this.end_date);
       this.getPerformance(this.dateRange.value.province, this.start_date, this.end_date);
@@ -116,29 +116,30 @@ export class NdDashboardComponent implements OnInit {
 
   onChanges(): void {
     this.dateRange.valueChanges.subscribe(val => {
-      this.province = val.province;
+      this.provinceDropdown = val.province;
       this.start_date = formatDate(val.rangeValue[0], 'yyyy-MM-dd', 'en-US');
-      this.end_date = formatDate(val.rangeValue[1], 'yyyy-MM-dd', 'en-US');  
+      this.end_date = formatDate(val.rangeValue[1], 'yyyy-MM-dd', 'en-US');   
       this.area = val.area;
+ 
 
-      const areaArray = this.areaList.filter((v) => v.province_id == this.province.ID);
+      const areaArray = this.areaList.filter((v) => v.province_id == this.provinceDropdown.id);
       this.areaListFilter = areaArray.filter((obj, index, self) =>
-        index === self.findIndex((t) => t.name === obj.name) 
+        index === self.findIndex((t) => t.name === obj.name)
       );
-      this.areaCount = this.areaListFilter.length; 
+      this.areaCount = this.areaListFilter.length;
 
-      this.getTableView(this.province.name, this.start_date, this.end_date);
-      this.getAverageArea(this.province.name, this.area.name, this.start_date, this.end_date);
-      this.getPerformance(this.province.name, this.start_date, this.end_date);
-      this.getNDYear(this.province.name);
+      this.getTableView(this.provinceDropdown.name, this.start_date, this.end_date);
+      this.getAverageArea(this.provinceDropdown.name, this.area.name, this.start_date, this.end_date);
+      this.getPerformance(this.provinceDropdown.name, this.start_date, this.end_date);
+      this.getNDYear(this.provinceDropdown.name);
     });
   }
  
 
-  getAverageArea(province: string, area: string, start_date: string, end_date: string) { 
+  getAverageArea(province: string, area: string, start_date: string, end_date: string) {  
     this.ndService.tableView(province, start_date, end_date).subscribe((res) => {
-      this.averageAreaData = res.data;
-      this.averageAreaList  = this.averageAreaData.filter((val) => val.Area == area);
+      this.averageAreaData = res.data;   
+      this.averageAreaList = this.averageAreaData.filter((val) => val.Area == area);
       this.isLoading = false;
     });
   }
@@ -147,6 +148,7 @@ export class NdDashboardComponent implements OnInit {
   getNDYear(province: string) {
     this.ndService.NdByYear(province).subscribe((res) => {
       this.ndYearList = res.data; 
+      console.log("res", res.data)
       this.isLoading = false;
     });
   }
@@ -155,6 +157,7 @@ export class NdDashboardComponent implements OnInit {
   getPerformance(province: string, start_date: string, end_date: string) {
     this.ndService.tableView(province, start_date, end_date).subscribe((res) => {
       this.performanceAreaList = res.data; 
+      console.log("province", province); 
       this.isLoading = false;
     });
   }

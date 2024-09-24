@@ -175,8 +175,7 @@ export class SosChartBarComponent implements OnChanges {
     this.sosDataList.push({ x: 'Elite', y: this.Elite1 });
     this.sosDataList.push({ x: 'Yes', y: this.Yes1 });
     this.sosDataList.push({ x: 'Time', y: this.Time1 });
-
-    console.log("sosDataList", this.sosDataList); 
+ 
   }
 
 
