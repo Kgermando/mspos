@@ -78,8 +78,7 @@ export class NdDashboardComponent implements OnInit {
       this.areaService.getAreaDropdown().subscribe((r) => {
         this.areaList = r.data; 
         if (!this.provinceDropdown) {
-          const dataList = this.provinceDropdownList.filter((v) => v.name == 'Kinshasa');
-          console.log("dataList[0].id", dataList[0].id)   
+          const dataList = this.provinceDropdownList.filter((v) => v.name == 'Kinshasa'); 
           const areaArray = this.areaList.filter((v) => v.province_id == dataList[0].id);
           this.areaListFilter = areaArray.filter((obj, index, self) =>
             index === self.findIndex((t) => t.name === obj.name) 
