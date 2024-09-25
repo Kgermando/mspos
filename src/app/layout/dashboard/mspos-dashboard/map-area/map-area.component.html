@@ -1,6 +1,6 @@
 <div class="card-header border-0 pb-0">
     <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-        <h4><i class="ti ti-grip-vertical me-1"></i>Share of stock Map</h4>
+        <h4><i class="ti ti-grip-vertical me-1"></i>Share of Stock Map</h4>
     </div>
     <div class="card-body">
         @if (isLoading) {
@@ -10,45 +10,64 @@
             </div>
         </div>
         } @else {
+
+            <!-- <div class="map-container">
+                <img src="img/map.png" alt="Map" #mapImage>
+                <div *ngFor="let map of sosMapList"
+                [style.position]="'absolute'"
+                [style.left.px]="map.Eq"  
+                class="province-box"></div>
+            </div> -->
+
+            <!-- <div class="map-container">
+                <img src="img/map.png" alt="Map" #mapImage>
+                <div *ngFor="let map of sosMapList"
+                [style.position]="'absolute'"
+                [style.left.px]="province.coordonates.lng * scale"
+                [style.left.px]="province.coordonates.lat * scale"
+                class="province-box"
+                >
+
+                </div>
+            </div> -->
+
+
+
         <div id="leadpiechart">
             <div class="map-container">
 
                 <img src="img/map.png" alt="Map" class="map-image">
 
 
-                <div class="map-marker marker-1"></div> <!--Tshuapa -->
-                <div class="map-marker marker-2"></div> <!--Kwilu-->
-                <div class="map-marker marker-3"></div> <!--Kasai-Central-->
-                <div class="map-marker marker-4"></div> <!--South Kivu-->
-                <div class="map-marker marker-5"></div> <!--Maut-Katanga-->
-                <div class="map-marker marker-6"></div> <!--Lualaba-->
-                <div class="map-marker marker-7"></div> <!--Haut-Lomami-->
-                <div class="map-marker marker-8"></div> <!--Ituri-->
-                <div class="map-marker marker-9"></div> <!--North Kivu-->
-                <div class="map-marker marker-10"></div> <!--Tanganyika-->
-                <div class="map-marker marker-11"></div> <!--LOMAMI-->
-                <div class="map-marker marker-12"></div> <!--Kasai-Oriental-->
-                <div class="map-marker marker-13"></div> <!--sankuru-->
-                <div class="map-marker marker-14"></div> <!--Mai-Ndombe-->
-                <div class="map-marker marker-15"></div> <!--Equateur-->
-                <div class="map-marker marker-16"></div> <!--Tshopo-->
-                <div class="map-marker marker-17"></div> <!--Sub-Ubangi-->
-                <div class="map-marker marker-18"></div> <!--Haut-Uele-->
-                <div class="map-marker marker-19"></div> <!--Bas-Uelle-->
-                <div class="map-marker marker-20"></div> <!--Maniema-->
-                <div class="map-marker marker-21"></div> <!--Kongo Central-->
-                <div class="map-marker marker-22"></div> <!--Kwango-->
-                <div class="map-marker marker-23"></div> <!--Kwilu-->
-                <div class="map-marker marker-24"></div> <!--Nord-Ubangi-->
-                <div class="map-marker marker-25"></div> <!--Mongala-->
-                <div class="map-marker marker-26"></div> <!--Kinshasa-->
-        
-        
+                <div class="map-marker marker-1"></div>  
+                <div class="map-marker marker-2"></div>  
+                <div class="map-marker marker-3"></div>  
+                <div class="map-marker marker-4"></div>  
+                <div class="map-marker marker-5"></div>  
+                <div class="map-marker marker-6"></div>  
+                <div class="map-marker marker-7"></div>
+                <div class="map-marker marker-8"></div>
+                <div class="map-marker marker-9"></div>
+                <div class="map-marker marker-10"></div>
+                <div class="map-marker marker-11"></div>
+                <div class="map-marker marker-12"></div>
+                <div class="map-marker marker-13"></div>
+                <div class="map-marker marker-14"></div>
+                <div class="map-marker marker-15"></div>
+                <div class="map-marker marker-16"></div>
+                <div class="map-marker marker-17"></div>
+                <div class="map-marker marker-18"></div>
+                <div class="map-marker marker-19"></div>
+                <div class="map-marker marker-20"></div>
+                <div class="map-marker marker-21"></div>
+                <div class="map-marker marker-22"></div>
+                <div class="map-marker marker-23"></div>
+                <div class="map-marker marker-24"></div>
+                <div class="map-marker marker-25"></div>
+                <div class="map-marker marker-26"></div>
             </div>
         
         </div>
         }
     </div>
 </div>
-
-

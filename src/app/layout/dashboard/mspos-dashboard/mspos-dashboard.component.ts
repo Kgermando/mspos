@@ -119,7 +119,7 @@ export class MsposDashboardComponent implements OnInit {
     this.dateRange.valueChanges.subscribe(val => { 
       const days = getBusinessDaysBetweenDates(val.rangeValue[0], val.rangeValue[1])
       this.start_date = formatDate(val.rangeValue[0], 'yyyy-MM-dd', 'en-US');
-      this.end_date = formatDate(val.rangeValue[1], 'yyyy-MM-dd', 'en-US');  
+      this.end_date = formatDate(val.rangeValue[1], 'yyyy-MM-dd', 'en-US');
 
       this.getSOSPie(this.start_date, this.end_date);
       this.getTrackingVisit(days.toString(), this.start_date, this.end_date);

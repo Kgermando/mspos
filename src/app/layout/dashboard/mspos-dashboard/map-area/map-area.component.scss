@@ -7,12 +7,21 @@ $marker-border-color: red;
   position: relative;
   display: inline-block;
 
+  // .province-box {
+  //   position: absolute;
+  //   width: $marker-width;
+  //   height: $marker-height;
+  //   background-color: $marker-color;
+  //   border: 2px solid $marker-border-color;
+  //   border-radius: 50%;
+  // }
+
   /* Map image styling */
   .map-image {
     display: block;
     max-width: 100%;
     height: auto;
-  } 
+  }
 
   /* Markers */
   .map-marker {
@@ -23,136 +32,157 @@ $marker-border-color: red;
     border: 2px solid $marker-border-color;
     border-radius: 50%;
 
+    // kongo central
     &.marker-1 {
-      top: 33%;
-      left: 47%;
+      top: 54%;
+      left: 5%;
     }
 
+    // Kinshasa
     &.marker-2 {
-      top: 55%;
-      left: 45%;
+      top: 50%;
+      left: 16%;
     }
 
+    // Mai-Ndombe
     &.marker-3 {
-      top: 61%;
+      top: 40%;
+      left: 25%;
+    }
+
+    // Kwango
+    &.marker-4 {
+      top: 60%;
+      left: 25%;
+    }
+
+    // Kwilu
+    &.marker-5 {
+      top: 50%;
+      left: 30%;
+    }
+
+    // Kwilu 2
+    &.marker-6 {
+      top: 53%;
+      left: 43%;
+    }
+
+    // Kasai central
+    &.marker-7 {
+      top: 58%;
       left: 50%;
     }
 
-    &.marker-4 {
-      top: 48%;
-      left: 72%;
-    }
-
-    &.marker-5 {
-      top: 74%;
-      left: 70%;
-    }
-
-    &.marker-6 {
-      top: 73%;
-      left: 53%;
-    }
-
-    &.marker-7 {
-      top: 66%;
-      left: 62%;
-    }
-
+    // Kasai Oriental
     &.marker-8 {
-      top: 30%;
-      left: 75%;
-    }
-
-    &.marker-9 {
-      top: 38%;
-      left: 73%;
-    }
-
-    &.marker-10 {
       top: 60%;
-      left: 70%;
+      left: 57%;
     }
 
-    &.marker-11 {
-      top: 59%;
-      left: 58%;
+    // Lomami
+    &.marker-9 {
+      top: 55%;
+      left: 65%;
     }
 
-    &.marker-12 {
-      top: 59%;
-      left: 54%;
-    }
-
-    &.marker-13 {
-      top: 48%;
+    // Lualaba
+    &.marker-10 {
+      top: 75%;
       left: 55%;
     }
 
+    // Haut lomami
+    &.marker-11 {
+      top: 70%;
+      left: 65%;
+    }
+
+    // Haut katanaga
+    &.marker-12 {
+      top: 80%;
+      left: 80%;
+    }
+
+    // Tanganyka
+    &.marker-13 {
+      top: 60%;
+      left: 85%;
+    }
+
+    // SUd kivu
     &.marker-14 {
       top: 45%;
-      left: 35%;
+      left: 85%;
     }
 
+    // Maniema
     &.marker-15 {
-      top: 34%;
-      left: 38%;
+      top: 45%;
+      left: 70%;
     }
 
+    // Nord kivu
     &.marker-16 {
-      top: 33%;
-      left: 60%;
-      // width: 70px;
-      // height: 70px;
+      top: 30%;
+      left: 85%;
     }
 
+    // Ituri
     &.marker-17 {
-      top: 24%;
-      left: 39%;
+      top: 20%;
+      left: 85%;
     }
 
+    // Haut uele
     &.marker-18 {
-      top: 23%;
-      left: 74%;
+      top: 12%;
+      left: 80%;
     }
 
+    // Tshiopo
     &.marker-19 {
       top: 22%;
       left: 60%;
     }
 
+    // Tshuapa
     &.marker-20 {
-      top: 47%;
-      left: 64%;
+      top: 30%;
+      left: 44%;
     }
 
+    // Sunkuru
     &.marker-21 {
-      top: 56%;
-      left: 20%;
+      top: 43%;
+      left: 60%;
     }
 
+    // Equateur
     &.marker-22 {
-      top: 60%;
+      top: 25%;
       left: 33%;
     }
 
+    // Mongala
     &.marker-23 {
-      top: 54%;
-      left: 36%;
+      top: 15%;
+      left: 50%;
     }
-
+// Nord ubungi
     &.marker-24 {
-      top: 21%;
+      top: 5%;
       left: 45%;
     }
-
+// Sud ubangi
     &.marker-25 {
-      top: 27%;
-      left: 47%;
+      top: 10%;
+      left: 35%;
     }
-
+// Bas-uele
     &.marker-26 {
-      top: 52%;
-      left: 26%;
+      top: 5%;
+      left: 65%;
     }
   }
 
