@@ -34,6 +34,7 @@ import { ProvinceUserComponent } from './components/province-user/province-user.
 import { UserAreaComponent } from './components/user-area/user-area.component';
 import { UserSupComponent } from './components/user-sup/user-sup.component';
 import { UserPosComponent } from './components/user-pos/user-pos.component';
+import { ReloadComponent } from './components/reload/reload.component';
 
 
 @NgModule({
@@ -42,6 +43,7 @@ import { UserPosComponent } from './components/user-pos/user-pos.component';
         UserAreaComponent,
         UserSupComponent,
         UserPosComponent,
+        ReloadComponent,
     ],
     exports: [
         CommonModule,
@@ -78,6 +80,7 @@ import { UserPosComponent } from './components/user-pos/user-pos.component';
         UserAreaComponent,
         UserSupComponent,
         UserPosComponent,
+        ReloadComponent,
     ], imports: [
         CommonModule,
         NgScrollbarModule,

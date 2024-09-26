@@ -1,7 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { apiResultFormat } from '../../../shared/model/pages.model';
+import { Component, OnInit, ViewChild } from '@angular/core'; 
 import { MatTableDataSource } from '@angular/material/table';
-import { PaginationService, pageSelection, tablePageSize } from '../../../shared/custom-pagination/pagination.service';
+import { PaginationService } from '../../../shared/custom-pagination/pagination.service';
 import { Router } from '@angular/router';
 import { MatSort, Sort } from '@angular/material/sort';
 import { routes } from '../../../shared/routes/routes';
@@ -117,7 +116,7 @@ export class ProvinceListComponent implements OnInit {
 
   fetchProducts(pageIndex: number, pageSize: number) {
     this.provinceService.getPaginated(pageIndex, pageSize).subscribe(res => {
-      this.dataList = res.data;
+      this.dataList = res.data; 
       this.totalItems = res.pagination.total_pages;
       this.length = res.pagination.length;
       this.dataSource = new MatTableDataSource<IProvince>(this.dataList);
@@ -245,4 +244,5 @@ export class ProvinceListComponent implements OnInit {
   compareFn(c1: IProvince, c2: IProvince): boolean {
     return c1 && c2 ? c1.ID === c2.ID : c1 === c2;
   }
+
 }

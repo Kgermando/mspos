@@ -7,15 +7,6 @@ $marker-border-color: red;
   position: relative;
   display: inline-block;
 
-  // .province-box {
-  //   position: absolute;
-  //   width: $marker-width;
-  //   height: $marker-height;
-  //   background-color: $marker-color;
-  //   border: 2px solid $marker-border-color;
-  //   border-radius: 50%;
-  // }
-
   /* Map image styling */
   .map-image {
     display: block;
@@ -26,13 +17,13 @@ $marker-border-color: red;
   /* Markers */
   .map-marker {
     position: absolute;
-    width: $marker-width;
-    height: $marker-height;
+    // width: $marker-width;
+    // height: $marker-height;
     background-color: $marker-color;
     border: 2px solid $marker-border-color;
     border-radius: 50%;
 
-    // kongo central
+    // Kongo central
     &.marker-1 {
       top: 54%;
       left: 5%;
@@ -62,7 +53,7 @@ $marker-border-color: red;
       left: 30%;
     }
 
-    // Kwilu 2
+    // Kwilu 2 Kasai
     &.marker-6 {
       top: 53%;
       left: 43%;
@@ -169,17 +160,20 @@ $marker-border-color: red;
       top: 15%;
       left: 50%;
     }
-// Nord ubungi
+
+    // Nord ubungi
     &.marker-24 {
       top: 5%;
       left: 45%;
     }
-// Sud ubangi
+
+    // Sud ubangi
     &.marker-25 {
-      top: 10%;
+      top: 15%;
       left: 35%;
     }
-// Bas-uele
+
+    // Bas-uele
     &.marker-26 {
       top: 5%;
       left: 65%;
@@ -187,8 +181,8 @@ $marker-border-color: red;
   }
 
   /* Media query for responsiveness */
-  @media screen and (max-width: 600px) {
-    width: 100%;
-    /* Map container becomes responsive */
-  }
+  // @media screen and (max-width: 600px) {
+  //   width: 100%;
+  //   /* Map container becomes responsive */
+  // }
 }

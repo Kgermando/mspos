@@ -11,7 +11,7 @@
         </div>
         } @else {
 
-            <!-- <div class="map-container">
+        <!-- <div class="map-container">
                 <img src="img/map.png" alt="Map" #mapImage>
                 <div *ngFor="let map of sosMapList"
                 [style.position]="'absolute'"
@@ -19,7 +19,7 @@
                 class="province-box"></div>
             </div> -->
 
-            <!-- <div class="map-container">
+        <!-- <div class="map-container">
                 <img src="img/map.png" alt="Map" #mapImage>
                 <div *ngFor="let map of sosMapList"
                 [style.position]="'absolute'"
@@ -38,35 +38,85 @@
 
                 <img src="img/map.png" alt="Map" class="map-image">
 
+                <!-- [ngStyle]="{'top': marker1Top + '%', 'left': marker1Left + '%'}" -->
+                <div [ngStyle]="{'width': scaleKongoCentral + 'px', 'height': scaleKongoCentral + 'px'}" class="map-marker marker-1"></div>
 
-                <div class="map-marker marker-1"></div>  
-                <div class="map-marker marker-2"></div>  
-                <div class="map-marker marker-3"></div>  
-                <div class="map-marker marker-4"></div>  
-                <div class="map-marker marker-5"></div>  
-                <div class="map-marker marker-6"></div>  
-                <div class="map-marker marker-7"></div>
-                <div class="map-marker marker-8"></div>
-                <div class="map-marker marker-9"></div>
-                <div class="map-marker marker-10"></div>
-                <div class="map-marker marker-11"></div>
-                <div class="map-marker marker-12"></div>
-                <div class="map-marker marker-13"></div>
-                <div class="map-marker marker-14"></div>
-                <div class="map-marker marker-15"></div>
-                <div class="map-marker marker-16"></div>
-                <div class="map-marker marker-17"></div>
-                <div class="map-marker marker-18"></div>
-                <div class="map-marker marker-19"></div>
-                <div class="map-marker marker-20"></div>
-                <div class="map-marker marker-21"></div>
-                <div class="map-marker marker-22"></div>
-                <div class="map-marker marker-23"></div>
-                <div class="map-marker marker-24"></div>
-                <div class="map-marker marker-25"></div>
-                <div class="map-marker marker-26"></div>
+
+                <div [ngStyle]="{'width': scaleKinshasa + 'px', 'height': scaleKinshasa + 'px'}" class="map-marker marker-2"></div>
+
+
+                <div [ngStyle]="{'width': scaleMaiNdombe + 'px', 'height': scaleMaiNdombe + 'px'}" class="map-marker marker-3"></div>
+
+
+                <div [ngStyle]="{'width': scaleKwango + 'px', 'height': scaleKwango + 'px'}" class="map-marker marker-4"></div>
+
+
+                <div [ngStyle]="{'width': scaleKwilu + 'px', 'height': scaleKwilu + 'px'}" class="map-marker marker-5"></div>
+
+
+                <div [ngStyle]="{'width': scaleKasai + 'px', 'height': scaleKasai + 'px'}" class="map-marker marker-6"></div>
+
+
+                <div [ngStyle]="{'width': scaleKasaiCentral + 'px', 'height': scaleKasaiCentral + 'px'}" class="map-marker marker-7"></div>
+
+
+                <div [ngStyle]="{'width': scaleKasaiOriental + 'px', 'height': scaleKasaiOriental + 'px'}" class="map-marker marker-8"></div>
+
+
+                <div [ngStyle]="{'width': scaleLomami + 'px', 'height': scaleLomami + 'px'}" class="map-marker marker-9"></div>
+
+
+                <div [ngStyle]="{'width': scaleLualaba + 'px', 'height': scaleLualaba + 'px'}" class="map-marker marker-10"></div>
+
+
+                <div [ngStyle]="{'width': scaleHautLomami + 'px', 'height': scaleHautLomami + 'px'}" class="map-marker marker-11"></div>
+
+
+                <div [ngStyle]="{'width': scaleHautKatanaga + 'px', 'height': scaleHautKatanaga + 'px'}" class="map-marker marker-12"></div>
+
+
+                <div [ngStyle]="{'width': scaleTanganyka + 'px', 'height': scaleTanganyka + 'px'}" class="map-marker marker-13"></div>
+
+
+                <div [ngStyle]="{'width': scaleSudKivu + 'px', 'height': scaleSudKivu + 'px'}" class="map-marker marker-14"></div>
+
+
+                <div [ngStyle]="{'width': scaleManiema + 'px', 'height': scaleManiema + 'px'}" class="map-marker marker-15"></div>
+
+
+                <div [ngStyle]="{'width': scaleNordKivu + 'px', 'height': scaleNordKivu + 'px'}" class="map-marker marker-16"></div>
+
+
+                <div [ngStyle]="{'width': scaleIturi + 'px', 'height': scaleIturi + 'px'}" class="map-marker marker-17"></div>
+
+
+                <div [ngStyle]="{'width': scaleHautUele + 'px', 'height': scaleHautUele + 'px'}" class="map-marker marker-18"></div>
+
+
+                <div [ngStyle]="{'width': scaleTshiopo + 'px', 'height': scaleTshiopo + 'px'}" class="map-marker marker-19"></div>
+
+
+                <div [ngStyle]="{'width': scaleTshuapa + 'px', 'height': scaleTshuapa + 'px'}" class="map-marker marker-20"></div>
+
+
+                <div [ngStyle]="{'width': scaleSunkuru + 'px', 'height': scaleSunkuru + 'px'}" class="map-marker marker-21"></div>
+
+
+                <div [ngStyle]="{'width': scaleEquateur + 'px', 'height': scaleEquateur + 'px'}" class="map-marker marker-22"></div>
+
+
+                <div [ngStyle]="{'width': scaleMongala + 'px', 'height': scaleMongala + 'px'}" class="map-marker marker-23"></div>
+
+
+                <div [ngStyle]="{'width': scaleNordUbungi + 'px', 'height': scaleNordUbungi + 'px'}" class="map-marker marker-24"></div>
+
+
+                <div [ngStyle]="{'width': scaleSudUbangi + 'px', 'height': scaleSudUbangi + 'px'}" class="map-marker marker-25"></div>
+                
+
+                <div [ngStyle]="{'width': scaleBasUele + 'px', 'height': scaleBasUele + 'px'}" class="map-marker marker-26"></div>
             </div>
-        
+
         </div>
         }
     </div>

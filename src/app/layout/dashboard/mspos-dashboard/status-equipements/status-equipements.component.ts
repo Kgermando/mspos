@@ -33,9 +33,7 @@ export class StatusEquipementsComponent implements OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.statusEquipDataList = this.statusEquipementList;
-
-    console.log("statusEquipDataList", this.statusEquipDataList)
+    this.statusEquipDataList = this.statusEquipementList; 
     this.getPieChart();
   }
 

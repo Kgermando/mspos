@@ -35,9 +35,7 @@ export class SumaryChartBarComponent implements OnChanges {
  
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.sumChartList = this.summaryChartList
-
-    console.log("sumChartList",this.sumChartList )
+    this.sumChartList = this.summaryChartList 
     this.getChart();
   }
 

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { SOSPieModel } from '../../models/summary-dashboard.model';
 
 interface Province {
@@ -12,30 +12,56 @@ interface Province {
   templateUrl: './map-area.component.html',
   styleUrl: './map-area.component.scss'
 })
-export class MapAreaComponent {
+export class MapAreaComponent implements OnChanges {
+
   @Input() isLoading: boolean = false;
   @Input() sosMapList: SOSPieModel[] = [];
 
   @ViewChild('.map-container', { static: true }) mapContainer!: ElementRef;
 
   @ViewChild('mapImage', { static: true }) mapImage!: ElementRef;
+ 
 
-  scale = 0;
 
-  ngOnInit() {
-   
-    const imageWidth = this.mapImage.nativeElement.width;
-    const imageHeight = this.mapImage.nativeElement.height;
-    this.scale = imageWidth / 360;
+  scale = 2; 
 
-    console.log("imageWidth", imageWidth)
-    
+  scaleKongoCentral = 2;
+  scaleKinshasa = 2;
+  scaleMaiNdombe = 2;
+  scaleKwango = 2;
+  scaleKwilu = 2;
+  scaleKasai = 2;
+  scaleKasaiCentral = 2;
+  scaleKasaiOriental = 2;
+  scaleLomami = 2;
+  scaleLualaba = 2;
+  scaleHautLomami = 2;
+  scaleHautKatanaga = 2;
+  scaleTanganyka = 2;
+  scaleSudKivu = 2;
+  scaleManiema = 2;
+  scaleNordKivu = 2;
+  scaleIturi = 2;
+  scaleHautUele = 2;
+  scaleTshiopo = 2;
+  scaleTshuapa = 2;
+  scaleSunkuru = 2;
+  scaleEquateur = 2;
+  scaleMongala = 2;
+  scaleNordUbungi = 2;
+  scaleSudUbangi = 2;
+  scaleBasUele = 20;
 
-    // const mapMarkers = this.mapContainer.nativeElement.querySelectorAll('.kinshasa');
-    // mapMarkers.forEach((marker: { style: { backgroundColor: string; top:  number, left: number}; }) => {
-    //   // marker.style.backgroundColor = 'red';  
-    //   marker.style.top = 52,
-    //   marker.style.left = 20
-    // });
-  }
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log("sosMapList 1", this.sosMapList);
+
+    for (let index = 0; index < this.sosMapList.length; index++) {
+      const element = this.sosMapList[index];
+      if (element.Province == '') {
+        
+      } else {
+        
+      }
+    }
+  } 
 }
