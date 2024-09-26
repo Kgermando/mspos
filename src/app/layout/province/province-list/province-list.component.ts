@@ -11,6 +11,7 @@ import { UserModel } from '../../../auth/models/user.model';
 import { AuthService } from '../../../auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { ProvinceList } from '../../../utils/province-list';
 
 @Component({
   selector: 'app-province-list',
@@ -43,9 +44,9 @@ export class ProvinceListComponent implements OnInit {
   currentUser!: UserModel;
   isLoading = false;
 
+  provinceList = ProvinceList;
   
-  constructor(
-    private pagination: PaginationService,
+  constructor( 
     private router: Router,
     private _formBuilder: FormBuilder,
     private authService: AuthService,

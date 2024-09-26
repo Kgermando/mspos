@@ -117,7 +117,7 @@
                                         <th mat-sort-header="ws">WS</th>
                                         <th mat-sort-header="mast">MAST</th>
                                         <th mat-sort-header="oris">ORIS</th>
-                                        <th mat-sort-header="elite">ELITE</th> 
+                                        <th mat-sort-header="elite">ELITE</th>
                                         <th mat-sort-header="yes">YES</th>
                                         <th mat-sort-header="time">TIME</th>
                                         <th mat-sort-header="province_id">Province</th>
@@ -144,11 +144,11 @@
                                         <td>{{ data.ws }}</td>
                                         <td>{{ data.mast }}</td>
                                         <td>{{ data.oris }}</td>
-                                        <td>{{ data.elite }}</td> 
+                                        <td>{{ data.elite }}</td>
                                         <td>{{ data.yes }}</td>
                                         <td>{{ data.time }}</td>
                                         <td>
-                                           {{data.province}}
+                                            {{data.province}}
                                         </td>
                                         <td>
                                             {{data.area}}
@@ -191,26 +191,23 @@
                                     </tr>
                                     }
                                     @if (isLoadingData) {
-                                        <tr class="odd">
-                                          <div class=" text-center d-flex justify-content-center align-items-center ">
+                                    <tr class="odd">
+                                        <div class=" text-center d-flex justify-content-center align-items-center ">
                                             <button disabled class="btn btn-primary">
-                                              <div class="spinner-border" role="status">
-                                                  <span class="visually-hidden">Loading...</span>
-                                              </div>
-                                          </button>
-                                          </div> 
-                                        </tr>
-                                      }
+                                                <div class="spinner-border" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </tr>
+                                    }
                                 </tbody>
                             </table>
                         </div>
-                        <mat-paginator [length]="length"
-                        [pageSize]="pageSize"
-                        [pageSizeOptions]="[15, 20, 30, 40, 50, 80, 100]"
-                        showFirstLastButtons
-                        (page)="onPageChange($event)"
-                        aria-label="Select page">
-                     </mat-paginator>
+                        <mat-paginator [length]="length" [pageSize]="pageSize"
+                            [pageSizeOptions]="[15, 20, 30, 40, 50, 80, 100]" showFirstLastButtons
+                            (page)="onPageChange($event)" aria-label="Select page">
+                        </mat-paginator>
                         <div class="row align-items-center">
                             <div class="col-md-6">
                                 <div class="datatable-length"></div>
@@ -244,20 +241,21 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="mb-3">
-                          <label class="col-form-label" for="pos_id">
-                            POS
-                            <span class="text-danger">*</span>
-                          </label>
-                          <mat-select class="select custom-mat-select" formControlName="pos_id" placeholder="Choose pos">
-                            @for (item of posListFilter; track item) {
-                            <mat-option value="{{item.ID}}">{{item.name}} | {{item.shop}}</mat-option>
-                            }
-                          </mat-select>
-                          <mat-error *ngIf="formGroup.controls['pos_id'].hasError('required')">
-                            Ce champs est obligatoire
-                          </mat-error>
+                            <label class="col-form-label" for="pos_id">
+                                POS
+                                <span class="text-danger">*</span>
+                            </label>
+                            <mat-select class="select custom-mat-select" formControlName="pos_id"
+                                placeholder="Choose pos">
+                                @for (item of posListFilter; track item) {
+                                <mat-option value="{{item.ID}}">{{item.name}} | {{item.shop}}</mat-option>
+                                }
+                            </mat-select>
+                            <mat-error *ngIf="formGroup.controls['pos_id'].hasError('required')">
+                                Ce champs est obligatoire
+                            </mat-error>
                         </div>
-                      </div>
+                    </div>
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label class="col-form-label" for="text">EQ <span class="text-danger">*</span></label>
@@ -374,7 +372,7 @@
                                 Ce champs est obligatoire
                             </mat-error>
                         </div>
-                    </div> 
+                    </div>
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label class="col-form-label" for="text">YES <span class="text-danger">*</span></label>
@@ -411,8 +409,7 @@
                 </button>
                 }
                 @if (!isLoading) {
-                <button type="submit" class="btn btn-primary" 
-                    data-bs-target="#create_success">Create</button>
+                <button type="submit" class="btn btn-primary" data-bs-target="#create_success">Create</button>
                 }
             </div>
         </form>
@@ -439,20 +436,21 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="mb-3">
-                          <label class="col-form-label" for="pos_id">
-                            POS
-                            <span class="text-danger">*</span>
-                          </label>
-                          <mat-select class="select custom-mat-select" formControlName="pos_id" placeholder="Choose pos">
-                            @for (item of posListFilter; track item) {
-                            <mat-option value="{{item.ID}}">{{item.name}} | {{item.shop}}</mat-option>
-                            }
-                          </mat-select>
-                          <mat-error *ngIf="formGroup.controls['pos_id'].hasError('required')">
-                            Ce champs est obligatoire
-                          </mat-error>
+                            <label class="col-form-label" for="pos_id">
+                                POS
+                                <span class="text-danger">*</span>
+                            </label>
+                            <mat-select class="select custom-mat-select" formControlName="pos_id"
+                                placeholder="Choose pos">
+                                @for (item of posListFilter; track item) {
+                                <mat-option value="{{item.ID}}">{{item.name}} | {{item.shop}}</mat-option>
+                                }
+                            </mat-select>
+                            <mat-error *ngIf="formGroup.controls['pos_id'].hasError('required')">
+                                Ce champs est obligatoire
+                            </mat-error>
                         </div>
-                      </div>
+                    </div>
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label class="col-form-label" for="text">EQ <span class="text-danger">*</span></label>
@@ -569,7 +567,7 @@
                                 Ce champs est obligatoire
                             </mat-error>
                         </div>
-                    </div> 
+                    </div>
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label class="col-form-label" for="text">YES <span class="text-danger">*</span></label>
