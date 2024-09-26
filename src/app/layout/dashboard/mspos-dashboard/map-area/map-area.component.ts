@@ -106,6 +106,6 @@ export class MapAreaComponent implements OnChanges {
   } 
 
   toolTip(province: string, brand: number) {
-    return `${province}: ${brand}`;
+    return `${province}: ${brand}%`;
   }
 }

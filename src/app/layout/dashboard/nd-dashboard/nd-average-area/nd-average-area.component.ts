@@ -212,37 +212,27 @@ export class NdAverageAreaComponent implements OnChanges {
         tickAmount: 5,
       },
       events: {
-        dataPointSelection: function(event:any, chartContext:any, config:any) {
-          var selectedPoints = config.selectedDataPoints;
-          // Ici, vous pouvez accéder aux données des points sélectionnés
-          console.log(selectedPoints);
-    
-          // Exemple : Mettre en évidence les points sélectionnés
-          chartContext.config.options.markers.colors = ['red', 'red', 'red']; // Mettre tous les marqueurs en rouge
-          chartContext.updateOptions(chartContext.config.options);
-        }
+         
       }
-    };
+    }; 
   }
 
-  onBarClicked(data: any) {
-    // Votre logique ici pour gérer le clic
-    const nomDeLaDonnee = data.x;
-    console.log('Vous avez sélectionné :', nomDeLaDonnee);
- 
-    // Par exemple, afficher un modal :
-    // this.openModal(data);  
-  }
+  onChartClick(event: any) {
+     // Access the clicked bar's index and category
+     const index = event.dataPointIndex;
+     const category = this.chartOptions3.xaxis.categories[index];
+  
+    if (index) {
+      // Access clickedCategory properties here
+      console.log('Clicked category:', index);
+    } else {
+      // Handle case where clickedCategory is undefined
+      console.log('Clicked no category:');
+    }
 
-  selectedDataPoints: any[] = [];
-  onSelectedDataPoints(event: any) {
-    // this.selectedDataPoints = event;
-
-    // // Retrieve the name of the selected data point section
-    // const selectedDataPoint = event[0]; // Assuming you want the first selected data point
-    // const seriesIndex = this.chartOptions3.series.findIndex((series: { data: string | any[]; }) => series.data.indexOf(selectedDataPoint.value) !== -1);
-    // const selectedSectionName = this.chartOptions3.series[seriesIndex].name;
-    // console.log('Selected section name:', selectedSectionName);
+    // const clickedCategory = this.chartOptions3.xaxis.categories[event.dataPointIndex];
+    // console.log('Clicked category:', clickedCategory);
+    // Do something with the clicked category here, e.g., show a tooltip or perform an action
   }
  
 }
