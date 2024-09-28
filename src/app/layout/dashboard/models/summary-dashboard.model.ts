@@ -35,3 +35,14 @@ export interface StatusEquipementModel {
 	Equipement: string;
 	Count: number; 
 }
+
+
+export interface GoogleMapModel {
+	Lat: number;
+	Lng: number; 
+} 
+
+export interface PriceSaleModel {
+	Price: string;
+	Count: number;
+}

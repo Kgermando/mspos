@@ -10,6 +10,7 @@ import { SishDashboardComponent } from './sish-dashboard/sish-dashboard.componen
 import { OosDashboardComponent } from './oos-dashboard/oos-dashboard.component';
 import { SosDashboardComponent } from './sos-dashboard/sos-dashboard.component';
 import { SeDashboardComponent } from './se-dashboard/se-dashboard.component';
+import { GoogleMapComponent } from './google-map/google-map.component';
 
 const routes: Routes = [
   {
@@ -52,6 +53,10 @@ const routes: Routes = [
       {
         path: 'sales-evolution',
         component: SeDashboardComponent,
+      },
+      {
+        path: 'google-maps',
+        component: GoogleMapComponent,
       },
     ],
   },

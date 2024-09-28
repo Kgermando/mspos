@@ -31,7 +31,11 @@ import { SosByYearComponent } from './sos-dashboard/sos-by-year/sos-by-year.comp
 import { SosChartBarComponent } from './sos-dashboard/sos-chart-bar/sos-chart-bar.component';
 import { BetterDrComponent } from './mspos-dashboard/better-dr/better-dr.component';
 import { BetterSupComponent } from './mspos-dashboard/better-sup/better-sup.component';
-import { StatusEquipementsComponent } from './mspos-dashboard/status-equipements/status-equipements.component'; 
+import { StatusEquipementsComponent } from './mspos-dashboard/status-equipements/status-equipements.component';
+import { GoogleMapComponent } from './google-map/google-map.component'; 
+import { GoogleMapsModule } from '@angular/google-maps';
+import { MapCardComponent } from './google-map/map-card/map-card.component';
+import { PriceSaleComponent } from './mspos-dashboard/price-sale/price-sale.component';
 
 
 
@@ -65,12 +69,16 @@ import { StatusEquipementsComponent } from './mspos-dashboard/status-equipements
     SosChartBarComponent,
     BetterDrComponent,
     BetterSupComponent,
-    StatusEquipementsComponent, 
+    StatusEquipementsComponent,
+    GoogleMapComponent,
+    MapCardComponent,
+    PriceSaleComponent, 
   ],
   imports: [
     CommonModule,
     DashboardRoutingModule,
     SharedModule,
+    GoogleMapsModule
   ]
 })
 export class DashboardModule { }

@@ -10,6 +10,7 @@ import { PosformProvinceComponent } from './posform-province/posform-province.co
 import { PosformAreaComponent } from './posform-area/posform-area.component';
 import { PosformSupComponent } from './posform-sup/posform-sup.component';
 import { PosformPosComponent } from './posform-pos/posform-pos.component';
+import { PosformService } from './posform.service';
 
 
 @NgModule({
@@ -26,6 +27,9 @@ import { PosformPosComponent } from './posform-pos/posform-pos.component';
     CommonModule,
     PosRoutingModule,
     SharedModule,
-  ]
+  ],
+  providers: [ 
+    PosformService,
+  ],
 })
 export class PosModule { }

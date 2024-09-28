@@ -43,10 +43,8 @@ export class LayoutComponent implements OnInit {
     private common: CommonService,
     private data: DataService,
     private settings: SettingsService,
-    private renderer: Renderer2,
-    private titleService: Title,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
+    private renderer: Renderer2, 
+    private router: Router, 
     private authService: AuthService,
   ) {
     this.sidebar.toggleMobileSideBar.subscribe((res: string) => {
@@ -102,7 +100,7 @@ export class LayoutComponent implements OnInit {
 
   private getRoutes(data: url): void {
     const splitVal = data.url.split('/');
-    console.log("splitVal", splitVal)
+    // console.log("splitVal", splitVal)
     this.base = splitVal[1];
     this.page = splitVal[2];
     this.last = splitVal[3];
@@ -110,9 +108,9 @@ export class LayoutComponent implements OnInit {
     this.common.page.next(splitVal[2]);
     this.common.last.next(splitVal[3]);
 
-    console.log("base", this.base)
-    console.log("page", this.page)
-    console.log("last", this.last)
+    // console.log("base", this.base)
+    // console.log("page", this.page)
+    // console.log("last", this.last)
 
     if (data.url.split('/')[1] === '404-error') {
       this.sideBarActivePath = true;

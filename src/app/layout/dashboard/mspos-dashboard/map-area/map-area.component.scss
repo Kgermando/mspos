@@ -23,6 +23,7 @@ $marker-border-color: red;
     border: 2px solid $marker-border-color;
     border-radius: 50%;
     cursor: pointer;
+    // opacity: 0.4;
 
     // Kongo central
     &.marker-1 {
@@ -62,8 +63,8 @@ $marker-border-color: red;
 
     // Kasai central
     &.marker-7 {
-      top: 58%;
-      left: 50%;
+      top: 55%;
+      left: 53%;
     }
 
     // Kasai Oriental

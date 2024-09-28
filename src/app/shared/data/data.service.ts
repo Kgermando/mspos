@@ -59,6 +59,10 @@ export class DataService {
             //   menuValue: 'Sales evolution',
             //   route: routes.seDashboard,
             // },
+            {
+              menuValue: 'Maps DR',
+              route: routes.googleMapsDashboard,
+            },
           ]
         }, 
       ],

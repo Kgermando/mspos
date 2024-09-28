@@ -27,7 +27,7 @@ export class SumaryChartBarComponent implements OnChanges {
   @Input() isLoading!: boolean;
   @Input() summaryChartList: SumChartBarModel[] = [];
 
-  sumChartList: SumChartBarModel[] = [];
+  // sumChartList: SumChartBarModel[] = [];
 
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions3: Partial<ChartOptions> | any;
@@ -35,7 +35,7 @@ export class SumaryChartBarComponent implements OnChanges {
  
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.sumChartList = this.summaryChartList 
+    // this.sumChartList = this.summaryChartList;
     this.getChart();
   }
 
@@ -43,19 +43,19 @@ export class SumaryChartBarComponent implements OnChanges {
     this.chartOptions3 = {
       series: [{
         name: 'Numeric distribution',
-        data: this.sumChartList.map((val) => {
+        data: this.summaryChartList.map((val) => {
           return val.Nd;
         }),
       },
       {
         name: 'Share of stock',
-        data: this.sumChartList.map((val => {
+        data: this.summaryChartList.map((val => {
           return val.Sos;
         })),
       }, 
       {
         name: 'Out of stock',
-        data: this.sumChartList.map((val => {
+        data: this.summaryChartList.map((val => {
           return val.Oos;
         })),
       }, 
@@ -77,7 +77,7 @@ export class SumaryChartBarComponent implements OnChanges {
       },
 
       xaxis: {
-        categories: this.sumChartList.map((val => {
+        categories: this.summaryChartList.map((val => {
           return val.Province;
         })),
         // categories: ['Kinshasa', 'Province orientale', 'Kongo central', 'Grand bandundu', 'Katanga', 'Maniema', 'Grand kivu', 'Tshikapa', 'Kananga', 'Kasai oriental'],

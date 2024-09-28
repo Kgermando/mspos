@@ -50,5 +50,13 @@ export class SummaryService extends ApiService {
   StatusEquipement(start_date: string, end_date: string): Observable<any> {
     return this.http.get(`${this.endpoint}/status-equements/${start_date}/${end_date}`);
   }
+
+  GoogleMap(start_date: string, end_date: string): Observable<any> {
+    return this.http.get(`${this.endpoint}/google-maps/${start_date}/${end_date}`);
+  }
+
+  PriceSale(start_date: string, end_date: string): Observable<any> {
+    return this.http.get(`${this.endpoint}/price-sales/${start_date}/${end_date}`);
+  }
  
-}
+} 

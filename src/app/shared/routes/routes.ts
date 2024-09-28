@@ -60,8 +60,11 @@ export class routes {
   public static get seDashboard(): string {
     return this.dashboard + '/sales-evolution';
   }
+  public static get googleMapsDashboard(): string {
+    return this.dashboard + '/google-maps';
+  }
 
-
+  
 
   // Pos
   public static get pos(): string {

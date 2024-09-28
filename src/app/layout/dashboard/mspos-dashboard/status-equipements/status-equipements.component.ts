@@ -26,20 +26,20 @@ export class StatusEquipementsComponent implements OnChanges {
   @Input() statusEquipementList: StatusEquipementModel[] = [];
  
 
-  statusEquipDataList: StatusEquipementModel[] = [];
+  // statusEquipDataList: StatusEquipementModel[] = [];
 
   @ViewChild('chart') chart!: ChartComponent; 
   public chartOptions3: Partial<ChartOptions> | any;
 
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.statusEquipDataList = this.statusEquipementList; 
+    // this.statusEquipDataList = this.statusEquipementList; 
     this.getPieChart();
   }
 
   getPieChart() {
     this.chartOptions3 = {
-      series: this.statusEquipDataList.map((val) => val.Count),
+      series: this.statusEquipementList.map((val) => val.Count),
       chart: {
         width: 400,
         type: 'donut',
@@ -50,7 +50,7 @@ export class StatusEquipementsComponent implements OnChanges {
           return val + ' - ' + opts.w.globals.series[opts.seriesIndex];
         },
       },
-      colors: this.statusEquipDataList.map((val) => {
+      colors: this.statusEquipementList.map((val) => {
         if (val.Equipement == 'Casser') {
           return '#FFA500';
         } else if (val.Equipement == 'Vieux') {
@@ -61,7 +61,7 @@ export class StatusEquipementsComponent implements OnChanges {
           return ''
         }
       }),  // ['#4A00E5', '#FFA201', '#0092E4', '#E41F07'],
-      labels: this.statusEquipDataList.map((val) => val.Equipement), // ['Campaigns', 'Google', 'Referrals', 'Paid Social'],
+      labels: this.statusEquipementList.map((val) => val.Equipement), // ['Campaigns', 'Google', 'Referrals', 'Paid Social'],
       plotOptions: {
         pie: {
           startAngle: -90,

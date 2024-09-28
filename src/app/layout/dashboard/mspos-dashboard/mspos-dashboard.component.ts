@@ -13,7 +13,7 @@ import { CommonService } from '../../../shared/common/common.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { IProvince } from '../../province/models/province.model';
 import { SummaryService } from '../services/summary.service';
-import { BetterModel, PerfVisitModel, SOSPieModel, StatusEquipementModel, SumChartBarModel } from '../models/summary-dashboard.model';
+import { BetterModel, PerfVisitModel, PriceSaleModel, SOSPieModel, StatusEquipementModel, SumChartBarModel } from '../models/summary-dashboard.model';
 import { formatDate } from '@angular/common';
 import { getBusinessDaysBetweenDates } from '../../../utils/calcul-date-except-weekend';
 export interface ChartOptions {
@@ -61,6 +61,8 @@ export class MsposDashboardComponent implements OnInit {
   betterSupList: BetterModel[] = [];
 
   statusEquipementList: StatusEquipementModel[] = [];
+
+  priceSaleLIst: PriceSaleModel[] = [];
 
   constructor(
     private common: CommonService,
@@ -110,6 +112,7 @@ export class MsposDashboardComponent implements OnInit {
       this.getBetterDR(this.start_date, this.end_date);
       this.getBestSup(this.start_date, this.end_date);
       this.getStatusEquiment(this.start_date, this.end_date);
+      this.getPriceSale(this.start_date, this.end_date);
     }
 
     this.onChanges();
@@ -127,6 +130,7 @@ export class MsposDashboardComponent implements OnInit {
       this.getBetterDR(this.start_date, this.end_date);
       this.getBestSup(this.start_date, this.end_date);
       this.getStatusEquiment(this.start_date, this.end_date);
+      this.getPriceSale(this.start_date, this.end_date);
     });
   }
 
@@ -200,6 +204,13 @@ export class MsposDashboardComponent implements OnInit {
   getStatusEquiment(start_date: string, end_date: string) {
     this.summaryService.StatusEquipement(start_date, end_date).subscribe((res) => {
       this.statusEquipementList = res.data;
+      this.isLoading = false;
+    });
+  }
+
+  getPriceSale(start_date: string, end_date: string) {
+    this.summaryService.PriceSale(start_date, end_date).subscribe((res) => {
+      this.priceSaleLIst = res.data;
       this.isLoading = false;
     });
   }

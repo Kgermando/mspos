@@ -1,7 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { apiResultFormat } from '../../../shared/model/pages.model';
+import { Component, OnInit, ViewChild } from '@angular/core'; 
+import {GeolocationService} from '@ng-web-apis/geolocation';
 import { MatTableDataSource } from '@angular/material/table';
-import { PaginationService, pageSelection, tablePageSize } from '../../../shared/custom-pagination/pagination.service';
 import { Router } from '@angular/router';
 import { MatSort, Sort } from '@angular/material/sort';
 import { routes } from '../../../shared/routes/routes';
@@ -19,7 +18,7 @@ import { IPos } from '../../pos-vente/models/pos.model';
 import { generateRandomString } from '../../../utils/generate-random';
 import { PosVenteService } from '../../pos-vente/pos-vente.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-
+ 
 
 @Component({
   selector: 'app-postform-list',
@@ -52,6 +51,10 @@ export class PostformListComponent implements OnInit {
   currentUser!: UserModel;
   isLoading = false;
 
+  latitude!: number;
+  longitude!: number;
+
+
 
   userList: IUser[] = [];
   provinceList: IProvince[] = [];
@@ -61,7 +64,7 @@ export class PostformListComponent implements OnInit {
   posListFilter: IPos[] = [];
 
   constructor(
-    private pagination: PaginationService,
+    private readonly geolocation$: GeolocationService,
     private router: Router,
     private _formBuilder: FormBuilder,
     private authService: AuthService,
@@ -94,6 +97,13 @@ export class PostformListComponent implements OnInit {
           this.posList = res.data;
           this.posListFilter = this.posList.filter((v) => v.area_id == this.currentUser.area_id) 
         });
+
+        this.geolocation$.subscribe((position) => {
+          this.latitude = position.coords.latitude;
+          this.longitude = position.coords.longitude;
+          // console.log('Latitude:', position.coords.latitude);
+          // console.log('Longitude:', position.coords.longitude);
+        });
       },
       error: (error) => {
         this.isLoadingData = false;
@@ -125,87 +135,7 @@ export class PostformListComponent implements OnInit {
       yes: ['', Validators.required],
       time: ['', Validators.required],
       comment: ['Rien à signaler', Validators.required],
-    });
-
-    // this.authService.user().subscribe({
-    //   next: (user) => {
-    //     this.currentUser = user;
-    //     this.posService.getAll().subscribe(res => {
-    //       this.posList = res.data;
-    //       this.posListFilter = this.posList.filter((v) => v.area_id == this.currentUser.area_id)
-    //       console.log("area_id", this.currentUser.area_id);
-    //       console.log("posList", this.posList);
-    //       console.log("posListFilter", this.posListFilter);
-    //     });
-    //     this.posformService.refreshDataList$.subscribe(() => {
-    //       this.posformService.getAll().subscribe((apiRes: apiResultFormat) => {
-    //         this.actualData = apiRes.data;
-    //         this.totalUser = apiRes.meta.total;
-    //         this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-    //           if (this.router.url == this.routes.posForm) {
-    //             this.getTableData({ skip: res.skip, limit: res.limit });
-    //             this.pageSize = res.pageSize;
-    //           }
-    //         });
-    //       });
-    //     });
-    //     this.posformService.getAll().subscribe((apiRes: apiResultFormat) => {
-    //       this.actualData = apiRes.data;
-    //       this.totalUser = apiRes.meta.total;
-    //       this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-    //         if (this.router.url == this.routes.posForm) {
-    //           this.getTableData({ skip: res.skip, limit: res.limit });
-    //           this.pageSize = res.pageSize;
-    //         }
-    //       });
-    //     });
-    //     if (this.idItem) {
-    //       this.posformService.get(this.idItem).subscribe(item => {
-    //         this.dataItem = item.data;
-    //         this.formGroup.patchValue({
-    //           // id_unique: this.dataItem.id_unique,  
-    //           pos_id: this.dataItem.pos_id,
-    //           eq: this.dataItem.eq,
-    //           eq1: this.dataItem.eq1,
-    //           sold: this.dataItem.sold,
-    //           dhl: this.dataItem.dhl,
-    //           dhl1: this.dataItem.dhl1,
-    //           ar: this.dataItem.ar,
-    //           ar1: this.dataItem.ar1,
-    //           sbl: this.dataItem.sbl,
-    //           sbl1: this.dataItem.sbl1,
-    //           pmf: this.dataItem.pmf,
-    //           pmf1: this.dataItem.pmf1,
-    //           pmm: this.dataItem.pmm,
-    //           pmm1: this.dataItem.pmm1,
-    //           ticket: this.dataItem.ticket,
-    //           ticket1: this.dataItem.ticket1,
-    //           mtc: this.dataItem.mtc,
-    //           mtc1: this.dataItem.mtc1,
-    //           ws: this.dataItem.ws,
-    //           ws1: this.dataItem.ws1,
-    //           mast: this.dataItem.mast,
-    //           mast1: this.dataItem.mast1,
-    //           oris: this.dataItem.oris,
-    //           oris1: this.dataItem.oris1,
-    //           elite: this.dataItem.elite, 
-    //           elite1: this.dataItem.elite1, 
-    //           yes: this.dataItem.yes,
-    //           yes1: this.dataItem.yes1,
-    //           time: this.dataItem.time,
-    //           time1: this.dataItem.time1,
-    //           comment: this.dataItem.comment,
-    //         });
-    //       }
-    //       );
-    //     }
-    //   },
-    //   error: (error) => {
-    //     this.router.navigate(['/auth/login']);
-    //     console.log(error);
-    //   }
-    // });
- 
+    }); 
 
     this.selectedValue1 = [
       { name: 'Mobile App' },
@@ -319,6 +249,8 @@ export class PostformListComponent implements OnInit {
           area_id: this.currentUser.area_id,
           sup_id: this.currentUser.sup_id,
           pos_id: parseInt(this.formGroup.value.pos_id),
+          latitude: this.latitude,
+          longitude: this.longitude,
           signature: this.currentUser.fullname,
         };
         this.posformService.create(body).subscribe({
@@ -379,6 +311,8 @@ export class PostformListComponent implements OnInit {
         area_id: this.currentUser.area_id,
         sup_id: this.currentUser.sup_id,
         pos_id: parseInt(this.formGroup.value.pos_id),
+        latitude: this.latitude,
+        longitude: this.longitude,
         signature: this.currentUser.fullname,
       };
       this.posformService.update(this.idItem, body)
