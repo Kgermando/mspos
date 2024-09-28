@@ -45,4 +45,8 @@ export interface IPosForm {
     area : string;
     sup: string;
     pos: string; 
+
+    latitude: number;
+    longitude: number;
+    price: string; 
 }

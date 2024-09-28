@@ -239,7 +239,7 @@
         <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
             <div>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="mb-3">
                             <label class="col-form-label" for="pos_id">
                                 POS
@@ -252,6 +252,23 @@
                                 }
                             </mat-select>
                             <mat-error *ngIf="formGroup.controls['pos_id'].hasError('required')">
+                                Ce champs est obligatoire
+                            </mat-error>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="price">
+                                Prix de vente
+                                <span class="text-danger">*</span>
+                            </label>
+                            <mat-select class="select custom-mat-select" formControlName="price"
+                                placeholder="Choose pos">
+                                @for (item of priceList; track item) {
+                                <mat-option value="{{item}}">{{item}} FC</mat-option>
+                                }
+                            </mat-select>
+                            <mat-error *ngIf="formGroup.controls['price'].hasError('required')">
                                 Ce champs est obligatoire
                             </mat-error>
                         </div>

@@ -212,36 +212,22 @@ export class NdAverageAreaComponent implements OnChanges {
         tickAmount: 5,
       },
       events: {
-        // click(event: any, chartContext: any, opts: any) {
-        //     console.log(opts.config.series[opts.seriesIndex])
-        //     console.log(opts.config.series[opts.seriesIndex].name)
-        //     console.log(opts.config.series[opts.seriesIndex].data[opts.dataPointIndex])
-        // }
-        dataPointSelection: function (event: any, chartContext: any, config: any) {
-          // opts.w.globals.labels[opts.seriesIndex];
-          alert(chartContext.w.globals.labels[config.dataPointIndex])
-          // The last parameter config contains additional information like `seriesIndex` and `dataPointIndex` for cartesian charts
-        }
+        
+        click(event: any, chartContext: any, opts: any) {
+          console.log(opts.w.globals.labels[opts.seriesIndex]);
+        },
+         
       }
     };
   }
 
-  onChartClick(event: any) {
-    // Access the clicked bar's index and category
-    const index = event.dataPointIndex;
-    const category = this.chartOptions3.xaxis.categories[index];
+  onChartClick(event: any, opts: any) {
 
-    if (index) {
-      // Access clickedCategory properties here
-      console.log('Clicked category:', index);
-    } else {
-      // Handle case where clickedCategory is undefined
-      console.log('Clicked no category:');
-    }
+    // console.log(opts.w.globals.labels[opts.seriesIndex]);
 
-    // const clickedCategory = this.chartOptions3.xaxis.categories[event.dataPointIndex];
-    // console.log('Clicked category:', clickedCategory);
-    // Do something with the clicked category here, e.g., show a tooltip or perform an action
+    console.log("opts", opts);
+
+ 
   }
 
 }

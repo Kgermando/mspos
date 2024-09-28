@@ -63,6 +63,8 @@ export class PostformListComponent implements OnInit {
   posList: IPos[] = []; 
   posListFilter: IPos[] = [];
 
+  priceList: string[] = ['150', '100']
+
   constructor(
     private readonly geolocation$: GeolocationService,
     private router: Router,
@@ -135,6 +137,7 @@ export class PostformListComponent implements OnInit {
       yes: ['', Validators.required],
       time: ['', Validators.required],
       comment: ['Rien à signaler', Validators.required],
+      price: ['', Validators.required],
     }); 
 
     this.selectedValue1 = [
@@ -251,6 +254,7 @@ export class PostformListComponent implements OnInit {
           pos_id: parseInt(this.formGroup.value.pos_id),
           latitude: this.latitude,
           longitude: this.longitude,
+          price: this.formGroup.value.price,
           signature: this.currentUser.fullname,
         };
         this.posformService.create(body).subscribe({
@@ -313,6 +317,7 @@ export class PostformListComponent implements OnInit {
         pos_id: parseInt(this.formGroup.value.pos_id),
         latitude: this.latitude,
         longitude: this.longitude,
+        price: this.formGroup.value.price,
         signature: this.currentUser.fullname,
       };
       this.posformService.update(this.idItem, body)
@@ -371,6 +376,9 @@ export class PostformListComponent implements OnInit {
         time: this.dataItem.time,
         time1: this.dataItem.time1,
         comment: this.dataItem.comment,
+        latitude: this.dataItem.latitude,
+        longitude: this.dataItem.longitude,
+        price: this.dataItem.comment,
       });
     }
     );
