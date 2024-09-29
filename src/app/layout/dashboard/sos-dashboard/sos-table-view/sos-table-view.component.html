@@ -32,10 +32,18 @@
         <tr class="odd">
           <td>{{item.Area}}</td>
           <td>
-            @if (item.Eq < 50) { <span class="badge badge-pill bg-danger">{{item.Eq}} %</span>
+            <!-- @if (item.Eq < 50) { 
+              <span class="badge badge-pill bg-danger">{{item.Eq}} %</span>
               }
               @if (item.Eq >= 50) {
               <span class="badge badge-pill bg-success">{{item.Eq}} %</span>
+              } -->
+              @if (item.Eq >= 95) {
+                <span class="badge badge-pill bg-success" style="font-size: 16px;">{{item.Eq}} %</span>
+              } @else if (item.Eq < 95 && item.Eq >= 80) {
+                <span class="badge badge-pill bg-warning" style="font-size: 16px;">{{item.Eq}} %</span>
+              } @else if (item.Eq < 80) {
+                <span class="badge badge-pill bg-danger" style="font-size: 16px;">{{item.Eq}} %</span>
               }
           </td>
           <td>{{item.Dhl}} %</td>

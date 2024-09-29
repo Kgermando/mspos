@@ -38,10 +38,9 @@ export interface StatusEquipementModel {
 
 
 export interface GoogleMapModel {
-	Lat: number;
-	Lng: number; 
-} 
-
+	Latitude: string;
+	Longitude: string; 
+}   
 export interface PriceSaleModel {
 	Price: string;
 	Count: number;

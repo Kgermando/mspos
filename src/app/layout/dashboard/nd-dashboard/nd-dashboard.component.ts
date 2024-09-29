@@ -146,8 +146,7 @@ export class NdDashboardComponent implements OnInit {
 
   getNDYear(province: string) {
     this.ndService.NdByYear(province).subscribe((res) => {
-      this.ndYearList = res.data; 
-      console.log("res", res.data)
+      this.ndYearList = res.data;  
       this.isLoading = false;
     });
   }
@@ -155,8 +154,7 @@ export class NdDashboardComponent implements OnInit {
 
   getPerformance(province: string, start_date: string, end_date: string) {
     this.ndService.tableView(province, start_date, end_date).subscribe((res) => {
-      this.performanceAreaList = res.data; 
-      console.log("province", province); 
+      this.performanceAreaList = res.data;  
       this.isLoading = false;
     });
   }

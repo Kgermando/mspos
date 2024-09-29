@@ -68,8 +68,9 @@
                             <table matSort (matSortChange)="sortData($event)" class="table" id="contracts-list">
                                 <thead class="thead-light">
                                     <tr>
-                                        <th mat-sort-header="name">Name</th>
                                         <th mat-sort-header="province">Province</th>
+                                        <th mat-sort-header="name">Name</th> 
+                                        <th mat-sort-header="commune">Commune</th>
                                         <th mat-sort-header="sup">Superviseur</th>
                                         <th mat-sort-header="pos">Action</th>
                                     </tr>
@@ -78,14 +79,17 @@
                                     @for (data of dataList; track data) {
                                     <tr class="odd">
                                         <td>
-                                            <a href="javascript:void(0);" class="add-popups">{{ data.name }}</a>
-                                        </td>
-                                        <td>
                                             {{ data.province }} 
                                         </td>
                                         <td>
-                                            {{ data.sup }}  
-                                        </td> 
+                                            <a href="javascript:void(0);" class="add-popups">{{ data.name }}</a>
+                                        </td>
+                                        <td>
+                                           <app-area-commune [commune]="data.commune"></app-area-commune>
+                                        </td>
+                                        <td>
+                                            {{ data.sup }}
+                                        </td>
                                         <td>
                                             <div class="dropdown table-action">
                                                 <a href="javascript:void(0);" class="action-icon"
@@ -163,16 +167,6 @@
         <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
             <div>
                 <div class="row">
-                    <div class="col-md-12">
-                        <div class="mb-3">
-                            <label class="col-form-label" for="text">Name area <span
-                                    class="text-danger">*</span></label>
-                            <input type="text" class="form-control" formControlName="name" required />
-                            <mat-error *ngIf="formGroup.controls['name'].hasError('required')">
-                                Ce champs est obligatoire
-                            </mat-error>
-                        </div>
-                    </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="col-form-label" for="location">Province <span
@@ -188,6 +182,26 @@
                             </mat-error>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="text">Name area <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control" formControlName="name" required />
+                            <mat-error *ngIf="formGroup.controls['name'].hasError('required')">
+                                Ce champs est obligatoire
+                            </mat-error>
+                        </div>
+                    </div> 
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                          <label class="col-form-label" for="reason">Commune </label>
+                          <p-chips
+                            class="input-tags form-control"
+                            [ngModelOptions]="{ standalone: true }"
+                            [(ngModel)]="communeList"
+                          ></p-chips>
+                        </div>
+                      </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="col-form-label" for="location">Superviseur <span
@@ -230,7 +244,7 @@
 <div class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_edit">
 
     <div class="offcanvas-header border-bottom">
-        <h4>Edit ASM</h4>
+        <h4>Edit AREA</h4>
         <button type="button"
             class="btn-close custom-btn-close border p-1 me-0 d-flex align-items-center justify-content-center rounded-circle"
             data-bs-dismiss="offcanvas" aria-label="Close">
@@ -266,6 +280,16 @@
                             </mat-error>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                          <label class="col-form-label" for="reason">Commune </label>
+                          <p-chips
+                            class="input-tags form-control"
+                            [ngModelOptions]="{ standalone: true }"
+                            [(ngModel)]="communeList"
+                          ></p-chips>
+                        </div>
+                      </div>
                     <div class="col-md-12">
                         <div class="mb-3">
                             <label class="col-form-label" for="location">Superviseur <span class="text-danger">*</span></label>

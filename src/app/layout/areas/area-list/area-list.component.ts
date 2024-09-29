@@ -15,6 +15,7 @@ import { ISup } from '../../sups/models/sup.model';
 import { ProvinceService } from '../../province/province.service';
 import { SupService } from '../../sups/sup.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { RemoveAccolade } from '../../../utils/remove-accolade';
 
 @Component({
   selector: 'app-area-list',
@@ -50,6 +51,8 @@ export class AreaListComponent implements OnInit {
 
   provinceList: IProvince[] = [];
   supList: ISup[] = [];
+
+  communeList: string[] = ['Collab'];
 
 
   constructor(
@@ -103,7 +106,7 @@ export class AreaListComponent implements OnInit {
   ngOnInit() {
     this.isLoadingData = true;
     this.formGroup = this._formBuilder.group({
-      name: ['', Validators.required],
+      name: ['', Validators.required], 
       province_id: ['', Validators.required],
       sup_id: ['', Validators.required],
     });
@@ -141,7 +144,7 @@ export class AreaListComponent implements OnInit {
       this.dataSource = new MatTableDataSource<IArea>(this.dataList);
       //  this.dataSource.paginator = this.paginator; 
       this.paginator.length = res.pagination.length;
-      this.dataSource.sort = this.sort;
+      this.dataSource.sort = this.sort; 
 
       this.isLoadingData = false;
     });
@@ -190,6 +193,7 @@ export class AreaListComponent implements OnInit {
         this.isLoading = true;
         var body = {
           name: this.formGroup.value.name,
+          commune: this.communeList,
           province_id: parseInt(this.formGroup.value.province_id),
           sup_id: parseInt(this.formGroup.value.sup_id),
           signature: this.currentUser.fullname,
@@ -218,6 +222,7 @@ export class AreaListComponent implements OnInit {
       this.isLoading = true;
       var body = {
         name: this.formGroup.value.name,
+        commune: this.communeList,
         province_id: parseInt(this.formGroup.value.province_id),
         sup_id: parseInt(this.formGroup.value.sup_id),
         signature: this.currentUser.fullname,

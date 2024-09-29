@@ -1,10 +1,9 @@
- 
 @if (isLoading) {
-  <div class=" text-center d-flex justify-content-center align-items-center ">
-    <div class="spinner-border bs-primary" role="status">
-       <span class="visually-hidden">Loading...</span>
-     </div>
- </div>
+<div class=" text-center d-flex justify-content-center align-items-center ">
+  <div class="spinner-border bs-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
 } @else {
 <div class="table-responsive custom-table">
   <table class="table dataTable" id="deals-project">
@@ -32,11 +31,15 @@
       <tr class="odd">
         <td>{{item.Area}}</td>
         <td>
-          @if (item.Eq < 50) { <span class="badge badge-pill bg-danger">{{item.Eq}} %</span>
-            }
-            @if (item.Eq >= 50) {
-            <span class="badge badge-pill bg-success">{{item.Eq}} %</span>
-            }
+          @if (item.Eq >= 95) { 
+            <span class="badge badge-pill bg-success" style="font-size: 16px;">{{item.Eq}} %</span>
+          }
+          @else if (item.Eq < 95 && item.Eq >= 80) {
+            <span class="badge badge-pill bg-warning" style="font-size: 16px;">{{item.Eq}} %</span>
+            } 
+          @else if (item.Eq < 80) {
+             <span class="badge badge-pill bg-danger" style="font-size: 16px;">{{item.Eq}} %</span>
+          }
         </td>
         <td>{{item.Dhl}} %</td>
         <td>{{item.Ar}} %</td>

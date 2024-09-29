@@ -20,6 +20,7 @@ import { AsmSupCountComponent } from './asm/asm-sup-count/asm-sup-count.componen
 import { SupAsmComponent } from './sups/sup-asm/sup-asm.component';
 import { SupAreComponent } from './areas/sup-are/sup-are.component';
 import { ArePosComponent } from './pos-vente/are-pos/are-pos.component';
+import { AreaCommuneComponent } from './areas/area-commune/area-commune.component';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { ArePosComponent } from './pos-vente/are-pos/are-pos.component';
     SupAsmComponent,
     SupAreComponent,
     ArePosComponent,
+    AreaCommuneComponent,
   ],
   imports: [
     CommonModule,
