@@ -33,11 +33,11 @@ export class AuthService {
 
 
   updateInfo(data: any): Observable<UserModel> {
-    return this.http.put<UserModel>(`${environment.apiUrl}/users/info`, data);
+    return this.http.put<UserModel>(`${environment.apiUrl}/auth/profil/info`, data);
   }
 
   updatePassword(data: any): Observable<UserModel> {
-    return this.http.put<UserModel>(`${environment.apiUrl}/users/password`, data);
+    return this.http.put<UserModel>(`${environment.apiUrl}/auth/change-password`, data);
   }
 
 }
