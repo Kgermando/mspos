@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -24,13 +24,14 @@ import { PriceSaleModel } from '../../models/summary-dashboard.model';
 })
 export class PriceSaleComponent implements OnChanges {
 
+
   @Input() isLoading!: boolean;
   @Input() priceSaleLIst: PriceSaleModel[] = [];
 
   priceSaleData: PriceSaleModel[] = [];
 
   @ViewChild('chart') chart!: ChartComponent;
-  public chartOptions3: Partial<ChartOptions> | any; 
+  public chartOptions3: Partial<ChartOptions> | any;  
  
   ngOnChanges(changes: SimpleChanges): void {
     // this.priceSaleData = this.priceSaleLIst;

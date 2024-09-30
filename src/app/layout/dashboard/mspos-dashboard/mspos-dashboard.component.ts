@@ -1,17 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 import {
   ApexAxisChartSeries,
-  ApexChart,
-  ChartComponent,
+  ApexChart, 
   ApexDataLabels,
   ApexXAxis,
   ApexPlotOptions,
 } from 'ng-apexcharts';
 import { routes } from '../../../shared/routes/routes';
 import { CommonService } from '../../../shared/common/common.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { IProvince } from '../../province/models/province.model';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms'; 
 import { SummaryService } from '../services/summary.service';
 import { BetterModel, PerfVisitModel, PriceSaleModel, SOSPieModel, StatusEquipementModel, SumChartBarModel } from '../models/summary-dashboard.model';
 import { formatDate } from '@angular/common';
@@ -27,7 +25,7 @@ export interface ChartOptions {
 @Component({
   selector: 'app-mspos-dashboard',
   templateUrl: './mspos-dashboard.component.html',
-  styleUrl: './mspos-dashboard.component.scss'
+  styleUrl: './mspos-dashboard.component.scss', 
 })
 export class MsposDashboardComponent implements OnInit {
   public routes =  routes 
@@ -69,6 +67,7 @@ export class MsposDashboardComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private renderer: Renderer2,
     private summaryService: SummaryService, 
+    private changeDetectorRef: ChangeDetectorRef
   ) {
 
     this.common.base.subscribe((base: string) => {
@@ -105,17 +104,20 @@ export class MsposDashboardComponent implements OnInit {
     this.end_date = formatDate(this.dateRange.value.rangeValue[1], 'yyyy-MM-dd', 'en-US');
 
 
-    if (this.start_date && this.end_date) {  
+    if (this.start_date && this.end_date) {
       this.getSOSPie(this.start_date, this.end_date);
-      this.getTrackingVisit('20', this.start_date, this.end_date);
-      this.getSummryChart(this.start_date, this.end_date);
+      this.getTrackingVisit('20', this.start_date, this.end_date); 
       this.getBetterDR(this.start_date, this.end_date);
       this.getBestSup(this.start_date, this.end_date);
+
+      this.getSummryChart(this.start_date, this.end_date);
       this.getStatusEquiment(this.start_date, this.end_date);
       this.getPriceSale(this.start_date, this.end_date);
     }
 
     this.onChanges();
+
+    this.changeDetectorRef.detectChanges(); 
   }
 
   onChanges(): void {
@@ -125,16 +127,15 @@ export class MsposDashboardComponent implements OnInit {
       this.end_date = formatDate(val.rangeValue[1], 'yyyy-MM-dd', 'en-US');
 
       this.getSOSPie(this.start_date, this.end_date);
-      this.getTrackingVisit(days.toString(), this.start_date, this.end_date);
-      this.getSummryChart(this.start_date, this.end_date);
+      this.getTrackingVisit(days.toString(), this.start_date, this.end_date); 
       this.getBetterDR(this.start_date, this.end_date);
       this.getBestSup(this.start_date, this.end_date);
+
+      this.getSummryChart(this.start_date, this.end_date);
       this.getStatusEquiment(this.start_date, this.end_date);
       this.getPriceSale(this.start_date, this.end_date);
     });
   }
-
-
 
 
   getDrCount() {

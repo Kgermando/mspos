@@ -1,14 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { apiResultFormat } from '../../../shared/model/pages.model';
 import { MatTableDataSource } from '@angular/material/table';
-import { PaginationService, pageSelection, tablePageSize } from '../../../shared/custom-pagination/pagination.service';
+import { PaginationService } from '../../../shared/custom-pagination/pagination.service';
 import { Router } from '@angular/router';
 import { MatSort, Sort } from '@angular/material/sort';
 import { routes } from '../../../shared/routes/routes';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserModel } from '../../../auth/models/user.model';
 import { AuthService } from '../../../auth/auth.service';
-import { ToastrService } from 'ngx-toastr'; 
+import { ToastrService } from 'ngx-toastr';
 import { IProvince } from '../../province/models/province.model';
 import { ManagerService } from '../manager.service';
 import { IManager } from '../models/manager.model';
@@ -29,7 +28,8 @@ export class ManagerListComponent implements OnInit {
   pageIndex: number = 0;
   length: number = 0;
 
-  // Table 
+  // Table
+  displayedColumns: string[] = ['name', 'id'];
   dataSource = new MatTableDataSource<IManager>(this.dataList);
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -43,14 +43,13 @@ export class ManagerListComponent implements OnInit {
   formGroup!: FormGroup;
   currentUser!: UserModel;
   isLoading = false;
- 
+
 
   constructor(
-    private pagination: PaginationService,
     private router: Router,
     private _formBuilder: FormBuilder,
     private authService: AuthService,
-    public managerService: ManagerService,  
+    public managerService: ManagerService,
     private toastr: ToastrService
   ) {
   }
@@ -67,7 +66,7 @@ export class ManagerListComponent implements OnInit {
   selectedDatas4: any[] | undefined;
 
   ngAfterViewInit(): void {
-   
+
     this.authService.user().subscribe({
       next: (user) => {
         this.currentUser = user;
@@ -75,7 +74,7 @@ export class ManagerListComponent implements OnInit {
           this.fetchProducts(this.pageIndex, this.pageSize);
         });
         this.fetchProducts(this.pageIndex, this.pageSize);
- 
+
       },
       error: (error) => {
         this.isLoadingData = false;
@@ -85,13 +84,13 @@ export class ManagerListComponent implements OnInit {
     });
   }
 
-   
+
   ngOnInit() {
     this.isLoadingData = true;
-    
+
     this.formGroup = this._formBuilder.group({
       name: ['', Validators.required],
-    }); 
+    });
 
     this.selectedValue1 = [
       { name: 'Mobile App' },
@@ -111,10 +110,10 @@ export class ManagerListComponent implements OnInit {
       { name: 'Meeting' }
     ];
   }
- 
+
 
   onPageChange(event: PageEvent): void {
-    this.isLoadingData = true; 
+    this.isLoadingData = true;
     this.fetchProducts(event.pageIndex, event.pageSize);
   }
 
@@ -128,14 +127,14 @@ export class ManagerListComponent implements OnInit {
       this.dataSource = new MatTableDataSource<IManager>(this.dataList);
       //  this.dataSource.paginator = this.paginator; 
       this.paginator.length = res.pagination.length;
-      this.dataSource.sort = this.sort; 
+      this.dataSource.sort = this.sort;
 
       this.isLoadingData = false;
     });
   }
 
- 
-  
+
+
 
   public sortData(sort: Sort) {
     const data = this.dataList.slice();
@@ -149,6 +148,13 @@ export class ManagerListComponent implements OnInit {
       });
     }
   }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+
   public sidebarPopup = false;
   public sidebarPopup2 = false;
   openSidebarPopup() {
@@ -166,21 +172,21 @@ export class ManagerListComponent implements OnInit {
     }
   }
   initChecked = false;
- 
- 
+
+
   onSubmit() {
     try {
       if (this.formGroup.valid) {
         this.isLoading = true;
-        var body = { 
-          name: this.formGroup.value.name,  
+        var body = {
+          name: this.formGroup.value.name,
           signature: this.currentUser.fullname,
         };
         this.managerService.create(body).subscribe({
           next: (res) => {
             this.isLoading = false;
             this.formGroup.reset();
-            this.toastr.success('Ajouter avec succès!', 'Success!'); 
+            this.toastr.success('Ajouter avec succès!', 'Success!');
           },
           error: (err) => {
             this.isLoading = false;
@@ -193,42 +199,42 @@ export class ManagerListComponent implements OnInit {
       this.isLoading = false;
       console.log(error);
     }
-  } 
+  }
 
   onSubmitUpdate() {
     try {
       this.isLoading = true;
-      var body = { 
-        name: this.formGroup.value.name,  
+      var body = {
+        name: this.formGroup.value.name,
         signature: this.currentUser.fullname,
       };
       this.managerService.update(this.idItem, body)
-      .subscribe({
-        next: () => {
-          this.formGroup.reset();
-          this.toastr.success('Modification enregistré!', 'Success!'); 
-          this.isLoading = false;
-        },
-        error: err => {
-          console.log(err);
-          this.toastr.error('Une erreur s\'est produite!', 'Oupss!');
-          this.isLoading = false;
-        }
-      }); 
+        .subscribe({
+          next: () => {
+            this.formGroup.reset();
+            this.toastr.success('Modification enregistré!', 'Success!');
+            this.isLoading = false;
+          },
+          error: err => {
+            console.log(err);
+            this.toastr.error('Une erreur s\'est produite!', 'Oupss!');
+            this.isLoading = false;
+          }
+        });
     } catch (error) {
       this.isLoading = false;
       console.log(error);
     }
   }
- 
-  findValue(value: number) { 
+
+  findValue(value: number) {
     this.idItem = value;
-    this.managerService.get(this.idItem).subscribe(item => { 
+    this.managerService.get(this.idItem).subscribe(item => {
       this.dataItem = item.data;
-        this.formGroup.patchValue({
-          name: this.dataItem.name,  
-        });
-      }
+      this.formGroup.patchValue({
+        name: this.dataItem.name,
+      });
+    }
     );
     // this.dataList.forEach(item => { 
     //   if (item.name === value) {
@@ -246,21 +252,21 @@ export class ManagerListComponent implements OnInit {
     // });
   }
 
- 
+
 
   delete(): void {
     this.managerService
-    .delete(this.idItem)
-    .subscribe({
-      next: () => {
-        this.toastr.info('Supprimé avec succès!', 'Success!'); 
-      },
-      error: err => {
-        this.toastr.error('Une erreur s\'est produite!', 'Oupss!');
-        console.log(err);
+      .delete(this.idItem)
+      .subscribe({
+        next: () => {
+          this.toastr.info('Supprimé avec succès!', 'Success!');
+        },
+        error: err => {
+          this.toastr.error('Une erreur s\'est produite!', 'Oupss!');
+          console.log(err);
+        }
       }
-    }
-    );
+      );
   }
 
   compareFn(c1: IProvince, c2: IProvince): boolean {

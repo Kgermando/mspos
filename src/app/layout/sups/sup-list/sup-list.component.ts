@@ -32,6 +32,7 @@ export class SupListComponent implements OnInit {
   length: number = 0;
 
   // Table 
+  displayedColumns: string[] = ['name', 'province', 'asm','id'];
   dataSource = new MatTableDataSource<ISup>(this.dataList);
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -143,35 +144,7 @@ export class SupListComponent implements OnInit {
 
       this.isLoadingData = false;
     });
-  }
-
- 
-
-  // private getTableData(pageOption: pageSelection): void {
-  //   this.supService.getAll().subscribe((apiRes: apiResultFormat) => {
-  //     this.tableData = [];
-  //     this.tableDataCopy = [];
-  //     this.serialNumberArray = [];
-  //     this.totalData = apiRes.totalData;
-  //     apiRes.data.map((res: ISup, index: number) => {
-  //       const serialNumber = index + 1;
-  //       if (index >= pageOption.skip && serialNumber <= pageOption.limit) {
-  //         res.ID = serialNumber;
-  //         this.tableData.push(res);
-  //         this.serialNumberArray.push(serialNumber);
-  //         this.tableDataCopy.push(res);
-  //       }
-  //     });
-  //     this.dataSource = new MatTableDataSource<ISup>(this.actualData);
-  //     this.pagination.calculatePageSize.next({
-  //       totalData: this.totalData,
-  //       pageSize: this.pageSize,
-  //       tableData: this.tableData,
-  //       tableDataCopy: this.tableDataCopy,
-  //       serialNumberArray: this.serialNumberArray,
-  //     });
-  //   });
-  // }
+  } 
 
   public sortData(sort: Sort) {
     const data = this.dataList.slice();
@@ -186,13 +159,9 @@ export class SupListComponent implements OnInit {
     }
   }
 
-  public searchData(value: string): void {
-    if (value == '') {
-      this.dataList = this.dataList;
-    } else {
-      this.dataSource.filter = value.trim().toLowerCase();
-      this.dataList = this.dataSource.filteredData;
-    }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   public sidebarPopup = false;

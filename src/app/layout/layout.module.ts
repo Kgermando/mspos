@@ -21,6 +21,8 @@ import { SupAsmComponent } from './sups/sup-asm/sup-asm.component';
 import { SupAreComponent } from './areas/sup-are/sup-are.component';
 import { ArePosComponent } from './pos-vente/are-pos/are-pos.component';
 import { AreaCommuneComponent } from './areas/area-commune/area-commune.component';
+import { ChangePasswordComponent } from './profile/change-password/change-password.component';
+import { EditProfileComponent } from './profile/edit-profile/edit-profile.component';
 
 
 @NgModule({
@@ -42,6 +44,8 @@ import { AreaCommuneComponent } from './areas/area-commune/area-commune.componen
     SupAreComponent,
     ArePosComponent,
     AreaCommuneComponent,
+    ChangePasswordComponent,
+    EditProfileComponent,
   ],
   imports: [
     CommonModule,

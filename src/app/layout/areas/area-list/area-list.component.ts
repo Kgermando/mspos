@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { PaginationService } from '../../../shared/custom-pagination/pagination.service';
+import { MatTableDataSource } from '@angular/material/table'; 
 import { Router } from '@angular/router';
 import { MatSort, Sort } from '@angular/material/sort';
 import { routes } from '../../../shared/routes/routes';
@@ -14,8 +13,7 @@ import { IProvince } from '../../province/models/province.model';
 import { ISup } from '../../sups/models/sup.model';
 import { ProvinceService } from '../../province/province.service';
 import { SupService } from '../../sups/sup.service';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { RemoveAccolade } from '../../../utils/remove-accolade';
+import { MatPaginator, PageEvent } from '@angular/material/paginator'; 
 
 @Component({
   selector: 'app-area-list',
@@ -33,6 +31,7 @@ export class AreaListComponent implements OnInit {
   length: number = 0;
 
   // Table 
+  displayedColumns: string[] = ['province', 'name', 'commune', 'sup', 'id'];
   dataSource = new MatTableDataSource<IArea>(this.dataList);
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -55,8 +54,7 @@ export class AreaListComponent implements OnInit {
   communeList: string[] = ['Collab'];
 
 
-  constructor(
-    private pagination: PaginationService,
+  constructor( 
     private router: Router,
     private _formBuilder: FormBuilder,
     private authService: AuthService,
@@ -165,13 +163,9 @@ export class AreaListComponent implements OnInit {
     }
   }
 
-  public searchData(value: string): void {
-    if (value == '') {
-      this.dataList = this.dataList;
-    } else {
-      this.dataSource.filter = value.trim().toLowerCase();
-      this.dataList = this.dataSource.filteredData;
-    }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
 

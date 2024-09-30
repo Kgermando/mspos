@@ -33,6 +33,7 @@ export class PosVenteListComponent implements OnInit {
   length: number = 0;
 
   // Table 
+  displayedColumns: string[] = ['status', 'province', 'name', 'area', 'shop', 'manager', 'commune', 'avenue', 'quartier', 'reference', 'telephone', 'inputgroupselector', 'eparasol', 'etable', 'ekiosk', 'cparasol', 'ctable', 'ckiosk', 'id'];
   dataSource = new MatTableDataSource<IPos>(this.dataList);
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -163,18 +164,8 @@ export class PosVenteListComponent implements OnInit {
       this.isLoadingData = false;
     });
   }
-  
-  public sidebarPopup = false;
-  public sidebarPopup2 = false;
-  openSidebarPopup() {
-    this.sidebarPopup = !this.sidebarPopup;
-  }
-  openSidebarPopup2() {
-    this.sidebarPopup2 = !this.sidebarPopup2;
-  }
 
-
- public sortData(sort: Sort) {
+  public sortData(sort: Sort) {
     const data = this.dataList.slice();
     if (!sort.active || sort.direction === '') {
       this.dataList = data;
@@ -187,8 +178,20 @@ export class PosVenteListComponent implements OnInit {
     }
   }
 
-  initChecked = false;
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 
+  
+  public sidebarPopup = false;
+  public sidebarPopup2 = false;
+  openSidebarPopup() {
+    this.sidebarPopup = !this.sidebarPopup;
+  }
+  openSidebarPopup2() {
+    this.sidebarPopup2 = !this.sidebarPopup2;
+  } 
 
   onSubmit() {
     try {

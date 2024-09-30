@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './auth/guard/auth.guard';
 
-const routes: Routes = [ 
+const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () =>
@@ -15,6 +16,7 @@ const routes: Routes = [
       import('../app/layout/layout.module').then(
         (m) => m.LayoutModule
       ),
+    canActivate: [AuthGuard]
   },
   {
     path: 'error-pages',
@@ -29,8 +31,8 @@ const routes: Routes = [
   //   redirectTo: 'auth',
   //   pathMatch: 'full',
   // },
-  { path: '', redirectTo: 'auth', pathMatch: 'full'},
-  { path: '**', redirectTo: 'auth', pathMatch: 'full'}
+  { path: '', redirectTo: 'auth', pathMatch: 'full' },
+  { path: '**', redirectTo: 'auth', pathMatch: 'full' }
 ];
 
 @NgModule({

@@ -36,6 +36,7 @@ export class PostformListComponent implements OnInit {
   length: number = 0;
 
   // Table 
+  displayedColumns: string[] = ['eq', 'sold', 'dhl', 'ar', 'sbl', 'pmf', 'pmm', 'ticket', 'mtc', 'ws', 'mast', 'oris', 'elite', 'yes', 'time', 'province_id', 'area_id', 'sup_id', 'pos_id', 'user_id', 'comment', 'id'];
   dataSource = new MatTableDataSource<IPosForm>(this.dataList);
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -192,15 +193,10 @@ export class PostformListComponent implements OnInit {
     }
   }
 
-  public searchData(value: string): void {
-    if (value == '') {
-      this.dataList = this.dataList;
-    } else {
-      this.dataSource.filter = value.trim().toLowerCase();
-      this.dataList = this.dataSource.filteredData;
-    }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-
 
   public sidebarPopup = false;
   public sidebarPopup2 = false;

@@ -1,7 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { apiResultFormat } from '../../../shared/model/pages.model';
+import { Component, OnInit, ViewChild } from '@angular/core'; 
 import { MatTableDataSource } from '@angular/material/table';
-import { PaginationService, pageSelection, tablePageSize } from '../../../shared/custom-pagination/pagination.service';
+import { PaginationService } from '../../../shared/custom-pagination/pagination.service';
 import { Router } from '@angular/router';
 import { MatSort, Sort } from '@angular/material/sort';
 import { routes } from '../../../shared/routes/routes';
@@ -31,6 +30,7 @@ export class AsmListComponent implements OnInit {
   length: number = 0;
 
   // Table 
+  displayedColumns: string[] = ['name', 'province', 'total','id'];
   dataSource = new MatTableDataSource<IAsm>(this.dataList);
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -151,6 +151,11 @@ export class AsmListComponent implements OnInit {
         return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
       });
     }
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   public sidebarPopup = false;

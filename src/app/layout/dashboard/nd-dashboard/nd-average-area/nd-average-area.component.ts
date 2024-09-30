@@ -211,23 +211,22 @@ export class NdAverageAreaComponent implements OnChanges {
         max: 100,
         tickAmount: 5,
       },
-      events: {
-        
-        click(event: any, chartContext: any, opts: any) {
-          console.log(opts.w.globals.labels[opts.seriesIndex]);
-        },
-         
-      }
+      // events: {
+
+      //   click(event: any, chartContext: any, opts: any) {
+      //     console.log(opts.w.globals.labels[opts.seriesIndex]);
+      //   },
+
+      // }
     };
   }
 
-  onChartClick(event: any, opts: any) {
+  selectedCategory!: string;
 
-    // console.log(opts.w.globals.labels[opts.seriesIndex]);
-
-    console.log("opts", opts);
-
- 
+  onChartClicked(event: any) {
+    console.log(event.globals.dataPointIndex)
+    const categoryName = this.chartOptions3.xaxis.categories[event.globals.dataPointIndex];
+    this.selectedCategory = categoryName;
   }
 
 }

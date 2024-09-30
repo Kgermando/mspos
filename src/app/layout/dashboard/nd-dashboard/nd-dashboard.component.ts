@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, Renderer2} from '@angular/core';
 import { routes } from '../../../shared/routes/routes';
 import { ProvinceService } from '../../province/province.service';
 import { AreaService } from '../../areas/area.service';
@@ -14,7 +14,7 @@ import { NDYearModel, TableViewModel } from '../models/nd-dashboard.models';
 @Component({
   selector: 'app-nd-dashboard',
   templateUrl: './nd-dashboard.component.html',
-  styleUrl: './nd-dashboard.component.scss'
+  styleUrl: './nd-dashboard.component.scss', 
 })
 export class NdDashboardComponent implements OnInit {
   public routes = routes;

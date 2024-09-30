@@ -29,6 +29,7 @@ export class ProvinceListComponent implements OnInit {
   length: number = 0;
 
   // Table 
+  displayedColumns: string[] = ['name', 'area', 'pos', 'sup', 'dr','id'];
   dataSource = new MatTableDataSource<IProvince>(this.dataList);
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -142,13 +143,9 @@ export class ProvinceListComponent implements OnInit {
     }
   }
 
-  public searchData(value: string): void {
-    if (value == '') {
-      this.dataList = this.dataList;
-    } else {
-      this.dataSource.filter = value.trim().toLowerCase();
-      this.dataList = this.dataSource.filteredData;
-    }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
 

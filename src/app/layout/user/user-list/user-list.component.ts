@@ -39,6 +39,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
   length: number = 0;
 
   // Table 
+  displayedColumns: string[] = ['fullname', 'title', 'email', 'phone', 'province', 'area', 'sup', 'status', 'id'];
   dataSource = new MatTableDataSource<IUser>(this.dataList);
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -164,7 +165,10 @@ export class UserListComponent implements OnInit, AfterViewInit {
   }
 
 
-
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 
   public sortData(sort: Sort) {
     const data = this.dataList.slice();
@@ -177,17 +181,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
         return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
       });
     }
-  }
-  // public searchData(value: string): void {
-  //   if (value == '') {
-  //     this.ELEMENT_DATA = this.ELEMENT_DATA;
-  //   } else {
-  //     this.dataSource.filter = value.trim().toLowerCase();
-  //     this.ELEMENT_DATA = this.dataSource.filteredData;
-  //   }
-  // }
-
-
+  } 
 
 
   openSidebarPopup1() {
@@ -292,7 +286,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
 
   findValue(value: number) {
     this.idItem = value;
-    this.supService.get(this.idItem).subscribe(item => { 
+    this.usersService.get(this.idItem).subscribe(item => { 
       this.dataItem = item.data;
         this.formGroup.patchValue({
           fullname: this.dataItem.fullname,
@@ -328,7 +322,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
           console.log(err);
         }
       }
-      );
+    );
   }
 
 
