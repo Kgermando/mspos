@@ -18,6 +18,7 @@ import { AreaService } from '../../areas/area.service';
 import { SupService } from '../../sups/sup.service';
 import { IPermission, permissions } from '../../../shared/model/permission.model';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { LogsService } from '../../user-logs/logs.service';
 
 @Component({
   selector: 'app-user-list',
@@ -84,11 +85,11 @@ export class UserListComponent implements OnInit, AfterViewInit {
     private areaService: AreaService,
     private supService: SupService,
     private _formBuilder: FormBuilder,
+    private logActivity: LogsService,
     private toastr: ToastrService
-  ) {
+  ) { }
 
-  }
-  ngAfterViewInit(): void { 
+  ngAfterViewInit(): void {
     this.authService.user().subscribe({
       next: (user) => {
         this.currentUser = user;
@@ -181,7 +182,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
         return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
       });
     }
-  } 
+  }
 
 
   openSidebarPopup1() {
@@ -227,14 +228,28 @@ export class UserListComponent implements OnInit, AfterViewInit {
         };
         this.usersService.create(body).subscribe({
           next: (res) => {
-            this.isLoading = false;
-            this.formGroup.reset();
-            this.toastr.success('Ajouter avec succès!', 'Success!');
-            // this.router.navigate(['/web/actualites/list']);
+            this.logActivity.activity(
+              'Users',
+              this.currentUser.id,
+              'created',
+              'Created new user',
+              this.currentUser.fullname
+            ).subscribe({
+              next: () => {
+                this.isLoading = false;
+                this.formGroup.reset();
+                this.toastr.success('Ajouter avec succès!', 'Success!');
+              },
+              error: (err) => {
+                this.isLoading = false;
+                this.toastr.error(`${err.error.message}`, 'Oupss!');
+                console.log(err);
+              }
+            });
           },
           error: (err) => {
             this.isLoading = false;
-            this.toastr.error('Une erreur s\'est produite!', 'Oupss!');
+            this.toastr.error(`${err.error.message}`, 'Oupss!');
             console.log(err);
           }
         });
@@ -268,9 +283,24 @@ export class UserListComponent implements OnInit, AfterViewInit {
       this.usersService.update(this.idItem, body)
         .subscribe({
           next: () => {
-            this.formGroup.reset();
-            this.toastr.success('Modification enregistré!', 'Success!');
-            this.isLoading = false;
+            this.logActivity.activity(
+              'Users',
+              this.currentUser.id,
+              'updated',
+              'Updated user',
+              this.currentUser.fullname
+            ).subscribe({
+              next: () => {
+                this.formGroup.reset();
+                this.toastr.success('Modification enregistré!', 'Success!');
+                this.isLoading = false;
+              },
+              error: (err) => {
+                this.isLoading = false;
+                this.toastr.error(`${err.error.message}`, 'Oupss!');
+                console.log(err);
+              }
+            });
           },
           error: err => {
             console.log(err);
@@ -286,25 +316,25 @@ export class UserListComponent implements OnInit, AfterViewInit {
 
   findValue(value: number) {
     this.idItem = value;
-    this.usersService.get(this.idItem).subscribe(item => { 
+    this.usersService.get(this.idItem).subscribe(item => {
       this.dataItem = item.data;
-        this.formGroup.patchValue({
-          fullname: this.dataItem.fullname,
-          email: this.dataItem.email,
-          title: this.dataItem.title,
-          phone: this.dataItem.phone,
-          password: this.dataItem.password,
-          province_id: this.dataItem.province_id,
-          area_id: this.dataItem.area_id,
-          sup_id: this.dataItem.sup_id,
-          // pos_id: this.dataItem.pos_id,
-          role: this.dataItem.title, // Role et title c'est la meme chose mais le role cest pour le code source
-          permission: this.dataItem.permission,
-          // image: this.imageUrl,
-          status: this.dataItem.status,
-          is_manager: this.dataItem.is_manager,
-        });
-      }
+      this.formGroup.patchValue({
+        fullname: this.dataItem.fullname,
+        email: this.dataItem.email,
+        title: this.dataItem.title,
+        phone: this.dataItem.phone,
+        password: this.dataItem.password,
+        province_id: this.dataItem.province_id,
+        area_id: this.dataItem.area_id,
+        sup_id: this.dataItem.sup_id,
+        // pos_id: this.dataItem.pos_id,
+        role: this.dataItem.title, // Role et title c'est la meme chose mais le role cest pour le code source
+        permission: this.dataItem.permission,
+        // image: this.imageUrl,
+        status: this.dataItem.status,
+        is_manager: this.dataItem.is_manager,
+      });
+    }
     );
   }
 
@@ -322,7 +352,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
           console.log(err);
         }
       }
-    );
+      );
   }
 
 

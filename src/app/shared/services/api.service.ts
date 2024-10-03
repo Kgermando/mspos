@@ -26,12 +26,8 @@ export abstract class ApiService {
     return this._refreshData$;
   }
  
-  getData(page: number): Observable<ApiResponse> {
-    const params = new HttpParams()
-      .set('page', page.toString())
-      .set('total', '15');
-
-    return this.http.get<ApiResponse>(`${this.endpoint}/all`, { params });
+  getData(): Observable<ApiResponse> { 
+    return this.http.get<ApiResponse>(`${this.endpoint}/all`);
   }
   
   // @Cacheable({ cacheBusterObserver: cacheBuster$ })

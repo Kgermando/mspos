@@ -140,28 +140,40 @@ export class MsposDashboardComponent implements OnInit {
 
   getDrCount() {
     this.summaryService.DrCount().subscribe((res) => {
-      this.drCount = res.data.Count;
+      const dataList = res.data.Count;
+      if (dataList) {
+        this.drCount = dataList;
+      }
       this.isLoading = false;
     });
   }
 
   getPOSCount() {
     this.summaryService.POSCount().subscribe((res) => {
-      this.posCount = res.data.Count;
+      const dataList = res.data.Count;
+      if (dataList) {
+        this.posCount = dataList;
+      }
       this.isLoading = false;
     });
   }
 
   getProvinceCount() {
     this.summaryService.ProvinceCount().subscribe((res) => {
-      this.provinceCount = res.data.Count;
+      const dataList = res.data.Count;
+      if (dataList) {
+        this.provinceCount = dataList;
+      }  
       this.isLoading = false;
     });
   }
 
   getAreaCount() {
     this.summaryService.AreaCount().subscribe((res) => {
-      this.areaCount = res.data.Count;
+      const dataList = res.data.Count;
+      if (dataList) {
+        this.areaCount = dataList;
+      } 
       this.isLoading = false;
     });
   }
@@ -169,49 +181,70 @@ export class MsposDashboardComponent implements OnInit {
 
   getSOSPie(start_date: string, end_date: string) {
     this.summaryService.SOSPie(start_date, end_date).subscribe((res) => {
-      this.sosPieLIst = res.data;
+      const dataList = res.data; 
+      if (dataList) {
+        this.sosPieLIst = dataList;
+      }
       this.isLoading = false;
     });
   }
 
   getTrackingVisit(days: string, start_date: string, end_date: string) {
     this.summaryService.TrackingVisitDR(days, start_date, end_date).subscribe((res) => {
-      this.perfVisitDRList = res.data;  
+      const dataList = res.data; 
+      if (dataList) {
+        this.perfVisitDRList = dataList;
+      } 
       this.isLoading = false;
     });
   }
 
   getSummryChart(start_date: string, end_date: string) {
     this.summaryService.SummaryChartBar(start_date, end_date).subscribe((res) => {
-      this.summaryChartList = res.data;  
+      const dataList = res.data; 
+      if (dataList) {
+        this.summaryChartList = dataList;
+      }
       this.isLoading = false;
     });
   }
 
   getBetterDR(start_date: string, end_date: string) {
     this.summaryService.BetterDR(start_date, end_date).subscribe((res) => {
-      this.betterDRList = res.data;
+      const dataList = res.data; 
+      if (dataList) {
+        this.betterDRList = dataList;
+      }
       this.isLoading = false;
     });
   }
 
   getBestSup(start_date: string, end_date: string) {
     this.summaryService.SOSPie(start_date, end_date).subscribe((res) => {
-      this.betterSupList = res.data;
+      const dataList = res.data; 
+      if (dataList) {
+        this.betterSupList = dataList;
+      }
       this.isLoading = false;
     });
   }
 
   getStatusEquiment(start_date: string, end_date: string) {
     this.summaryService.StatusEquipement(start_date, end_date).subscribe((res) => {
-      this.statusEquipementList = res.data;
+      const dataList = res.data; 
+      if (dataList) {
+        this.statusEquipementList = dataList;
+      }
       this.isLoading = false;
     });
   }
 
   getPriceSale(start_date: string, end_date: string) {
     this.summaryService.PriceSale(start_date, end_date).subscribe((res) => {
-      this.priceSaleLIst = res.data;
+      const dataList = res.data; 
+      if (dataList) {
+        this.priceSaleLIst = dataList;
+      } 
       this.isLoading = false;
     });
   }

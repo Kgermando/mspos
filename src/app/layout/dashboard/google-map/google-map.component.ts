@@ -85,10 +85,13 @@ export class GoogleMapComponent implements OnInit {
 
   getPosFormList(start_date: string, end_date: string) {  
     this.summaryService.GoogleMap(start_date, end_date).subscribe((res) => {
-      this.googleMapList = res.data;
-      console.log("googleMapList", this.googleMapList)
+      const dataList = res.data; 
+      if (dataList) {
+        this.googleMapList = dataList;
+      }
+      // console.log("googleMapList", this.googleMapList)
       this.isLoading = false;
-    });
+    }); 
   }
 
 

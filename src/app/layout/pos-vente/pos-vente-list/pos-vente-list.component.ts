@@ -16,6 +16,7 @@ import { AreaService } from '../../areas/area.service';
 import { PosVenteService } from '../pos-vente.service';
 import { IArea } from '../../areas/models/area.model';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { LogsService } from '../../user-logs/logs.service';
 
 @Component({
   selector: 'app-pos-vente-list',
@@ -55,13 +56,13 @@ export class PosVenteListComponent implements OnInit {
 
 
   constructor(
-    private pagination: PaginationService,
     private router: Router,
     private _formBuilder: FormBuilder,
     private authService: AuthService,
     private posVenteService: PosVenteService,
     public provinceService: ProvinceService,
     private areaService: AreaService,
+    private logActivity: LogsService,
     private toastr: ToastrService
   ) {
   }
@@ -220,9 +221,24 @@ export class PosVenteListComponent implements OnInit {
         };
         this.posVenteService.create(body).subscribe({
           next: (res) => {
-            this.isLoading = false;
-            this.formGroup.reset();
-            this.toastr.success('Ajouter avec succès!', 'Success!');
+            this.logActivity.activity(
+              'POS',
+              this.currentUser.id,
+              'created',
+              'Created new pos',
+              this.currentUser.fullname
+            ).subscribe({
+              next: () => {
+                this.isLoading = false;
+                this.formGroup.reset();
+                this.toastr.success('Ajouter avec succès!', 'Success!'); 
+              },
+              error: (err) => {
+                this.isLoading = false;
+                this.toastr.error(`${err.error.message}`, 'Oupss!');
+                console.log(err);
+              }
+            });  
           },
           error: (err) => {
             this.isLoading = false;
@@ -264,9 +280,24 @@ export class PosVenteListComponent implements OnInit {
       this.posVenteService.update(this.idItem, body)
         .subscribe({
           next: () => {
-            this.formGroup.reset();
-            this.toastr.success('Modification enregistré!', 'Success!');
-            this.isLoading = false;
+            this.logActivity.activity(
+              'POS',
+              this.currentUser.id,
+              'update',
+              'Update Pos',
+              this.currentUser.fullname
+            ).subscribe({
+              next: () => {
+                this.formGroup.reset();
+                this.toastr.success('Modification enregistré!', 'Success!'); 
+                this.isLoading = false;
+              },
+              error: (err) => {
+                this.isLoading = false;
+                this.toastr.error(`${err.error.message}`, 'Oupss!');
+                console.log(err);
+              }
+            });  
           },
           error: err => {
             console.log(err);

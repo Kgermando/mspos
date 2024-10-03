@@ -46,18 +46,32 @@ export class LoginComponent implements OnInit {
       this.authService.login(body).subscribe({
         next: (res) => {
           this.authService.user().subscribe({
-            next: (u) => {
-              console.log("user", u)
-              this.toastr.success(`Bienvenue ${u.fullname}! 🎉`, 'Success!');
-              this.navigate();
+            next: (user) => {
+              // console.log("user", user)
+              this.toastr.success(`Bienvenue ${user.fullname}! 🎉`, 'Success!');
+              // this.navigate();
               // let user: UserModel = u; 
              
-              // let permissions = JSON.stringify(user.permissions);
-              // localStorage.removeItem('permissions');
-              // localStorage.setItem('permissions', permissions);
+              let permission = JSON.stringify(user.permission);
+              localStorage.removeItem('permissions');
+              localStorage.setItem('permission', permission);
+
+              if (user.role == 'Manager') {
+                this.router.navigate([routes.msposDashboard]);
+              } else if (user.role == 'ASM') {
+                this.router.navigate([routes.msposDashboard]);
+              }  else if (user.role == 'Supervisor') {
+                this.router.navigate([routes.msposDashboard]);
+              }  else if (user.role == 'DR') {
+                this.router.navigate([routes.posFormList]);
+              }  else if (user.role == 'Support') {
+                this.router.navigate([routes.userLogsList]);
+              } else {
+                this.router.navigate(['/auth/login']);
+              }
 
               // if (user.status) {
-              //   if (user.permissions[0] === 'Dashboard') { 
+              //   if (user.permission === 'Dashboard') { 
               //     this.router.navigate(['/web/dashboard']);
               //   } else if (user.permissions[0] === 'Actualites') {
               //     this.router.navigate(['/web/actualites/list']);

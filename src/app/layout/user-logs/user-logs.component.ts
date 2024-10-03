@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'; 
 
 @Component({
   selector: 'app-user-logs',
@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrl: './user-logs.component.scss'
 })
 export class UserLogsComponent {
-
+  
 }

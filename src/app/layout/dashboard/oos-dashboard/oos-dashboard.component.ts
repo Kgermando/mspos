@@ -136,7 +136,10 @@ export class OosDashboardComponent implements OnInit {
 
   getAverageArea(province: string, area: string, start_date: string, end_date: string) { 
     this.ndService.tableView(province, start_date, end_date).subscribe((res) => {
-      this.averageAreaData = res.data;
+      const dataList = res.data; 
+      if (dataList) {
+        this.averageAreaData = dataList;
+      } 
       this.averageAreaList  = this.averageAreaData.filter((val) => val.Area == area);
       this.isLoading = false;
     });
@@ -145,7 +148,10 @@ export class OosDashboardComponent implements OnInit {
 
   getNDYear(province: string) {
     this.ndService.NdByYear(province).subscribe((res) => {
-      this.ndYearList = res.data; 
+      const dataList = res.data; 
+      if (dataList) {
+        this.ndYearList = dataList;
+      }  
       this.isLoading = false;
     });
   }
@@ -153,7 +159,10 @@ export class OosDashboardComponent implements OnInit {
 
   getPerformance(province: string, start_date: string, end_date: string) {
     this.ndService.tableView(province, start_date, end_date).subscribe((res) => {
-      this.performanceAreaList = res.data; 
+      const dataList = res.data; 
+      if (dataList) {
+        this.performanceAreaList = dataList;
+      }  
       this.isLoading = false;
     });
   }
@@ -161,7 +170,10 @@ export class OosDashboardComponent implements OnInit {
 
   getTableView(province: string, start_date: string, end_date: string) {
     this.ndService.tableView(province, start_date, end_date).subscribe((res) => {
-      this.tableViewList = res.data; 
+      const dataList = res.data; 
+      if (dataList) {
+        this.tableViewList = dataList;
+      } 
       this.isLoading = false;
     });
   }
