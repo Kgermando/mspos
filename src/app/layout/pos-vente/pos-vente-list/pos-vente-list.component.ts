@@ -283,7 +283,7 @@ export class PosVenteListComponent implements OnInit {
             this.logActivity.activity(
               'POS',
               this.currentUser.id,
-              'update',
+              'updated',
               'Update Pos',
               this.currentUser.fullname
             ).subscribe({

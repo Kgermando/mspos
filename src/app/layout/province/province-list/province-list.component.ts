@@ -214,7 +214,7 @@ export class ProvinceListComponent implements OnInit {
           this.logActivity.activity(
             'Province',
             this.currentUser.id,
-            'update',
+            'updated',
             'Update province',
             this.currentUser.fullname
           ).subscribe({

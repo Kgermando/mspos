@@ -7,6 +7,7 @@ import { Auth } from '../../../auth/classes/auth';
 import { UserModel } from '../../../auth/models/user.model';
 import { AuthService } from '../../../auth/auth.service';
 import { Router } from '@angular/router';
+import { LogsService } from '../../user-logs/logs.service';
 
 @Component({
   selector: 'app-header',
@@ -22,6 +23,7 @@ export class HeaderComponent implements OnInit {
   public routes = routes;
 
   currentUser!: UserModel;
+  isLoading = false;
 
 
   constructor(
@@ -30,6 +32,7 @@ export class HeaderComponent implements OnInit {
     private sidebar: SidebarService,
     private settings: SettingsService,
     private authService: AuthService,
+    private logActivity: LogsService,
   ) {
     this.common.base.subscribe((base: string) => {
       this.base = base;
@@ -50,7 +53,6 @@ export class HeaderComponent implements OnInit {
     this.settings.themeMode.subscribe((res: string) => {
       this.themeMode = res;
     });
-
   }
 
   ngOnInit(): void {
@@ -63,9 +65,23 @@ export class HeaderComponent implements OnInit {
 
 
   logout() {
-    this.authService.logout().subscribe(res => {
-      console.log(res);
-      this.router.navigate(['/auth/login']);
+    this.isLoading = true;
+    this.logActivity.activity(
+      'Auth',
+      this.currentUser.id,
+      'logout',
+      'Logout Auth',
+      this.currentUser.fullname
+    ).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.authService.logout()
+        this.router.navigate(['/auth/login']);
+      },
+      error: (err) => {
+        this.isLoading = false; 
+        console.log(err);
+      }
     });
   }
 

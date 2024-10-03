@@ -12,6 +12,7 @@ import { IProvince } from '../../province/models/province.model';
 import { ManagerService } from '../manager.service';
 import { IManager } from '../models/manager.model';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { LogsService } from '../../user-logs/logs.service';
 
 @Component({
   selector: 'app-manager-list',
@@ -50,6 +51,7 @@ export class ManagerListComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private authService: AuthService,
     public managerService: ManagerService,
+    private logActivity: LogsService,
     private toastr: ToastrService
   ) {
   }
@@ -184,9 +186,24 @@ export class ManagerListComponent implements OnInit {
         };
         this.managerService.create(body).subscribe({
           next: (res) => {
-            this.isLoading = false;
-            this.formGroup.reset();
-            this.toastr.success('Ajouter avec succès!', 'Success!');
+            this.logActivity.activity(
+              'Manager',
+              this.currentUser.id,
+              'created',
+              'Created new Manager',
+              this.currentUser.fullname
+            ).subscribe({
+              next: () => {
+                this.isLoading = false;
+                this.formGroup.reset();
+                this.toastr.success('Ajouter avec succès!', 'Success!'); 
+              },
+              error: (err) => {
+                this.isLoading = false;
+                this.toastr.error(`${err.error.message}`, 'Oupss!');
+                console.log(err);
+              }
+            });  
           },
           error: (err) => {
             this.isLoading = false;
@@ -211,9 +228,24 @@ export class ManagerListComponent implements OnInit {
       this.managerService.update(this.idItem, body)
         .subscribe({
           next: () => {
-            this.formGroup.reset();
-            this.toastr.success('Modification enregistré!', 'Success!');
-            this.isLoading = false;
+            this.logActivity.activity(
+              'Manager',
+              this.currentUser.id,
+              'updated',
+              'Update Manager',
+              this.currentUser.fullname
+            ).subscribe({
+              next: () => {
+                this.formGroup.reset();
+                this.toastr.success('Modification enregistré!', 'Success!'); 
+                this.isLoading = false;
+              },
+              error: (err) => {
+                this.isLoading = false;
+                this.toastr.error(`${err.error.message}`, 'Oupss!');
+                console.log(err);
+              }
+            });  
           },
           error: err => {
             console.log(err);

@@ -235,7 +235,7 @@ export class SupListComponent implements OnInit {
           this.logActivity.activity(
             'Supervisor',
             this.currentUser.id,
-            'update',
+            'updated',
             'Update sup',
             this.currentUser.fullname
           ).subscribe({

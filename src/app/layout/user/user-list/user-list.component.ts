@@ -286,7 +286,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
             this.logActivity.activity(
               'Users',
               this.currentUser.id,
-              'updated',
+              'updated', 
               'Updated user',
               this.currentUser.fullname
             ).subscribe({

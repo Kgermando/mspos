@@ -13,6 +13,7 @@ import { AsmService } from '../asm.service';
 import { IProvince } from '../../province/models/province.model';
 import { ProvinceService } from '../../province/province.service'; 
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { LogsService } from '../../user-logs/logs.service';
 
 @Component({
   selector: 'app-asm-list',
@@ -48,12 +49,12 @@ export class AsmListComponent implements OnInit {
  
 
   constructor(
-    private pagination: PaginationService,
     private router: Router,
     private _formBuilder: FormBuilder,
     private authService: AuthService,
     public asmService: AsmService, 
     private provinceService: ProvinceService,
+    private logActivity: LogsService,
     private toastr: ToastrService
   ) { 
   }
@@ -188,9 +189,24 @@ export class AsmListComponent implements OnInit {
         };
         this.asmService.create(body).subscribe({
           next: (res) => {
-            this.isLoading = false;
-            this.formGroup.reset();
-            this.toastr.success('Ajouter avec succès!', 'Success!'); 
+            this.logActivity.activity(
+              'ASM',
+              this.currentUser.id,
+              'created',
+              'Created new ASM',
+              this.currentUser.fullname
+            ).subscribe({
+              next: () => {
+                this.isLoading = false;
+                this.formGroup.reset();
+                this.toastr.success('Ajouter avec succès!', 'Success!'); 
+              },
+              error: (err) => {
+                this.isLoading = false;
+                this.toastr.error(`${err.error.message}`, 'Oupss!');
+                console.log(err);
+              }
+            });  
           },
           error: (err) => {
             this.isLoading = false;
@@ -216,9 +232,24 @@ export class AsmListComponent implements OnInit {
       this.asmService.update(this.idItem, body)
       .subscribe({
         next: () => {
-          this.formGroup.reset();
-          this.toastr.success('Modification enregistré!', 'Success!'); 
-          this.isLoading = false;
+          this.logActivity.activity(
+            'ASM',
+            this.currentUser.id,
+            'updated',
+            'Update ASM',
+            this.currentUser.fullname
+          ).subscribe({
+            next: () => {
+              this.formGroup.reset();
+              this.toastr.success('Modification enregistré!', 'Success!'); 
+              this.isLoading = false;
+            },
+            error: (err) => {
+              this.isLoading = false;
+              this.toastr.error(`${err.error.message}`, 'Oupss!');
+              console.log(err);
+            }
+          });  
         },
         error: err => {
           console.log(err);
@@ -242,21 +273,6 @@ export class AsmListComponent implements OnInit {
         });
       }
     );
-    // this.dataList.forEach(item => { 
-    //   if (item.name === value) {
-    //     this.idItem = item.ID;
-    //     if (this.idItem) {
-    //       this.asmService.get(this.idItem).subscribe(item => { 
-    //         this.dataItem = item.data;
-    //           this.formGroup.patchValue({
-    //             name: this.dataItem.name, 
-    //             province_id: this.dataItem.province_id,  
-    //           });
-    //         }
-    //       );
-    //     }
-    //   }
-    // });
   }
 
   delete(): void {

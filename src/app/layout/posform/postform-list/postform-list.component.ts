@@ -339,7 +339,7 @@ export class PostformListComponent implements OnInit {
             this.logActivity.activity(
               'PosForm',
               this.currentUser.id,
-              'update',
+              'updated',
               'Update Posform',
               this.currentUser.fullname
             ).subscribe({

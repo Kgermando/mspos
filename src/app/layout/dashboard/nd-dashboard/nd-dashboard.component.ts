@@ -9,6 +9,8 @@ import { NdService } from '../services/nd.service';
 import { formatDate } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NDYearModel, TableViewModel } from '../models/nd-dashboard.models';
+import { AuthService } from '../../../auth/auth.service';
+import { UserModel } from '../../../auth/models/user.model';
 
 
 @Component({
@@ -23,6 +25,7 @@ export class NdDashboardComponent implements OnInit {
   last = '';
 
   isLoading = false;
+  currentUser!: UserModel;
 
   dateRange!: FormGroup;
   start_date!: string;
@@ -53,7 +56,8 @@ export class NdDashboardComponent implements OnInit {
     private renderer: Renderer2,
     private ndService: NdService,
     private provinceService: ProvinceService,
-    private areaService: AreaService
+    private areaService: AreaService,
+    private authService: AuthService,
   ) {
 
     this.common.base.subscribe((base: string) => {
@@ -73,20 +77,38 @@ export class NdDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.provinceService.getProvinceDropdown().subscribe((res) => {
-      this.provinceDropdownList = res.data; 
-      this.areaService.getAreaDropdown().subscribe((r) => {
-        this.areaList = r.data; 
-        if (!this.provinceDropdown) {
-          const dataList = this.provinceDropdownList.filter((v) => v.name == 'Kinshasa'); 
-          const areaArray = this.areaList.filter((v) => v.province_id == dataList[0].id);
-          this.areaListFilter = areaArray.filter((obj, index, self) =>
-            index === self.findIndex((t) => t.name === obj.name) 
-          );
-          this.areaCount = this.areaListFilter.length; // Total Area par province selectionner 
+    this.authService.user().subscribe({
+      next: (user) => {
+        this.currentUser = user;
+        if (this.currentUser.role != 'ASM') {
+          this.provinceService.getProvinceDropdown().subscribe((res) => {
+            this.provinceDropdownList = res.data; 
+            this.areaService.getAreaDropdown().subscribe((r) => {
+              this.areaList = r.data;
+              if (!this.provinceDropdown) {
+                const dataList = this.provinceDropdownList.filter((v) => v.name == 'Kinshasa'); 
+                const areaArray = this.areaList.filter((v) => v.province_id == dataList[0].id);
+                this.areaListFilter = areaArray.filter((obj, index, self) =>
+                  index === self.findIndex((t) => t.name === obj.name) 
+                );
+                this.areaCount = this.areaListFilter.length; // Total Area par province selectionner 
+              }
+            }); 
+          });
         }
-      }); 
+        if (this.currentUser.role != 'ASM') {
+          this.provinceService.get(this.currentUser.province_id).subscribe((res) => {
+            this.provinceDropdown = res.data;
+          });
+        }
+      },
+      error: (error) => { 
+        console.log(error);
+      }
     });
+
+    
+    
   
 
     const date = new Date();
@@ -95,9 +117,9 @@ export class NdDashboardComponent implements OnInit {
     this.rangeDate = [firstDay, lastDay];
 
     this.dateRange = this._formBuilder.group({
-      province: new FormControl('Kinshasa'),
+      province: new FormControl(this.provinceDropdown),
       rangeValue: new FormControl(this.rangeDate),
-      area: new FormControl('Funa'), 
+      area: new FormControl(''), 
     });
     this.start_date = formatDate(this.dateRange.value.rangeValue[0], 'yyyy-MM-dd', 'en-US');
     this.end_date = formatDate(this.dateRange.value.rangeValue[1], 'yyyy-MM-dd', 'en-US');
@@ -110,12 +132,17 @@ export class NdDashboardComponent implements OnInit {
       this.getNDYear(this.dateRange.value.province);
     }
 
+    console.log("province", this.dateRange.value.province)
+
     this.onChanges();
   }
 
   onChanges(): void {
     this.dateRange.valueChanges.subscribe(val => {
-      this.provinceDropdown = val.province;
+      if (this.currentUser.role != 'ASM') {
+        this.provinceDropdown = val.province;
+      }
+      
       this.start_date = formatDate(val.rangeValue[0], 'yyyy-MM-dd', 'en-US');
       this.end_date = formatDate(val.rangeValue[1], 'yyyy-MM-dd', 'en-US');   
       this.area = val.area;

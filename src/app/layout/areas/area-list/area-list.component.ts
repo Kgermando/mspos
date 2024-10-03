@@ -14,6 +14,7 @@ import { ISup } from '../../sups/models/sup.model';
 import { ProvinceService } from '../../province/province.service';
 import { SupService } from '../../sups/sup.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator'; 
+import { LogsService } from '../../user-logs/logs.service';
 
 @Component({
   selector: 'app-area-list',
@@ -61,6 +62,7 @@ export class AreaListComponent implements OnInit {
     private areaService: AreaService,
     private provinceService: ProvinceService,
     private supService: SupService,
+    private logActivity: LogsService,
     private toastr: ToastrService
   ) {
   }
@@ -194,9 +196,24 @@ export class AreaListComponent implements OnInit {
         };
         this.areaService.create(body).subscribe({
           next: (res) => {
-            this.isLoading = false;
-            this.formGroup.reset();
-            this.toastr.success('Ajouter avec succès!', 'Success!');
+            this.logActivity.activity(
+              'AREA',
+              this.currentUser.id,
+              'created',
+              'Created new AREA',
+              this.currentUser.fullname
+            ).subscribe({
+              next: () => {
+                this.isLoading = false;
+                this.formGroup.reset();
+                this.toastr.success('Ajouter avec succès!', 'Success!'); 
+              },
+              error: (err) => {
+                this.isLoading = false;
+                this.toastr.error(`${err.error.message}`, 'Oupss!');
+                console.log(err);
+              }
+            });  
           },
           error: (err) => {
             this.isLoading = false;
@@ -224,9 +241,24 @@ export class AreaListComponent implements OnInit {
       this.areaService.update(this.idItem, body)
         .subscribe({
           next: () => {
-            this.formGroup.reset();
-            this.toastr.success('Modification enregistré!', 'Success!');
-            this.isLoading = false;
+            this.logActivity.activity(
+              'AREA',
+              this.currentUser.id,
+              'updated',
+              'Update AREA',
+              this.currentUser.fullname
+            ).subscribe({
+              next: () => {
+                this.formGroup.reset();
+                this.toastr.success('Modification enregistré!', 'Success!'); 
+                this.isLoading = false;
+              },
+              error: (err) => {
+                this.isLoading = false;
+                this.toastr.error(`${err.error.message}`, 'Oupss!');
+                console.log(err);
+              }
+            });  
           },
           error: err => {
             console.log(err);

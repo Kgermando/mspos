@@ -102,7 +102,7 @@ export class ProfileComponent implements OnInit {
           this.logActivity.activity(
             'User profil',
             this.currentUser.id,
-            'update',
+            'updated',
             'Update user profil',
             this.currentUser.fullname
           ).subscribe({
@@ -144,7 +144,7 @@ export class ProfileComponent implements OnInit {
             this.logActivity.activity(
               'User profil',
               this.currentUser.id,
-              'update',
+              'updated',
               'Change password user profil',
               this.currentUser.fullname
             ).subscribe({
