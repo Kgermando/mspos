@@ -1,5 +1,4 @@
 export const environment = {
     production: false,
-    apiUrl: 'http://localhost:8000/api'
-    // apiUrl: 'https://mspos-api.onrender.com/api'
+    apiUrl: 'http://localhost:8000/api' 
 };
