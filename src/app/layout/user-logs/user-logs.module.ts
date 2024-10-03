@@ -3,15 +3,19 @@ import { CommonModule } from '@angular/common';
 
 import { UserLogsRoutingModule } from './user-logs-routing.module';
 import { UserLogsComponent } from './user-logs.component';
+import { SharedModule } from '../../shared/shared.module';
+import { LogsListComponent } from './logs-list/logs-list.component'; 
 
 
 @NgModule({
   declarations: [
-    UserLogsComponent
+    UserLogsComponent,
+    LogsListComponent, 
   ],
   imports: [
     CommonModule,
-    UserLogsRoutingModule
+    UserLogsRoutingModule,
+    SharedModule,
   ]
 })
 export class UserLogsModule { }

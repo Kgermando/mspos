@@ -37,11 +37,11 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'ares/ares-list',
+        path: 'areas/areas-list',
         component: AreaListComponent,
       },
       {
-        path: 'vente/pos-list',
+        path: 'pos/pos-list',
         component: PosVenteListComponent,
       },
       {
@@ -57,7 +57,7 @@ const routes: Routes = [
         component: ManagerListComponent,
       },
       {
-        path: 'pos',
+        path: 'posforms',
         loadChildren: () =>
           import('./posform/pos.module').then(
             (m) => m.PosModule

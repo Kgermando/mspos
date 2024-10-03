@@ -8,6 +8,7 @@ import { ProvinceService } from '../province/province.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Validators } from 'ngx-editor';
+import { LogsService } from '../user-logs/logs.service';
 
 @Component({
   selector: 'app-profile',
@@ -38,6 +39,7 @@ export class ProfileComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private authService: AuthService,
     private provinceService: ProvinceService,
+    private logActivity: LogsService,
     private toastr: ToastrService
   ) { }
 
@@ -97,9 +99,24 @@ export class ProfileComponent implements OnInit {
       };
       this.authService.updateInfo(body).subscribe({
         next: () => {
-          this.formGroup.reset();
-          this.toastr.success('Modification enregistré!', 'Success!');
-          this.isLoadingEdit = false;
+          this.logActivity.activity(
+            'User profil',
+            this.currentUser.id,
+            'update',
+            'Update user profil',
+            this.currentUser.fullname
+          ).subscribe({
+            next: () => {
+              this.formGroup.reset();
+              this.toastr.success('Modification enregistré!', 'Success!');
+              this.isLoadingEdit = false;
+            },
+            error: (err) => {
+              this.isLoadingEdit = false;
+              this.toastr.error(`${err.error.message}`, 'Oupss!');
+              console.log(err);
+            }
+          });  
         },
         error: err => {
           console.log(err);
@@ -124,10 +141,25 @@ export class ProfileComponent implements OnInit {
       this.authService.updatePassword(body).subscribe({
         next: () => {
           this.authService.logout().subscribe(res => {
-            this.formGroupChangePassword.reset();
-            this.toastr.success('Mot de passe modifié!', 'Success!');
-            this.isLoadingChangePassword = false;
-            this.router.navigate(['/auth/login']);
+            this.logActivity.activity(
+              'User profil',
+              this.currentUser.id,
+              'update',
+              'Change password user profil',
+              this.currentUser.fullname
+            ).subscribe({
+              next: () => {
+                this.formGroupChangePassword.reset();
+                this.toastr.success('Mot de passe modifié!', 'Success!');
+                this.isLoadingChangePassword = false;
+                this.router.navigate(['/auth/login']);
+              },
+              error: (err) => {
+                this.isLoadingChangePassword = false;
+                this.toastr.error(`${err.error.message}`, 'Oupss!');
+                console.log(err);
+              }
+            }); 
           }); 
         },
         error: err => {

@@ -14,6 +14,7 @@ import { SupService } from '../sup.service';
 import { IAsm } from '../../asm/models/asm.model';
 import { AsmService } from '../../asm/asm.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { LogsService } from '../../user-logs/logs.service';
 
 
 @Component({
@@ -49,8 +50,7 @@ export class SupListComponent implements OnInit {
   isLoading = false;
  
   provinceList: IProvince[] = [];
-  asmList: IAsm[] = []; 
-
+  asmList: IAsm[] = [];
 
   constructor( 
     private router: Router,
@@ -59,8 +59,9 @@ export class SupListComponent implements OnInit {
     public supService: SupService, 
     private provinceService: ProvinceService,
     private asmService: AsmService,
+    private logActivity: LogsService,
     private toastr: ToastrService
-  ) { 
+  ) {
   }
   
 
@@ -187,9 +188,24 @@ export class SupListComponent implements OnInit {
         };
         this.supService.create(body).subscribe({
           next: (res) => {
-            this.isLoading = false;
-            this.formGroup.reset();
-            this.toastr.success('Ajouter avec succès!', 'Success!'); 
+            this.logActivity.activity(
+              'Supervisor',
+              this.currentUser.id,
+              'created',
+              'Created new sup',
+              this.currentUser.fullname
+            ).subscribe({
+              next: () => {
+                this.isLoading = false;
+                this.formGroup.reset();
+                this.toastr.success('Ajouter avec succès!', 'Success!'); 
+              },
+              error: (err) => {
+                this.isLoading = false;
+                this.toastr.error(`${err.error.message}`, 'Oupss!');
+                console.log(err);
+              }
+            }); 
           },
           error: (err) => {
             this.isLoading = false;
@@ -216,9 +232,24 @@ export class SupListComponent implements OnInit {
       this.supService.update(this.idItem, body)
       .subscribe({
         next: () => {
-          this.formGroup.reset();
-          this.toastr.success('Modification enregistré!', 'Success!'); 
-          this.isLoading = false;
+          this.logActivity.activity(
+            'Supervisor',
+            this.currentUser.id,
+            'update',
+            'Update sup',
+            this.currentUser.fullname
+          ).subscribe({
+            next: () => {
+              this.formGroup.reset();
+              this.toastr.success('Modification enregistré!', 'Success!'); 
+              this.isLoading = false;
+            },
+            error: (err) => {
+              this.isLoading = false;
+              this.toastr.error(`${err.error.message}`, 'Oupss!');
+              console.log(err);
+            }
+          });  
         },
         error: err => {
           console.log(err);

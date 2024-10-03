@@ -64,16 +64,6 @@ export class routes {
     return this.dashboard + '/google-maps';
   }
 
-  
-
-  // Pos
-  public static get pos(): string {
-    return this.core + '/web/pos';
-  }
-  public static get posForm(): string {
-    return this.pos + '/pos-form-list';
-  }
-
 
   // Users
   public static get user(): string {
@@ -91,14 +81,22 @@ export class routes {
     return this.province + '/province-list';
   }
 
+  // PosForm
+  public static get posform(): string { 
+    return this.core + '/web/posforms';
+  }
+  public static get posFormList(): string {
+    return this.posform + '/pos-form-list';
+  }
+
   // Area
   public static get area(): string {
-    return this.core + '/web/ares/ares-list';
+    return this.core + '/web/areas/areas-list';
   }
 
   // Pos
   public static get posVente(): string {
-    return this.core + '/web/vente/pos-list';
+    return this.core + '/web/pos/pos-list';
   }
 
   // Supervisor
@@ -111,8 +109,8 @@ export class routes {
     return this.core + '/web/asm/asm-list';
   }
 
-   // Managers
-   public static get managerList(): string {
+  // Managers
+  public static get managerList(): string {
     return this.core + '/web/managers/manager-list';
   }
 

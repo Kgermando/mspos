@@ -2,7 +2,7 @@
 import { Component } from '@angular/core';
 import { routes } from '../../../shared/routes/routes';
 import { MenuItem, SubMenu, url } from '../../../shared/model/sidebar.model';
-import {  NavigationStart, Router, Event as RouterEvent } from '@angular/router';
+import { NavigationStart, Router, Event as RouterEvent } from '@angular/router';
 import { SidebarService } from '../../../shared/sidebar/sidebar.service';
 import { DataService } from '../../../shared/data/data.service';
 import { CommonService } from '../../../shared/common/common.service';
@@ -15,7 +15,7 @@ import { Auth } from '../../../auth/classes/auth';
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
 })
-export class SidebarComponent  {
+export class SidebarComponent {
   public routes = routes;
   base = '';
   page = '';
@@ -25,7 +25,7 @@ export class SidebarComponent  {
 
   currentUser!: UserModel;
 
-   
+
   public side_bar_data: any[] = [];
 
   constructor(
@@ -39,12 +39,12 @@ export class SidebarComponent  {
         this.getRoutes(event);
         const splitVal = event.url.split('/');
         this.currentUrl = event.url;
-        this.base = splitVal[1];
-        this.page = splitVal[2];
+        this.base = splitVal[2];
+        this.page = splitVal[3];
       }
     });
     this.getRoutes(this.router);
-    this.side_bar_data = this.data.sidebarData1;
+    // this.side_bar_data = this.data.sidebarData1;
     this.common.base.subscribe((res: string) => {
       this.base = res;
     });
@@ -56,19 +56,32 @@ export class SidebarComponent  {
     });
   }
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     Auth.userEmitter.subscribe(
-        user => {
-          this.currentUser = user; 
+      user => {
+        this.currentUser = user;
+        if (this.currentUser.role == 'Manager') {
+          this.side_bar_data = this.data.sidebarDataManager;
+        } else if (this.currentUser.role == 'ASM') {
+          this.side_bar_data = this.data.sidebarDataASM;
+        } else if (this.currentUser.role == 'Supervisor') {
+          this.side_bar_data = this.data.sidebarDataSup;
+        } else if (this.currentUser.role == 'DR') {
+          this.side_bar_data = this.data.sidebarDataDR;
+        } else if (this.currentUser.role == 'Support') {
+          this.side_bar_data = this.data.sidebarDataSupport;
+        } else {
+          this.side_bar_data = [];
         }
+      }
     );
-}
+  }
 
   private getRoutes(route: url): void {
     const splitVal = route.url.split('/');
     this.currentUrl = route.url;
-    this.base = splitVal[1];
-    this.page = splitVal[2];
+    this.base = splitVal[2];
+    this.page = splitVal[3];
   }
 
   public miniSideBarMouseHover(position: string): void {
@@ -140,5 +153,5 @@ export class SidebarComponent  {
   multiLevelThree() {
     this.multiLevel3 = !this.multiLevel3;
   }
- 
+
 }

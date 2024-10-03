@@ -12,6 +12,7 @@ import { AuthService } from '../../../auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ProvinceList } from '../../../utils/province-list';
+import { LogsService } from '../../user-logs/logs.service';
 
 @Component({
   selector: 'app-province-list',
@@ -34,8 +35,7 @@ export class ProvinceListComponent implements OnInit {
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-
-  public searchDataValue = '';
+ 
 
   // Forms  
   idItem!: number;
@@ -52,6 +52,7 @@ export class ProvinceListComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private authService: AuthService,
     private provinceService: ProvinceService,
+    private logActivity: LogsService,
     private toastr: ToastrService
   ) { 
   }
@@ -168,9 +169,24 @@ export class ProvinceListComponent implements OnInit {
         };
         this.provinceService.create(body).subscribe({
           next: (res) => {
-            this.isLoading = false;
-            this.formGroup.reset();
-            this.toastr.success('Ajouter avec succès!', 'Success!'); 
+            this.logActivity.activity(
+              'Province',
+              this.currentUser.id,
+              'created',
+              'Created new province',
+              this.currentUser.fullname
+            ).subscribe({
+              next: () => {
+                this.isLoading = false;
+                this.formGroup.reset();
+                this.toastr.success('Ajouter avec succès!', 'Success!'); 
+              },
+              error: (err) => {
+                this.isLoading = false;
+                this.toastr.error(`${err.error.message}`, 'Oupss!');
+                console.log(err);
+              }
+            });  
           },
           error: (err) => {
             this.isLoading = false;
@@ -195,9 +211,24 @@ export class ProvinceListComponent implements OnInit {
       this.provinceService.update(this.idItem, body)
       .subscribe({
         next: () => {
-          this.formGroup.reset();
-          this.toastr.success('Modification enregistré!', 'Success!'); 
-          this.isLoading = false;
+          this.logActivity.activity(
+            'Province',
+            this.currentUser.id,
+            'update',
+            'Update province',
+            this.currentUser.fullname
+          ).subscribe({
+            next: () => {
+              this.formGroup.reset();
+              this.toastr.success('Modification enregistré!', 'Success!'); 
+              this.isLoading = false;
+            },
+            error: (err) => {
+              this.isLoading = false;
+              this.toastr.error(`${err.error.message}`, 'Oupss!');
+              console.log(err);
+            }
+          });  
         },
         error: err => {
           console.log(err);

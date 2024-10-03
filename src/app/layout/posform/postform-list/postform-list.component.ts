@@ -18,6 +18,7 @@ import { IPos } from '../../pos-vente/models/pos.model';
 import { generateRandomString } from '../../../utils/generate-random';
 import { PosVenteService } from '../../pos-vente/pos-vente.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { LogsService } from '../../user-logs/logs.service';
  
 
 @Component({
@@ -73,6 +74,7 @@ export class PostformListComponent implements OnInit {
     private authService: AuthService,
     public posformService: PosformService,
     private posService: PosVenteService,
+    private logActivity: LogsService,
     private toastr: ToastrService
   ) {
   }
@@ -255,9 +257,24 @@ export class PostformListComponent implements OnInit {
         };
         this.posformService.create(body).subscribe({
           next: (res) => {
-            this.isLoading = false;
-            this.formGroup.reset();
-            this.toastr.success('Ajouter avec succès!', 'Success!');
+            this.logActivity.activity(
+              'PosForm',
+              this.currentUser.id,
+              'created',
+              'Created new PosForm',
+              this.currentUser.fullname
+            ).subscribe({
+              next: () => {
+                this.isLoading = false;
+                this.formGroup.reset();
+                this.toastr.success('Ajouter avec succès!', 'Success!'); 
+              },
+              error: (err) => {
+                this.isLoading = false;
+                this.toastr.error(`${err.error.message}`, 'Oupss!');
+                console.log(err);
+              }
+            });
           },
           error: (err) => {
             this.isLoading = false;
@@ -319,9 +336,24 @@ export class PostformListComponent implements OnInit {
       this.posformService.update(this.idItem, body)
         .subscribe({
           next: () => {
-            this.formGroup.reset();
-            this.toastr.success('Modification enregistré!', 'Success!');
-            this.isLoading = false;
+            this.logActivity.activity(
+              'PosForm',
+              this.currentUser.id,
+              'update',
+              'Update Posform',
+              this.currentUser.fullname
+            ).subscribe({
+              next: () => {
+                this.formGroup.reset();
+                this.toastr.success('Modification enregistré!', 'Success!'); 
+                this.isLoading = false;
+              },
+              error: (err) => {
+                this.isLoading = false;
+                this.toastr.error(`${err.error.message}`, 'Oupss!');
+                console.log(err);
+              }
+            });  
           },
           error: err => {
             console.log(err);

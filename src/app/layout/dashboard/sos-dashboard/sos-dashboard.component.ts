@@ -10,6 +10,9 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NDYearModel, TableViewModel } from '../models/nd-dashboard.models';
 import { SosService } from '../services/sos.service';
 import { SOSPieChartModel } from '../models/sos-dashboard.models';
+import { AuthService } from '../../../auth/auth.service';
+import { UserModel } from '../../../auth/models/user.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sos-dashboard',
@@ -24,6 +27,7 @@ export class SosDashboardComponent implements OnInit {
   last = '';
 
   isLoading = false;
+  currentUser!: UserModel;
 
   dateRange!: FormGroup;
   start_date!: string;
@@ -47,6 +51,8 @@ export class SosDashboardComponent implements OnInit {
     private common: CommonService,
     private _formBuilder: FormBuilder,
     private renderer: Renderer2,
+    private router: Router,
+    private authService: AuthService,
     private sosService: SosService,
     private provinceService: ProvinceService,
     private areaService: AreaService
@@ -69,6 +75,30 @@ export class SosDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading = true;
+    this.authService.user().subscribe({
+      next: (user) => {
+        this.currentUser = user;
+        if (this.currentUser.role == 'Manager') { 
+          
+        } else if (this.currentUser.role == 'ASM') {
+          
+        } else if (this.currentUser.role == 'Supervisor') {
+          
+        } else if (this.currentUser.role == 'DR') {
+           
+        } else if (this.currentUser.role == 'Support') {
+           
+        } else {
+           
+        }
+
+      },
+      error: (error) => { 
+        this.router.navigate(['/auth/login']);
+        console.log(error);
+      }
+    });
+
     this.provinceService.getProvinceDropdown().subscribe((res) => {
       this.provinceDropdownList = res.data; 
       this.areaService.getAreaDropdown().subscribe((r) => {
@@ -82,7 +112,7 @@ export class SosDashboardComponent implements OnInit {
           this.areaCount = this.areaListFilter.length; // Total Area par province selectionner 
         }
       });
-    });
+    }); 
   
 
     const date = new Date();
@@ -99,7 +129,7 @@ export class SosDashboardComponent implements OnInit {
     this.end_date = formatDate(this.dateRange.value.rangeValue[1], 'yyyy-MM-dd', 'en-US');
 
 
-    if (!this.provinceDropdown && this.start_date && this.end_date) {  
+    if (!this.provinceDropdown && this.start_date && this.end_date) {
       this.getTableView(this.dateRange.value.province,this.start_date, this.end_date); 
       this.getPieChart(this.dateRange.value.province, this.start_date, this.end_date);
       this.getNDYear(this.dateRange.value.province);
@@ -131,21 +161,30 @@ export class SosDashboardComponent implements OnInit {
 
   getPieChart(province: string, start_date: string, end_date: string) {
     this.sosService.SOSPieChart(province, start_date, end_date).subscribe((res) => {
-      this.sosPieLIst = res.data; 
+      const dataList = res.data; 
+      if (dataList) {
+        this.sosPieLIst = dataList;
+      } 
       this.isLoading = false;
     });
   }
 
   getTableView(province: string, start_date: string, end_date: string) {
     this.sosService.SOSTableView(province, start_date, end_date).subscribe((res) => {
-      this.tableViewList = res.data; 
+      const dataList = res.data; 
+      if (dataList) {
+        this.tableViewList = dataList;
+      }  
       this.isLoading = false;
     });
   }
 
   getNDYear(province: string) {
     this.sosService.SOSByYear(province).subscribe((res) => {
-      this.sosYearList = res.data; 
+      const dataList = res.data; 
+      if (dataList) {
+        this.sosYearList = dataList;
+      }
       this.isLoading = false;
     });
   }
