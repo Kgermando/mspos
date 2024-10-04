@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <!-- /Page Header -->
-
+                @if (currentUser) {
                 <div class="card">
                     <div class="card-header">
                         <!-- Search -->
@@ -53,11 +53,15 @@
                                             </ul>
                                         </div>
                                     </div>
+                                    @if(currentUser.permission === 'ALL' ||
+                                    currentUser.permission === 'VAE' ||
+                                    currentUser.permission === 'VA') {
                                     <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="offcanvas"
                                         data-bs-target="#offcanvas_add">
                                         <i class="ti ti-square-rounded-plus me-2"></i>
                                         Add New Province
                                     </a>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -68,69 +72,77 @@
                             <div class="table-responsive custom-table">
                                 <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)"
                                     class="mat-elevation-z2 table">
-    
+
                                     <!-- name Column -->
                                     <ng-container matColumnDef="name">
                                         <th mat-header-cell *matHeaderCellDef> Name </th>
                                         <td mat-cell *matCellDef="let element"> {{element.name}} </td>
                                     </ng-container>
-    
+
                                     <!-- area Column -->
                                     <ng-container matColumnDef="area">
                                         <th mat-header-cell *matHeaderCellDef> Total Area </th>
-                                        <td mat-cell *matCellDef="let element"> 
+                                        <td mat-cell *matCellDef="let element">
                                             <app-area-count [id]="element.id"></app-area-count>
                                         </td>
                                     </ng-container>
-    
+
                                     <!-- pos Column -->
                                     <ng-container matColumnDef="pos">
                                         <th mat-header-cell *matHeaderCellDef> Total POS </th>
-                                        <td mat-cell *matCellDef="let element"> 
+                                        <td mat-cell *matCellDef="let element">
                                             @if (element.id){
-                                                <app-pos-count [id]="element.id"></app-pos-count>
-                                                }    
+                                            <app-pos-count [id]="element.id"></app-pos-count>
+                                            }
                                         </td>
                                     </ng-container>
 
                                     <!-- sup Column -->
                                     <ng-container matColumnDef="sup">
                                         <th mat-header-cell *matHeaderCellDef> Total Sup </th>
-                                        <td mat-cell *matCellDef="let element"> 
+                                        <td mat-cell *matCellDef="let element">
                                             @if (element.id){
-                                                <app-sup-count [id]="element.id"></app-sup-count>
-                                                }
+                                            <app-sup-count [id]="element.id"></app-sup-count>
+                                            }
                                         </td>
                                     </ng-container>
 
                                     <!-- dr Column -->
                                     <ng-container matColumnDef="dr">
                                         <th mat-header-cell *matHeaderCellDef> DR </th>
-                                        <td mat-cell *matCellDef="let element"> 
+                                        <td mat-cell *matCellDef="let element">
                                             @if (element.id) {
-                                                <app-dr-count [id]="element.id"></app-dr-count>
-                                                }
+                                            <app-dr-count [id]="element.id"></app-dr-count>
+                                            }
                                         </td>
                                     </ng-container>
-    
+
                                     <!-- id Column -->
                                     <ng-container matColumnDef="id">
                                         <th mat-header-cell *matHeaderCellDef> Action </th>
                                         <td mat-cell *matCellDef="let element">
+                                            @if(currentUser.permission === 'ALL' ||
+                                            currentUser.permission === 'VAE' ||
+                                            currentUser.permission === 'VED' ||
+                                            currentUser.permission === 'VE') {
                                             <button mat-icon-button (click)="findValue(element.id)"
                                                 data-bs-toggle="offcanvas" data-bs-target="#offcanvas_edit">
                                                 <mat-icon class="text-blue">edit</mat-icon>
                                             </button>
-                                            <button mat-icon-button (click)="findValue(element.id)" data-bs-toggle="modal"
-                                                data-bs-target="#delete_contact">
+                                            }
+                                            @if(currentUser.permission === 'ALL' ||
+                                            currentUser.permission === 'VED') {
+                                            <button mat-icon-button (click)="findValue(element.id)"
+                                                data-bs-toggle="modal" data-bs-target="#delete_contact">
                                                 <mat-icon class="text-danger">delete</mat-icon>
                                             </button>
+                                            }
                                         </td>
                                     </ng-container>
-    
+
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    
+
                                     <!-- Row shown when there is no matching data. -->
                                     <tr class="mat-row" *matNoDataRow>
                                         @if (isLoadingData){
@@ -140,7 +152,8 @@
                                             </div>
                                         </button>
                                         } @else {
-                                        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+                                        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"
+                                        </td>
                                         }
                                     </tr>
                                 </table>
@@ -159,15 +172,16 @@
                             </div>
                             <!-- /Projects List -->
                         </div>
-                        
+
                     </div>
                 </div>
+                }
             </div>
         </div>
     </div>
 </div>
 <!-- /Page Wrapper -->
- 
+
 <!-- Add New Contracts -->
 <div class="offcanvas offcanvas-end offcanvas-large" tabindex="-1" id="offcanvas_add">
 
