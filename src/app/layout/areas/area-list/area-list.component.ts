@@ -52,7 +52,7 @@ export class AreaListComponent implements OnInit {
   provinceList: IProvince[] = [];
   supList: ISup[] = [];
 
-  communeList: string[] = ['Collab'];
+  communeList: string[] = [];
 
 
   constructor( 
@@ -145,6 +145,8 @@ export class AreaListComponent implements OnInit {
       //  this.dataSource.paginator = this.paginator; 
       this.paginator.length = res.pagination.length;
       this.dataSource.sort = this.sort; 
+
+      console.log("datalist", this.dataList)
 
       this.isLoadingData = false;
     });
