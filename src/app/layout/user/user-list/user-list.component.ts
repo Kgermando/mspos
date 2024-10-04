@@ -231,8 +231,8 @@ export class UserListComponent implements OnInit, AfterViewInit {
             this.logActivity.activity(
               'Users',
               this.currentUser.id,
-              'created',
-              'Created new user',
+              'created', 
+              `Created new user ${res.data.id}`,
               this.currentUser.fullname
             ).subscribe({
               next: () => {
@@ -282,12 +282,12 @@ export class UserListComponent implements OnInit, AfterViewInit {
       };
       this.usersService.update(this.idItem, body)
         .subscribe({
-          next: () => {
+          next: (res) => {
             this.logActivity.activity(
               'Users',
               this.currentUser.id,
               'updated', 
-              'Updated user',
+              `Updated user ${res.data.id}`,
               this.currentUser.fullname
             ).subscribe({
               next: () => {
@@ -345,7 +345,25 @@ export class UserListComponent implements OnInit, AfterViewInit {
       .delete(this.idItem)
       .subscribe({
         next: () => {
-          this.toastr.info('Supprimé avec succès!', 'Success!');
+          this.logActivity.activity(
+            'Users',
+            this.currentUser.id,
+            'deleted', 
+            `Delete user ${this.idItem}`,
+            this.currentUser.fullname
+          ).subscribe({
+            next: () => {
+              this.formGroup.reset();
+              this.toastr.info('Supprimé avec succès!', 'Success!');
+              this.isLoading = false;
+            },
+            error: (err) => {
+              this.isLoading = false;
+              this.toastr.error(`${err.error.message}`, 'Oupss!');
+              console.log(err);
+            }
+          });
+         
         },
         error: err => {
           this.toastr.error('Une erreur s\'est produite!', 'Oupss!');

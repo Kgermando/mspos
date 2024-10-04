@@ -172,8 +172,8 @@ export class ProvinceListComponent implements OnInit {
             this.logActivity.activity(
               'Province',
               this.currentUser.id,
-              'created',
-              'Created new province',
+              'created', 
+              `Created new province ${res.data.id}`,
               this.currentUser.fullname
             ).subscribe({
               next: () => {
@@ -210,12 +210,12 @@ export class ProvinceListComponent implements OnInit {
       };
       this.provinceService.update(this.idItem, body)
       .subscribe({
-        next: () => {
+        next: (res) => {
           this.logActivity.activity(
             'Province',
             this.currentUser.id,
-            'updated',
-            'Update province',
+            'updated', 
+            `Updated province ${res.data.id}`,
             this.currentUser.fullname
           ).subscribe({
             next: () => {
@@ -260,7 +260,24 @@ export class ProvinceListComponent implements OnInit {
     .delete(this.idItem)
     .subscribe({
       next: () => {
-        this.toastr.info('Supprimé avec succès!', 'Success!'); 
+        this.logActivity.activity(
+          'Province',
+          this.currentUser.id,
+          'deleted', 
+          `Delete province ${this.idItem}`,
+          this.currentUser.fullname
+        ).subscribe({
+          next: () => {
+            this.formGroup.reset();
+            this.toastr.info('Supprimé avec succès!', 'Success!');
+            this.isLoading = false;
+          },
+          error: (err) => {
+            this.isLoading = false;
+            this.toastr.error(`${err.error.message}`, 'Oupss!');
+            console.log(err);
+          }
+        });
       },
       error: err => {
         this.toastr.error('Une erreur s\'est produite!', 'Oupss!');

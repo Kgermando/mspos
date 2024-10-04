@@ -191,8 +191,8 @@ export class SupListComponent implements OnInit {
             this.logActivity.activity(
               'Supervisor',
               this.currentUser.id,
-              'created',
-              'Created new sup',
+              'created', 
+              `Created new sup ${res.data.id}`,
               this.currentUser.fullname
             ).subscribe({
               next: () => {
@@ -231,12 +231,12 @@ export class SupListComponent implements OnInit {
       };
       this.supService.update(this.idItem, body)
       .subscribe({
-        next: () => {
+        next: (res) => {
           this.logActivity.activity(
             'Supervisor',
             this.currentUser.id,
-            'updated',
-            'Update sup',
+            'updated', 
+            `Updated sup ${res.data.id}`,
             this.currentUser.fullname
           ).subscribe({
             next: () => {
@@ -297,7 +297,24 @@ export class SupListComponent implements OnInit {
     .delete(this.idItem)
     .subscribe({
       next: () => {
-        this.toastr.info('Supprimé avec succès!', 'Success!'); 
+        this.logActivity.activity(
+          'Sup',
+          this.currentUser.id,
+          'deleted', 
+          `Delete sup ${this.idItem}`,
+          this.currentUser.fullname
+        ).subscribe({
+          next: () => {
+            this.formGroup.reset();
+            this.toastr.info('Supprimé avec succès!', 'Success!');
+            this.isLoading = false;
+          },
+          error: (err) => {
+            this.isLoading = false;
+            this.toastr.error(`${err.error.message}`, 'Oupss!');
+            console.log(err);
+          }
+        });
       },
       error: err => {
         this.toastr.error('Une erreur s\'est produite!', 'Oupss!');

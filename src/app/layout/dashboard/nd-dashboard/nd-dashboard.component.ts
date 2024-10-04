@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, Renderer2} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, Renderer2 } from '@angular/core';
 import { routes } from '../../../shared/routes/routes';
 import { ProvinceService } from '../../province/province.service';
 import { AreaService } from '../../areas/area.service';
@@ -16,7 +16,7 @@ import { UserModel } from '../../../auth/models/user.model';
 @Component({
   selector: 'app-nd-dashboard',
   templateUrl: './nd-dashboard.component.html',
-  styleUrl: './nd-dashboard.component.scss', 
+  styleUrl: './nd-dashboard.component.scss',
 })
 export class NdDashboardComponent implements OnInit {
   public routes = routes;
@@ -41,12 +41,12 @@ export class NdDashboardComponent implements OnInit {
   areaCount = 1; // For found length area for divide by ND
 
 
-  tableViewData: TableViewModel[] = [];   
-  tableViewList: TableViewModel[] = [];   
+  tableViewData: TableViewModel[] = [];
+  tableViewList: TableViewModel[] = [];
   averageAreaData: TableViewModel[] = [];
   averageAreaList: TableViewModel[] = [];
-  performanceAreaData: TableViewModel[] = []; 
-  performanceAreaList: TableViewModel[] = []; 
+  performanceAreaData: TableViewModel[] = [];
+  performanceAreaList: TableViewModel[] = [];
   ndYearList: NDYearModel[] = [];
 
 
@@ -82,59 +82,65 @@ export class NdDashboardComponent implements OnInit {
         this.currentUser = user;
         if (this.currentUser.role != 'ASM') {
           this.provinceService.getProvinceDropdown().subscribe((res) => {
-            this.provinceDropdownList = res.data; 
+            this.provinceDropdownList = res.data;
             this.areaService.getAreaDropdown().subscribe((r) => {
               this.areaList = r.data;
               if (!this.provinceDropdown) {
-                const dataList = this.provinceDropdownList.filter((v) => v.name == 'Kinshasa'); 
+                const dataList = this.provinceDropdownList.filter((v) => v.name == 'Kinshasa');
                 const areaArray = this.areaList.filter((v) => v.province_id == dataList[0].id);
                 this.areaListFilter = areaArray.filter((obj, index, self) =>
-                  index === self.findIndex((t) => t.name === obj.name) 
+                  index === self.findIndex((t) => t.name === obj.name)
                 );
                 this.areaCount = this.areaListFilter.length; // Total Area par province selectionner 
               }
-            }); 
+            });
           });
-        }
-        if (this.currentUser.role != 'ASM') {
+        } else if (this.currentUser.role == 'ASM') {
           this.provinceService.get(this.currentUser.province_id).subscribe((res) => {
             this.provinceDropdown = res.data;
           });
         }
+
+
+
+
+        const date = new Date();
+        const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        this.rangeDate = [firstDay, lastDay];
+    
+        this.dateRange = this._formBuilder.group({
+          province: new FormControl(this.provinceDropdown),
+          rangeValue: new FormControl(this.rangeDate),
+          area: new FormControl(''),
+        });
+        this.start_date = formatDate(this.dateRange.value.rangeValue[0], 'yyyy-MM-dd', 'en-US');
+        this.end_date = formatDate(this.dateRange.value.rangeValue[1], 'yyyy-MM-dd', 'en-US');
+    
+        if (this.currentUser.role == 'ASM') {
+          if (this.start_date && this.end_date) {
+            this.getTableView(this.provinceDropdown.name, this.start_date, this.end_date);
+            this.getAverageArea(this.provinceDropdown.name, this.dateRange.value.area, this.start_date, this.end_date);
+            this.getPerformance(this.provinceDropdown.name, this.start_date, this.end_date);
+            this.getNDYear(this.provinceDropdown.name);
+          }
+        } else {
+          if (!this.provinceDropdown && this.start_date && this.end_date) {
+            this.getTableView(this.dateRange.value.province, this.start_date, this.end_date);
+            this.getAverageArea(this.dateRange.value.province, this.dateRange.value.area, this.start_date, this.end_date);
+            this.getPerformance(this.dateRange.value.province, this.start_date, this.end_date);
+            this.getNDYear(this.dateRange.value.province);
+          }
+        }
+
+        this.onChanges();
       },
-      error: (error) => { 
+      error: (error) => {
         console.log(error);
       }
-    });
+    }); 
 
-    
-    
-  
-
-    const date = new Date();
-    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-    this.rangeDate = [firstDay, lastDay];
-
-    this.dateRange = this._formBuilder.group({
-      province: new FormControl(this.provinceDropdown),
-      rangeValue: new FormControl(this.rangeDate),
-      area: new FormControl(''), 
-    });
-    this.start_date = formatDate(this.dateRange.value.rangeValue[0], 'yyyy-MM-dd', 'en-US');
-    this.end_date = formatDate(this.dateRange.value.rangeValue[1], 'yyyy-MM-dd', 'en-US');
-
-
-    if (!this.provinceDropdown && this.start_date && this.end_date) {
-      this.getTableView(this.dateRange.value.province,this.start_date, this.end_date);
-      this.getAverageArea(this.dateRange.value.province, this.dateRange.value.area, this.start_date, this.end_date);
-      this.getPerformance(this.dateRange.value.province, this.start_date, this.end_date);
-      this.getNDYear(this.dateRange.value.province);
-    }
-
-    console.log("province", this.dateRange.value.province)
-
-    this.onChanges();
+   
   }
 
   onChanges(): void {
@@ -142,11 +148,11 @@ export class NdDashboardComponent implements OnInit {
       if (this.currentUser.role != 'ASM') {
         this.provinceDropdown = val.province;
       }
-      
+     
       this.start_date = formatDate(val.rangeValue[0], 'yyyy-MM-dd', 'en-US');
-      this.end_date = formatDate(val.rangeValue[1], 'yyyy-MM-dd', 'en-US');   
+      this.end_date = formatDate(val.rangeValue[1], 'yyyy-MM-dd', 'en-US');
       this.area = val.area;
- 
+
 
       const areaArray = this.areaList.filter((v) => v.province_id == this.provinceDropdown.id);
       this.areaListFilter = areaArray.filter((obj, index, self) =>
@@ -160,16 +166,16 @@ export class NdDashboardComponent implements OnInit {
       this.getNDYear(this.provinceDropdown.name);
     });
   }
- 
 
-  getAverageArea(province: string, area: string, start_date: string, end_date: string) {  
+
+  getAverageArea(province: string, area: string, start_date: string, end_date: string) {
     this.ndService.tableView(province, start_date, end_date).subscribe((res) => {
-      const dataList = res.data; 
+      const dataList = res.data;
       if (dataList) {
         this.averageAreaData = dataList;
       }
       this.averageAreaList = this.averageAreaData.filter((val) => val.Area == area);
-     
+
       this.isLoading = false;
     });
   }
@@ -177,7 +183,7 @@ export class NdDashboardComponent implements OnInit {
 
   getNDYear(province: string) {
     this.ndService.NdByYear(province).subscribe((res) => {
-      const dataList = res.data; 
+      const dataList = res.data;
       if (dataList) {
         this.ndYearList = dataList;
       }
@@ -188,10 +194,10 @@ export class NdDashboardComponent implements OnInit {
 
   getPerformance(province: string, start_date: string, end_date: string) {
     this.ndService.tableView(province, start_date, end_date).subscribe((res) => {
-      const dataList = res.data; 
+      const dataList = res.data;
       if (dataList) {
         this.performanceAreaList = dataList;
-      } 
+      }
       this.isLoading = false;
     });
   }
@@ -199,7 +205,7 @@ export class NdDashboardComponent implements OnInit {
 
   getTableView(province: string, start_date: string, end_date: string) {
     this.ndService.tableView(province, start_date, end_date).subscribe((res) => {
-      const dataList = res.data; 
+      const dataList = res.data;
       if (dataList) {
         this.tableViewList = dataList;
       }
@@ -207,6 +213,6 @@ export class NdDashboardComponent implements OnInit {
     });
   }
 
- 
+
 
 }

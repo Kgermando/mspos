@@ -224,8 +224,8 @@ export class PosVenteListComponent implements OnInit {
             this.logActivity.activity(
               'POS',
               this.currentUser.id,
-              'created',
-              'Created new pos',
+              'created', 
+              `Created new pos ${res.data.id}`,
               this.currentUser.fullname
             ).subscribe({
               next: () => {
@@ -279,12 +279,12 @@ export class PosVenteListComponent implements OnInit {
       };
       this.posVenteService.update(this.idItem, body)
         .subscribe({
-          next: () => {
+          next: (res) => {
             this.logActivity.activity(
               'POS',
               this.currentUser.id,
-              'updated',
-              'Update Pos',
+              'updated', 
+              `Updated Pos ${res.data.id}`,
               this.currentUser.fullname
             ).subscribe({
               next: () => {
@@ -375,7 +375,24 @@ export class PosVenteListComponent implements OnInit {
       .delete(this.idItem)
       .subscribe({
         next: () => {
-          this.toastr.info('Supprimé avec succès!', 'Success!');
+          this.logActivity.activity(
+            'POS',
+            this.currentUser.id,
+            'deleted', 
+            `Delete pos ${this.idItem}`,
+            this.currentUser.fullname
+          ).subscribe({
+            next: () => {
+              this.formGroup.reset();
+              this.toastr.info('Supprimé avec succès!', 'Success!');
+              this.isLoading = false;
+            },
+            error: (err) => {
+              this.isLoading = false;
+              this.toastr.error(`${err.error.message}`, 'Oupss!');
+              console.log(err);
+            }
+          });
         },
         error: err => {
           this.toastr.error('Une erreur s\'est produite!', 'Oupss!');
