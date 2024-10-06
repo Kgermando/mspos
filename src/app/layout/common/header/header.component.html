@@ -4,11 +4,11 @@
 
     <!-- Logo -->
     <div class="header-left active">
-        <a [routerLink]="routes.dealsDashboard" class="logo logo-normal">
+        <a [routerLink]="routes.msposDashboard" class="logo logo-normal">
             <img src="img/logo.png" alt="Logo">
             <img src="img/white-logo.svg" class="white-logo" alt="Logo">
         </a>
-        <a [routerLink]="routes.dealsDashboard" class="logo-small">
+        <a [routerLink]="routes.msposDashboard" class="logo-small">
             <img src="img/logo-small.svg" alt="Logo">
         </a>
         <a id="toggle_btn" href="javascript:void(0);" (click)="toggleSidebar()">
@@ -60,179 +60,13 @@
                                 (keydown.space)="changeThemeMode('dark_mode')" tabindex="0"></i>
                         </a>
 
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a href="javascript:void(0);" class="btn btn-header-list" data-bs-toggle="dropdown">
-                            <i class="ti ti-layout-grid-add"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end menus-info">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <ul class="menu-list">
-                                        <li>
-                                            <a [routerLink]="routes.contactList">
-                                                <div class="menu-details">
-                                                    <span class="menu-list-icon bg-violet">
-                                                        <i class="ti ti-user-up"></i>
-                                                    </span>
-                                                    <div class="menu-details-content">
-                                                        <p>Contacts</p>
-                                                        <span>Add New Contact</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a [routerLink]="routes.pipelineList">
-                                                <div class="menu-details">
-                                                    <span class="menu-list-icon bg-green">
-                                                        <i class="ti ti-timeline-event-exclamation"></i>
-                                                    </span>
-                                                    <div class="menu-details-content">
-                                                        <p>Pipline</p>
-                                                        <span>Add New Pipline</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a [routerLink]="routes.activitiesList">
-                                                <div class="menu-details">
-                                                    <span class="menu-list-icon bg-pink">
-                                                        <i class="ti ti-bounce-right"></i>
-                                                    </span>
-                                                    <div class="menu-details-content">
-                                                        <p>Activities</p>
-                                                        <span>Add New Activity</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a [routerLink]="routes.analyticsList">
-                                                <div class="menu-details">
-                                                    <span class="menu-list-icon bg-info">
-                                                        <i class="ti ti-analyze"></i>
-                                                    </span>
-                                                    <div class="menu-details-content">
-                                                        <p>Analytics</p>
-                                                        <span>Shows All Information</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a [routerLink]="routes.projectLists">
-                                                <div class="menu-details">
-                                                    <span class="menu-list-icon bg-danger">
-                                                        <i class="ti ti-atom-2"></i>
-                                                    </span>
-                                                    <div class="menu-details-content">
-                                                        <p>Projects</p>
-                                                        <span>Add New Project</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-6">
-                                    <ul class="menu-list">
-                                        <li>
-                                            <a [routerLink]="routes.deals">
-                                                <div class="menu-details">
-                                                    <span class="menu-list-icon bg-info">
-                                                        <i class="ti ti-medal"></i>
-                                                    </span>
-                                                    <div class="menu-details-content">
-                                                        <p>Deals</p>
-                                                        <span>Add New Deals</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a [routerLink]="routes.leads">
-                                                <div class="menu-details">
-                                                    <span class="menu-list-icon bg-secondary">
-                                                        <i class="ti ti-chart-arcs"></i>
-                                                    </span>
-                                                    <div class="menu-details-content">
-                                                        <p>Leads</p>
-                                                        <span>Add New Leads</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a [routerLink]="routes.companiesList">
-                                                <div class="menu-details">
-                                                    <span class="menu-list-icon bg-tertiary">
-                                                        <i class="ti ti-building-community"></i>
-                                                    </span>
-                                                    <div class="menu-details-content">
-                                                        <p>Company</p>
-                                                        <span>Add New Company</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a [routerLink]="routes.allTask">
-                                                <div class="menu-details">
-                                                    <span class="menu-list-icon bg-success">
-                                                        <i class="ti ti-list-check"></i>
-                                                    </span>
-                                                    <div class="menu-details-content">
-                                                        <p>Tasks</p>
-                                                        <span>Add New Task</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a [routerLink]="routes.compaignList">
-                                                <div class="menu-details">
-                                                    <span class="menu-list-icon bg-purple">
-                                                        <i class="ti ti-brand-campaignmonitor"></i>
-                                                    </span>
-                                                    <div class="menu-details-content">
-                                                        <p>Campaign</p>
-                                                        <span>Add New Campaign</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a [routerLink]="routes.faq" class="btn btn-help">
-                            <i class="ti ti-help-hexagon"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a [routerLink]="routes.leadReport" class="btn btn-chart-pie">
-                            <i class="ti ti-chart-pie"></i>
-                        </a>
-                    </li>
+                    </li> 
                 </ul>
             </li>
             <!-- /Nav List -->
 
-            <!-- Email -->
-            <li class="nav-item nav-item-email nav-item-box">
-                <a [routerLink]="routes.email">
-                    <i class="ti ti-message-circle-exclamation"></i>
-                    <span class="badge rounded-pill">14</span>
-                </a>
-            </li>
-            <!-- /Email -->
-
             <!-- Notifications -->
-            <li class="nav-item dropdown nav-item-box">
+            <!-- <li class="nav-item dropdown nav-item-box">
                 <a href="javascript:void(0);" class="nav-link" data-bs-toggle="dropdown">
                     <i class="ti ti-bell"></i>
                     <span class="badge rounded-pill">13</span>
@@ -304,7 +138,7 @@
                         <a href="javascript:void(0);" class="clear-link">Clear all</a>
                     </div>
                 </div>
-            </li>
+            </li> -->
             <!-- /Notifications -->
 
             <!-- Profile Dropdown -->
