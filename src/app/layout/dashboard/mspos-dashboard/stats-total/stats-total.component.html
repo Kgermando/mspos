@@ -7,15 +7,18 @@
         </span>
         <p>DR</p>
       </div>
-      <h2> @if (isLoading) {
-        <div class=" text-center d-flex justify-content-center align-items-center ">
-          <div class="spinner-border bs-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-        </div>
-        } @else {
-        {{ drCount }}
-        }
+      <h2>
+        <a routerLink="/web/users">
+          @if (isLoading) {
+            <div class=" text-center d-flex justify-content-center align-items-center ">
+              <div class="spinner-border bs-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+            } @else {
+            {{ drCount }}
+            }
+        </a>
       </h2>
     </div>
   </div>
@@ -27,16 +30,18 @@
         </span>
         <p>POS</p>
       </div>
-      <h2>@if (isLoading) {
-        <div class=" text-center d-flex justify-content-center align-items-center ">
-          <div class="spinner-border bs-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-        </div>
-        } @else {
-        {{ posCount }}
-        }
-
+      <h2>
+        <a routerLink="/web/pos/pos-list">
+          @if (isLoading) {
+            <div class=" text-center d-flex justify-content-center align-items-center ">
+              <div class="spinner-border bs-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+            } @else {
+            {{ posCount }}
+            }
+        </a> 
       </h2>
     </div>
   </div>
@@ -48,16 +53,18 @@
         </span>
         <p>Province</p>
       </div>
-      <h2>@if (isLoading) {
-        <div class=" text-center d-flex justify-content-center align-items-center ">
-          <div class="spinner-border bs-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-        </div>
-        } @else {
-        {{ provinceCount }}
-        }
-
+      <h2>
+        <a routerLink="/web/provinces">
+          @if (isLoading) {
+            <div class=" text-center d-flex justify-content-center align-items-center ">
+              <div class="spinner-border bs-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+            } @else {
+            {{ provinceCount }}
+            }
+        </a>  
       </h2>
     </div>
   </div>
@@ -70,15 +77,17 @@
         <p>Areas</p>
       </div>
       <h2>
-        @if (isLoading) {
-        <div class=" text-center d-flex justify-content-center align-items-center ">
-          <div class="spinner-border bs-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-        </div>
-        } @else {
-        {{ areaCount }}
-        }
+        <a routerLink="/web/areas/areas-list">
+          @if (isLoading) {
+            <div class=" text-center d-flex justify-content-center align-items-center ">
+              <div class="spinner-border bs-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+            } @else {
+            {{ areaCount }}
+            }
+        </a> 
       </h2>
     </div>
   </div>

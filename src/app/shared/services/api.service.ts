@@ -41,6 +41,17 @@ export abstract class ApiService {
     const params = { page_size: pageSize, page_number: pageNumber };
     return this.http.get<any>(`${this.endpoint}/all/paginate/${id}`, { params });
   }
+
+  getPaginatedByProvinceId(id: number, pageSize: number, pageNumber: number): Observable<any> {
+    const params = { page_size: pageSize, page_number: pageNumber };
+    return this.http.get<any>(`${this.endpoint}/all/paginate/province/${id}`, { params });
+  }
+
+  getPaginatedBySupId(id: number, pageSize: number, pageNumber: number): Observable<any> {
+    const params = { page_size: pageSize, page_number: pageNumber };
+    return this.http.get<any>(`${this.endpoint}/all/paginate/sup/${id}`, { params });
+  }
+ 
  
   // @Cacheable({ cacheBusterObserver: cacheBuster$ })
   getAll(): Observable<any> {

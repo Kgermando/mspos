@@ -9,6 +9,7 @@ import { PosCountComponent } from './pos-count/pos-count.component';
 import { AreaCountComponent } from './area-count/area-count.component';
 import { SupCountComponent } from './sup-count/sup-count.component';
 import { DrCountComponent } from './dr-count/dr-count.component';
+import { ProvincePosformComponent } from './province-posform/province-posform.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { DrCountComponent } from './dr-count/dr-count.component';
     PosCountComponent,
     AreaCountComponent,
     SupCountComponent,
-    DrCountComponent
+    DrCountComponent,
+    ProvincePosformComponent
   ],
   imports: [
     CommonModule,

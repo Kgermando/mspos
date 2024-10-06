@@ -7,7 +7,7 @@ export interface IArea {
     name: string;
     commune: string;
     province_id: number;
-    sup_id: number;
+    sup_id: number; 
     pos: IPos[];
     signature: string; 
     CreatedAt: Date;

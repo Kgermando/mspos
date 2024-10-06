@@ -128,7 +128,7 @@ export class ManagerListComponent implements OnInit {
       this.length = res.pagination.length;
       this.dataSource = new MatTableDataSource<IManager>(this.dataList);
       //  this.dataSource.paginator = this.paginator; 
-      this.paginator.length = res.pagination.length;
+      // this.paginator.length = res.pagination.length;
       this.dataSource.sort = this.sort;
 
       this.isLoadingData = false;
@@ -190,7 +190,7 @@ export class ManagerListComponent implements OnInit {
               'Manager',
               this.currentUser.id,
               'created',
-              `Created new Manager ${res.data.id}`,
+              `Created new Manager id: ${res.data.ID}`,
               this.currentUser.fullname
             ).subscribe({
               next: () => {
@@ -232,7 +232,7 @@ export class ManagerListComponent implements OnInit {
               'Manager',
               this.currentUser.id,
               'updated', 
-              `Updated Manager ${res.data.id}`,
+              `Updated Manager id: ${res.data.ID}`,
               this.currentUser.fullname
             ).subscribe({
               next: () => {
@@ -280,7 +280,7 @@ export class ManagerListComponent implements OnInit {
             'Manager',
             this.currentUser.id,
             'deleted', 
-            `Delete Manager ${this.idItem}`,
+            `Delete Manager id: ${this.idItem}`,
             this.currentUser.fullname
           ).subscribe({
             next: () => {

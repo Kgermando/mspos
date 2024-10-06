@@ -84,9 +84,9 @@ export class PosVenteListComponent implements OnInit {
       next: (user) => {
         this.currentUser = user;
         this.posVenteService.refreshDataList$.subscribe(() => {
-          this.fetchProducts(this.pageIndex, this.pageSize);
+          this.fetchProducts(this.currentUser, this.pageIndex, this.pageSize);
         });
-        this.fetchProducts(this.pageIndex, this.pageSize);
+        this.fetchProducts(this.currentUser, this.pageIndex, this.pageSize);
 
         this.provinceService.getAll().subscribe(res => {
           this.provinceList = res.data;
@@ -149,21 +149,67 @@ export class PosVenteListComponent implements OnInit {
 
   onPageChange(event: PageEvent): void {
     this.isLoadingData = true;
-    this.fetchProducts(event.pageIndex, event.pageSize);
+    this.fetchProducts(this.currentUser, event.pageIndex, event.pageSize);
   }
 
-  fetchProducts(pageIndex: number, pageSize: number) {
-    this.posVenteService.getPaginated(pageIndex, pageSize).subscribe(res => {
-      this.dataList = res.data;
-      this.totalItems = res.pagination.total_pages;
-      this.length = res.pagination.length;
-      this.dataSource = new MatTableDataSource<IPos>(this.dataList);
-      //  this.dataSource.paginator = this.paginator; 
-      this.paginator.length = res.pagination.length;
-      this.dataSource.sort = this.sort;
+  fetchProducts(currentUser: UserModel, pageIndex: number, pageSize: number) {
+    if (currentUser.role == 'Manager') {
+      this.posVenteService.getPaginated(pageIndex, pageSize).subscribe(res => {
+        this.dataList = res.data;
+        this.totalItems = res.pagination.total_pages;
+        this.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<IPos>(this.dataList); 
+        // this.paginator.length = res.pagination.length;
+        this.dataSource.sort = this.sort;
+  
+        this.isLoadingData = false;
+      });
 
-      this.isLoadingData = false;
-    });
+    } else if (currentUser.role == 'ASM') {
+      this.posVenteService.getPaginatedByProvinceId(currentUser.province_id, pageIndex, pageSize).subscribe(res => {
+        this.dataList = res.data;
+        this.totalItems = res.pagination.total_pages;
+        this.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<IPos>(this.dataList); 
+        // this.paginator.length = res.pagination.length;
+        this.dataSource.sort = this.sort;
+  
+        this.isLoadingData = false;
+      });
+    } else if (currentUser.role == 'Supervisor') {
+      this.posVenteService.getPaginatedBySupId(currentUser.area_id, pageIndex, pageSize).subscribe(res => {
+        this.dataList = res.data;
+        this.totalItems = res.pagination.total_pages;
+        this.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<IPos>(this.dataList); 
+        // this.paginator.length = res.pagination.length;
+        this.dataSource.sort = this.sort;
+  
+        this.isLoadingData = false;
+      });
+    }  else if (currentUser.role == 'DR') {
+      this.posVenteService.getPaginatedById(currentUser.id, pageIndex, pageSize).subscribe(res => {
+        this.dataList = res.data;
+        this.totalItems = res.pagination.total_pages;
+        this.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<IPos>(this.dataList); 
+        // this.paginator.length = res.pagination.length;
+        this.dataSource.sort = this.sort;
+  
+        this.isLoadingData = false;
+      });
+    } else {
+      this.posVenteService.getPaginated(pageIndex, pageSize).subscribe(res => {
+        this.dataList = res.data;
+        this.totalItems = res.pagination.total_pages;
+        this.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<IPos>(this.dataList); 
+        // this.paginator.length = res.pagination.length;
+        this.dataSource.sort = this.sort;
+  
+        this.isLoadingData = false;
+      });
+    } 
   }
 
   public sortData(sort: Sort) {
@@ -225,7 +271,7 @@ export class PosVenteListComponent implements OnInit {
               'POS',
               this.currentUser.id,
               'created', 
-              `Created new pos ${res.data.id}`,
+              `Created new pos id: ${res.data.ID}`,
               this.currentUser.fullname
             ).subscribe({
               next: () => {
@@ -284,7 +330,7 @@ export class PosVenteListComponent implements OnInit {
               'POS',
               this.currentUser.id,
               'updated', 
-              `Updated Pos ${res.data.id}`,
+              `Updated Pos id: ${res.data.ID}`,
               this.currentUser.fullname
             ).subscribe({
               next: () => {
@@ -335,39 +381,7 @@ export class PosVenteListComponent implements OnInit {
         ckiosk: this.dataItem.ckiosk,
         status: this.dataItem.status,
       });
-    }
-    );
-    // this.actualData.forEach(item => {
-    //   if (item.name === value) {
-    //     this.idItem = item.ID;
-    //     if (this.idItem) {
-    //       this.posVenteService.get(this.idItem).subscribe(item => {
-    //         this.dataItem = item.data;
-    //         this.formGroup.patchValue({
-    //           name: this.dataItem.name,
-    //           province_id: this.dataItem.province_id,
-    //           area_id: this.dataItem.area_id,
-    //           shop: this.dataItem.shop,
-    //           manager: this.dataItem.manager,
-    //           commune: this.dataItem.commune,
-    //           avenue: this.dataItem.avenue,
-    //           quartier: this.dataItem.quartier,
-    //           reference: this.dataItem.reference,
-    //           telephone: this.dataItem.telephone,
-    //           eparasol: this.dataItem.eparasol,
-    //           etable: this.dataItem.etable,
-    //           ekiosk: this.dataItem.ekiosk,
-    //           inputgroupselector: this.dataItem.inputgroupselector,
-    //           cparasol: this.dataItem.cparasol,
-    //           ctable: this.dataItem.ctable,
-    //           ckiosk: this.dataItem.ckiosk,
-    //           status: this.dataItem.status,
-    //         });
-    //       }
-    //       );
-    //     }
-    //   }
-    // });
+    }); 
   }
 
   delete(): void {
@@ -379,7 +393,7 @@ export class PosVenteListComponent implements OnInit {
             'POS',
             this.currentUser.id,
             'deleted', 
-            `Delete pos ${this.idItem}`,
+            `Delete pos id: ${this.idItem}`,
             this.currentUser.fullname
           ).subscribe({
             next: () => {

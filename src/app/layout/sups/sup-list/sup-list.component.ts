@@ -81,9 +81,9 @@ export class SupListComponent implements OnInit {
       next: (user) => {
         this.currentUser = user;
         this.supService.refreshDataList$.subscribe(() => {
-          this.fetchProducts(this.pageIndex, this.pageSize);
+          this.fetchProducts(this.currentUser, this.pageIndex, this.pageSize);
         });
-        this.fetchProducts(this.pageIndex, this.pageSize);
+        this.fetchProducts(this.currentUser, this.pageIndex, this.pageSize);
 
         this.provinceService.getAll().subscribe(res => {
           this.provinceList = res.data;
@@ -130,21 +130,46 @@ export class SupListComponent implements OnInit {
 
   onPageChange(event: PageEvent): void {
     this.isLoadingData = true; 
-    this.fetchProducts(event.pageIndex, event.pageSize);
+    this.fetchProducts(this.currentUser ,event.pageIndex, event.pageSize);
   } 
 
-  fetchProducts(pageIndex: number, pageSize: number) {
-    this.supService.getPaginated(pageIndex, pageSize).subscribe(res => {
-      this.dataList = res.data;
-      this.totalItems = res.pagination.total_pages;
-      this.length = res.pagination.length;
-      this.dataSource = new MatTableDataSource<ISup>(this.dataList);
-      //  this.dataSource.paginator = this.paginator; 
-      this.paginator.length = res.pagination.length;
-      this.dataSource.sort = this.sort; 
+  fetchProducts(currentUser: UserModel ,pageIndex: number, pageSize: number) {
+    if (currentUser.role == 'Manager') {
+      this.supService.getPaginated(pageIndex, pageSize).subscribe(res => {
+        this.dataList = res.data;
+        this.totalItems = res.pagination.total_pages;
+        this.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<ISup>(this.dataList);
+        //  this.dataSource.paginator = this.paginator; 
+        // this.paginator.length = res.pagination.length;
+        this.dataSource.sort = this.sort; 
+  
+        this.isLoadingData = false;
+      });
 
-      this.isLoadingData = false;
-    });
+    } else if (currentUser.role == 'ASM') {
+      this.supService.getPaginatedByProvinceId(currentUser.province_id, pageIndex, pageSize).subscribe(res => {
+        this.dataList = res.data;
+        this.totalItems = res.pagination.total_pages;
+        this.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<ISup>(this.dataList); 
+        // this.paginator.length = res.pagination.length;
+        this.dataSource.sort = this.sort; 
+  
+        this.isLoadingData = false;
+      }); 
+    } else {
+      this.supService.getPaginated(pageIndex, pageSize).subscribe(res => {
+        this.dataList = res.data;
+        this.totalItems = res.pagination.total_pages;
+        this.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<ISup>(this.dataList); 
+        // this.paginator.length = res.pagination.length;
+        this.dataSource.sort = this.sort; 
+  
+        this.isLoadingData = false;
+      });
+    } 
   } 
 
   public sortData(sort: Sort) {
@@ -192,7 +217,7 @@ export class SupListComponent implements OnInit {
               'Supervisor',
               this.currentUser.id,
               'created', 
-              `Created new sup ${res.data.id}`,
+              `Created new sup id: ${res.data.ID}`,
               this.currentUser.fullname
             ).subscribe({
               next: () => {
@@ -236,7 +261,7 @@ export class SupListComponent implements OnInit {
             'Supervisor',
             this.currentUser.id,
             'updated', 
-            `Updated sup ${res.data.id}`,
+            `Updated sup id: ${res.data.ID}`,
             this.currentUser.fullname
           ).subscribe({
             next: () => {
@@ -301,7 +326,7 @@ export class SupListComponent implements OnInit {
           'Sup',
           this.currentUser.id,
           'deleted', 
-          `Delete sup ${this.idItem}`,
+          `Delete sup id: ${this.idItem}`,
           this.currentUser.fullname
         ).subscribe({
           next: () => {

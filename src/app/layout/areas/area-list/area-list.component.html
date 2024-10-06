@@ -6,12 +6,12 @@
                 <!-- Page Header -->
                 <div class="page-header">
                     <div class="row align-items-center">
-                        <div class="col-4">
+                        <div class="col-md-4">
                             <h4 class="page-title">
                                 AREAS<span class="count-title">{{ length }}</span>
                             </h4>
                         </div>
-                        <div class="col-8 text-end">
+                        <div class="col-md-8 text-end">
                             <div class="head-icons">
                                 <app-reload></app-reload>
                                 <app-collapse-header></app-collapse-header>
@@ -80,8 +80,14 @@
     
                                     <!-- Name Column -->
                                     <ng-container matColumnDef="name">
-                                        <th mat-header-cell *matHeaderCellDef> Name sup </th>
+                                        <th mat-header-cell *matHeaderCellDef> Name area </th>
                                         <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                                    </ng-container> 
+
+                                      <!-- Name Column -->
+                                      <ng-container matColumnDef="sup">
+                                        <th mat-header-cell *matHeaderCellDef> Sup </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.sup}} </td>
                                     </ng-container> 
     
                                     <!-- commune Column -->
@@ -90,12 +96,6 @@
                                         <td mat-cell *matCellDef="let element"> 
                                             <app-area-commune [commune]="element.commune"></app-area-commune>
                                         </td>
-                                    </ng-container>
-    
-                                    <!-- Name Column -->
-                                    <ng-container matColumnDef="sup">
-                                        <th mat-header-cell *matHeaderCellDef> Sup </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.sup}} </td>
                                     </ng-container> 
     
                                     <!-- id Column -->

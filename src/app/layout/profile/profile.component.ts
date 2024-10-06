@@ -138,7 +138,7 @@ export class ProfileComponent implements OnInit {
       this.totalItemsLog = res.pagination.total_pages;
       this.lengthLog = res.pagination.length;
       this.dataSourceLog = new MatTableDataSource<UserLogsModel>(this.dataLogList);
-      this.paginator.length = res.pagination.length;
+      // this.paginator.length = res.pagination.length;
       this.dataSourceLog.sort = this.sort;
 
       this.isLoadingData = false;
@@ -177,7 +177,7 @@ export class ProfileComponent implements OnInit {
       this.totalItemsPosForm = res.pagination.total_pages;
       this.lengthPosForm = res.pagination.length;
       this.dataSourcePosForm = new MatTableDataSource<IPosForm>(this.dataPosFormList); 
-      this.paginator.length = res.pagination.length;
+      // this.paginator.length = res.pagination.length;
       this.dataSourcePosForm.sort = this.sort;
 
       this.isLoadingData = false;

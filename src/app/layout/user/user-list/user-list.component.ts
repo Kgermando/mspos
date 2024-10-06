@@ -94,9 +94,9 @@ export class UserListComponent implements OnInit, AfterViewInit {
       next: (user) => {
         this.currentUser = user;
         this.usersService.refreshDataList$.subscribe(() => {
-          this.fetchProducts(this.pageIndex, this.pageSize);
+          this.fetchProducts(this.currentUser, this.pageIndex, this.pageSize);
         });
-        this.fetchProducts(this.pageIndex, this.pageSize);
+        this.fetchProducts(this.currentUser, this.pageIndex, this.pageSize);
 
         this.provinceService.getAll().subscribe(res => {
           this.provinceList = res.data;
@@ -145,24 +145,63 @@ export class UserListComponent implements OnInit, AfterViewInit {
     // this.pageIndex = event.pageIndex;
     // this.pageSize = event.pageSize;
     // this.length = event.length;
-    this.fetchProducts(event.pageIndex, event.pageSize);
+    this.fetchProducts(this.currentUser, event.pageIndex, event.pageSize);
   }
 
 
 
-  fetchProducts(pageIndex: number, pageSize: number) {
-    this.usersService.getPaginated(pageIndex, pageSize).subscribe(res => {
-      this.dataList = res.data;
-      this.totalItems = res.pagination.total_pages;
-      this.length = res.pagination.length;
-      this.dataSource = new MatTableDataSource<IUser>(this.dataList);
-      //  this.dataSource.paginator = this.paginator; 
-      this.paginator.length = res.pagination.length;
-      this.dataSource.sort = this.sort;
-      console.log("response", res);
+  fetchProducts(currentUser: UserModel, pageIndex: number, pageSize: number) {
+    if (currentUser.role == 'Manager') {
+      this.usersService.getPaginated(pageIndex, pageSize).subscribe(res => {
+        this.dataList = res.data;
+        this.totalItems = res.pagination.total_pages;
+        this.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<IUser>(this.dataList);
+        //  this.dataSource.paginator = this.paginator; 
+        // this.paginator.length = res.pagination.length;
+        this.dataSource.sort = this.sort;
 
-      this.isLoadingData = false;
-    });
+        this.isLoadingData = false;
+      });
+    } else if (currentUser.role == 'ASM') {
+      this.usersService.getPaginatedByProvinceId(currentUser.province_id, pageIndex, pageSize).subscribe(res => {
+        this.dataList = res.data;
+        this.totalItems = res.pagination.total_pages;
+        this.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<IUser>(this.dataList);
+        // this.paginator.length = res.pagination.length;
+        this.dataSource.sort = this.sort; 
+
+        this.isLoadingData = false;
+      });
+
+    } else if (currentUser.role == 'Supervisor') {
+      this.usersService.getPaginatedBySupId(currentUser.area_id, pageIndex, pageSize).subscribe(res => {
+        this.dataList = res.data;
+        this.totalItems = res.pagination.total_pages;
+        this.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<IUser>(this.dataList);
+        // this.paginator.length = res.pagination.length;
+        this.dataSource.sort = this.sort;
+
+        this.isLoadingData = false;
+      });
+
+    } else {
+      this.usersService.getPaginated(pageIndex, pageSize).subscribe(res => {
+        this.dataList = res.data;
+        this.totalItems = res.pagination.total_pages;
+
+        this.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<IUser>(this.dataList);
+        // // this.paginator.length = res.pagination.length;
+        this.dataSource.sort = this.sort; 
+        
+
+        this.isLoadingData = false;
+      });
+    }
+
   }
 
 
@@ -231,8 +270,8 @@ export class UserListComponent implements OnInit, AfterViewInit {
             this.logActivity.activity(
               'Users',
               this.currentUser.id,
-              'created', 
-              `Created new user ${res.data.id}`,
+              'created',
+              `Created new user id: ${res.data.ID}`,
               this.currentUser.fullname
             ).subscribe({
               next: () => {
@@ -286,8 +325,8 @@ export class UserListComponent implements OnInit, AfterViewInit {
             this.logActivity.activity(
               'Users',
               this.currentUser.id,
-              'updated', 
-              `Updated user ${res.data.id}`,
+              'updated',
+              `Updated user id: ${res.data.ID}`,
               this.currentUser.fullname
             ).subscribe({
               next: () => {
@@ -348,8 +387,8 @@ export class UserListComponent implements OnInit, AfterViewInit {
           this.logActivity.activity(
             'Users',
             this.currentUser.id,
-            'deleted', 
-            `Delete user ${this.idItem}`,
+            'deleted',
+            `Delete user id: ${this.idItem}`,
             this.currentUser.fullname
           ).subscribe({
             next: () => {
@@ -363,7 +402,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
               console.log(err);
             }
           });
-         
+
         },
         error: err => {
           this.toastr.error('Une erreur s\'est produite!', 'Oupss!');

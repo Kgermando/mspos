@@ -101,7 +101,7 @@ export class LogsListComponent implements OnInit {
       this.totalItems = res.pagination.total_pages;
       this.length = res.pagination.length;
       this.dataSource = new MatTableDataSource<UserLogsModel>(this.dataList); 
-      this.paginator.length = res.pagination.length;
+      // this.paginator.length = res.pagination.length;
       this.dataSource.sort = this.sort;  
 
       this.isLoadingData = false;

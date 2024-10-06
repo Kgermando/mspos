@@ -32,7 +32,7 @@ export class AreaListComponent implements OnInit {
   length: number = 0;
 
   // Table 
-  displayedColumns: string[] = ['province', 'name', 'commune', 'sup', 'id'];
+  displayedColumns: string[] = ['province', 'name', 'sup', 'commune', 'id'];
   dataSource = new MatTableDataSource<IArea>(this.dataList);
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -83,9 +83,9 @@ export class AreaListComponent implements OnInit {
       next: (user) => {
         this.currentUser = user;
         this.areaService.refreshDataList$.subscribe(() => {
-          this.fetchProducts(this.pageIndex, this.pageSize);
+          this.fetchProducts(this.currentUser, this.pageIndex, this.pageSize);
         });
-        this.fetchProducts(this.pageIndex, this.pageSize);
+        this.fetchProducts(this.currentUser, this.pageIndex, this.pageSize);
 
         this.provinceService.getAll().subscribe(res => {
           this.provinceList = res.data;
@@ -133,23 +133,44 @@ export class AreaListComponent implements OnInit {
 
   onPageChange(event: PageEvent): void {
     this.isLoadingData = true;
-    this.fetchProducts(event.pageIndex, event.pageSize);
+    this.fetchProducts(this.currentUser, event.pageIndex, event.pageSize);
   }
 
-  fetchProducts(pageIndex: number, pageSize: number) {
-    this.areaService.getPaginated(pageIndex, pageSize).subscribe(res => {
-      this.dataList = res.data;
-      this.totalItems = res.pagination.total_pages;
-      this.length = res.pagination.length;
-      this.dataSource = new MatTableDataSource<IArea>(this.dataList);
-      //  this.dataSource.paginator = this.paginator; 
-      this.paginator.length = res.pagination.length;
-      this.dataSource.sort = this.sort; 
-
-      console.log("datalist", this.dataList)
-
-      this.isLoadingData = false;
-    });
+  fetchProducts(currentUser: UserModel, pageIndex: number, pageSize: number) { 
+    if (currentUser.role == 'Manager') {
+      this.areaService.getPaginated(pageIndex, pageSize).subscribe(res => {
+        this.dataList = res.data;
+        this.totalItems = res.pagination.total_pages;
+        this.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<IArea>(this.dataList);
+        // this.paginator.length = res.pagination.length;
+        this.dataSource.sort = this.sort; 
+        console.log("data", res.data);
+        this.isLoadingData = false;
+      });
+    } else if (currentUser.role == 'ASM') {
+      this.areaService.getPaginatedByProvinceId(currentUser.province_id, pageIndex, pageSize).subscribe(res => {
+        this.dataList = res.data;
+        this.totalItems = res.pagination.total_pages;
+        this.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<IArea>(this.dataList);
+        // this.paginator.length = res.pagination.length;
+        this.dataSource.sort = this.sort; 
+        console.log("data", res.data);
+        this.isLoadingData = false;
+      });
+    } else {
+      this.areaService.getPaginated(pageIndex, pageSize).subscribe(res => {
+        this.dataList = res.data;
+        this.totalItems = res.pagination.total_pages;
+        this.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<IArea>(this.dataList);
+        // this.paginator.length = res.pagination.length;
+        this.dataSource.sort = this.sort; 
+        console.log("data", res.data);
+        this.isLoadingData = false;
+      });
+    } 
   }
 
 
@@ -202,7 +223,7 @@ export class AreaListComponent implements OnInit {
               'AREA',
               this.currentUser.id,
               'created',
-              `Created new AREA ${res.data.id}`,
+              `Created new AREA id: ${res.data.ID}`,
               this.currentUser.fullname
             ).subscribe({
               next: () => {
@@ -247,7 +268,7 @@ export class AreaListComponent implements OnInit {
               'AREA',
               this.currentUser.id,
               'updated',
-              `Updated AREA ${res.data.id}`,
+              `Updated AREA id: ${res.data.ID}`,
               this.currentUser.fullname
             ).subscribe({
               next: () => {
@@ -281,6 +302,7 @@ export class AreaListComponent implements OnInit {
       this.formGroup.patchValue({
         name: this.dataItem.name,
         province_id: this.dataItem.province_id,
+        commune: this.dataItem.commune,
         sup_id: this.dataItem.sup_id,
       });
     });
@@ -297,7 +319,7 @@ export class AreaListComponent implements OnInit {
             'AREA',
             this.currentUser.id,
             'deleted', 
-            `Delete AREA ${this.idItem}`,
+            `Delete AREA id: ${this.idItem}`,
             this.currentUser.fullname
           ).subscribe({
             next: () => {

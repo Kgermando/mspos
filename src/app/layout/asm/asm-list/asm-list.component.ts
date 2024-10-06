@@ -134,7 +134,7 @@ export class AsmListComponent implements OnInit {
       this.length = res.pagination.length;
       this.dataSource = new MatTableDataSource<IAsm>(this.dataList);
       //  this.dataSource.paginator = this.paginator; 
-      this.paginator.length = res.pagination.length;
+      // this.paginator.length = res.pagination.length;
       this.dataSource.sort = this.sort; 
 
       this.isLoadingData = false;
@@ -193,7 +193,7 @@ export class AsmListComponent implements OnInit {
               'ASM',
               this.currentUser.id,
               'created',
-             `Created new ASM ${res.data.id}`,
+             `Created new ASM id: ${res.data.ID}`,
               this.currentUser.fullname
             ).subscribe({
               next: () => {
@@ -236,7 +236,7 @@ export class AsmListComponent implements OnInit {
             'ASM',
             this.currentUser.id,
             'updated',
-            `Updated ASM ${res.data.id}`,
+            `Updated ASM id: ${res.data.ID}`,
             this.currentUser.fullname
           ).subscribe({
             next: () => {
@@ -284,7 +284,7 @@ export class AsmListComponent implements OnInit {
           'ASM',
           this.currentUser.id,
           'deleted', 
-          `Delete ASM ${this.idItem}`,
+          `Delete ASM id: ${this.idItem}`,
           this.currentUser.fullname
         ).subscribe({
           next: () => {

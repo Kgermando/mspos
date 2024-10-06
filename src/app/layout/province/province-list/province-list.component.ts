@@ -124,7 +124,7 @@ export class ProvinceListComponent implements OnInit {
       this.length = res.pagination.length;
       this.dataSource = new MatTableDataSource<IProvince>(this.dataList);
       //  this.dataSource.paginator = this.paginator; 
-      this.paginator.length = res.pagination.length;
+      // this.paginator.length = res.pagination.length;
       this.dataSource.sort = this.sort; 
 
       this.isLoadingData = false;
@@ -173,7 +173,7 @@ export class ProvinceListComponent implements OnInit {
               'Province',
               this.currentUser.id,
               'created', 
-              `Created new province ${res.data.id}`,
+              `Created new province id: ${res.data.ID}`,
               this.currentUser.fullname
             ).subscribe({
               next: () => {
@@ -215,7 +215,7 @@ export class ProvinceListComponent implements OnInit {
             'Province',
             this.currentUser.id,
             'updated', 
-            `Updated province ${res.data.id}`,
+            `Updated province id: ${res.data.ID}`,
             this.currentUser.fullname
           ).subscribe({
             next: () => {
@@ -264,7 +264,7 @@ export class ProvinceListComponent implements OnInit {
           'Province',
           this.currentUser.id,
           'deleted', 
-          `Delete province ${this.idItem}`,
+          `Delete province id: ${this.idItem}`,
           this.currentUser.fullname
         ).subscribe({
           next: () => {

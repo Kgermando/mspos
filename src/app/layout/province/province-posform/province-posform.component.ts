@@ -1,33 +1,34 @@
 import { Component, OnInit, ViewChild } from '@angular/core'; 
 import {GeolocationService} from '@ng-web-apis/geolocation';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatSort, Sort } from '@angular/material/sort';
 import { routes } from '../../../shared/routes/routes';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserModel } from '../../../auth/models/user.model';
-import { AuthService } from '../../../auth/auth.service';
-import { ToastrService } from 'ngx-toastr';
-import { IProvince } from '../../province/models/province.model';
-import { IPosForm } from '../models/posform.models';
-import { PosformService } from '../posform.service';
+import { AuthService } from '../../../auth/auth.service'; 
+import { IProvince } from '../../province/models/province.model'; 
 import { IUser } from '../../user/models/user.model';
 import { IArea } from '../../areas/models/area.model';
 import { ISup } from '../../sups/models/sup.model';
-import { IPos } from '../../pos-vente/models/pos.model';
-import { generateRandomString } from '../../../utils/generate-random';
+import { IPos } from '../../pos-vente/models/pos.model'; 
 import { PosVenteService } from '../../pos-vente/pos-vente.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { IPosForm } from '../../posform/models/posform.models';
+import { PosformService } from '../../posform/posform.service';
 import { LogsService } from '../../user-logs/logs.service';
- 
+import { ToastrService } from 'ngx-toastr'; 
+import { ProvinceService } from '../province.service';
+
 
 @Component({
-  selector: 'app-postform-list',
-  templateUrl: './postform-list.component.html',
-  styleUrl: './postform-list.component.scss'
+  selector: 'app-province-posform',
+  templateUrl: './province-posform.component.html',
+  styleUrl: './province-posform.component.scss'
 })
-export class PostformListComponent implements OnInit {
+export class ProvincePosformComponent  implements OnInit {
   isLoadingData = false;
+  isLoadingDataProvince = false;
   public routes = routes;
   // Table 
   dataList: IPosForm[] = [];
@@ -45,6 +46,7 @@ export class PostformListComponent implements OnInit {
 
   public searchDataValue = '';
 
+  province!: IProvince;
   // Forms  
   idItem!: number;
   dataItem!: IPosForm; // Single data 
@@ -69,10 +71,12 @@ export class PostformListComponent implements OnInit {
 
   constructor(
     private readonly geolocation$: GeolocationService,
+    private route: ActivatedRoute,
     private router: Router,
     private _formBuilder: FormBuilder,
     private authService: AuthService,
     public posformService: PosformService,
+    private provinceService: ProvinceService,
     private posService: PosVenteService,
     private logActivity: LogsService,
     private toastr: ToastrService
@@ -90,6 +94,7 @@ export class PostformListComponent implements OnInit {
   selectedDatas4: any[] | undefined;
 
   ngAfterViewInit(): void { 
+   
     this.authService.user().subscribe({
       next: (user) => {
         this.currentUser = user;
@@ -121,6 +126,10 @@ export class PostformListComponent implements OnInit {
 
   ngOnInit() {
     this.isLoadingData = true;
+ 
+    this.route.params.subscribe(routeParams => { 
+      this.loadData(routeParams['id']);
+    });
     
     this.formGroup = this._formBuilder.group({
       pos_id: ['', Validators.required],
@@ -168,63 +177,24 @@ export class PostformListComponent implements OnInit {
   } 
 
   fetchProducts(currentUser: UserModel, pageIndex: number, pageSize: number) {
-    if (currentUser.role == 'Manager') {
-      this.posformService.getPaginated(pageIndex, pageSize).subscribe(res => {
-        this.dataList = res.data;
-        this.totalItems = res.pagination.total_pages;
-        this.length = res.pagination.length;
-        this.dataSource = new MatTableDataSource<IPosForm>(this.dataList); 
-        // this.paginator.length = res.pagination.length;
-        this.dataSource.sort = this.sort; 
-  
-        this.isLoadingData = false;
-      });  
-    } else if (currentUser.role == 'ASM') {
-      this.posformService.getPaginatedByProvinceId(currentUser.province_id, pageIndex, pageSize).subscribe(res => {
-        this.dataList = res.data;
-        this.totalItems = res.pagination.total_pages;
-        this.length = res.pagination.length;
-        this.dataSource = new MatTableDataSource<IPosForm>(this.dataList); 
-        // this.paginator.length = res.pagination.length;
-        this.dataSource.sort = this.sort; 
-  
-        this.isLoadingData = false;
-      });
-    }  else if (currentUser.role == 'Supervisor') {
-      this.posformService.getPaginatedBySupId(currentUser.sup_id, pageIndex, pageSize).subscribe(res => {
-        this.dataList = res.data;
-        this.totalItems = res.pagination.total_pages;
-        this.length = res.pagination.length;
-        this.dataSource = new MatTableDataSource<IPosForm>(this.dataList); 
-        // this.paginator.length = res.pagination.length;
-        this.dataSource.sort = this.sort; 
-  
-        this.isLoadingData = false;
-      });
-    } else if (currentUser.role == 'DR') {
-      this.posformService.getPaginatedById(currentUser.id, pageIndex, pageSize).subscribe(res => {
-        this.dataList = res.data;
-        this.totalItems = res.pagination.total_pages;
-        this.length = res.pagination.length;
-        this.dataSource = new MatTableDataSource<IPosForm>(this.dataList); 
-        // this.paginator.length = res.pagination.length;
-        this.dataSource.sort = this.sort; 
-  
-        this.isLoadingData = false;
-      });
-    } else {
-      this.posformService.getPaginated(pageIndex, pageSize).subscribe(res => {
-        this.dataList = res.data;
-        this.totalItems = res.pagination.total_pages;
-        this.length = res.pagination.length;
-        this.dataSource = new MatTableDataSource<IPosForm>(this.dataList); 
-        // this.paginator.length = res.pagination.length;
-        this.dataSource.sort = this.sort; 
-  
-        this.isLoadingData = false;
-      });
-    }
-    
+    this.posformService.getPaginatedByProvinceId(currentUser.province_id, pageIndex, pageSize).subscribe(res => {
+      this.dataList = res.data;
+      this.totalItems = res.pagination.total_pages;
+      this.length = res.pagination.length;
+      this.dataSource = new MatTableDataSource<IPosForm>(this.dataList); 
+      // this.paginator.length = res.pagination.length;
+      this.dataSource.sort = this.sort; 
+
+      this.isLoadingData = false;
+    });
+  }
+
+  public loadData(id: any): void {
+    this.isLoadingDataProvince = true;
+    this.provinceService.get(Number(id)).subscribe(res => {
+      this.province = res.data;  
+      this.isLoadingDataProvince = false;
+    });
   }
  
 
@@ -254,86 +224,7 @@ export class PostformListComponent implements OnInit {
   openSidebarPopup2() {
     this.sidebarPopup2 = !this.sidebarPopup2;
   }  
-
-  onSubmit() {
-    try {
-      if (this.formGroup.valid) {
-        this.isLoading = true; 
-        var body = {
-          id_unique: generateRandomString(6),
-          eq: parseInt(this.formGroup.value.eq),
-          eq1: (parseInt(this.formGroup.value.eq) > 0 ? 1 : 0 ),
-          sold: parseInt(this.formGroup.value.sold),
-          dhl: parseInt(this.formGroup.value.dhl),
-          dhl1: (parseInt(this.formGroup.value.dhl) > 0 ? 1 : 0 ),
-          ar: parseInt(this.formGroup.value.ar),
-          ar1: (parseInt(this.formGroup.value.ar) > 0 ? 1 : 0 ),
-          sbl: parseInt(this.formGroup.value.sbl),
-          sbl1: (parseInt(this.formGroup.value.sbl) > 0 ? 1 : 0 ),
-          pmf: parseInt(this.formGroup.value.pmf),
-          pmf1: (parseInt(this.formGroup.value.pmf) > 0 ? 1 : 0 ),
-          pmm: parseInt(this.formGroup.value.pmm),
-          pmm1: (parseInt(this.formGroup.value.pmm) > 0 ? 1 : 0 ),
-          ticket: parseInt(this.formGroup.value.ticket),
-          ticket1: (parseInt(this.formGroup.value.ticket) > 0 ? 1 : 0 ),
-          mtc: parseInt(this.formGroup.value.mtc),
-          mtc1: (parseInt(this.formGroup.value.mtc) > 0 ? 1 : 0 ),
-          ws: parseInt(this.formGroup.value.ws),
-          ws1: (parseInt(this.formGroup.value.ws) > 0 ? 1 : 0 ),
-          mast: parseInt(this.formGroup.value.mast),
-          mast1: (parseInt(this.formGroup.value.mast) > 0 ? 1 : 0 ),
-          oris: parseInt(this.formGroup.value.oris),
-          oris1: (parseInt(this.formGroup.value.oris) > 0 ? 1 : 0 ),
-          elite: parseInt(this.formGroup.value.elite), 
-          elite1: (parseInt(this.formGroup.value.elite) > 0 ? 1 : 0 ), 
-          yes: parseInt(this.formGroup.value.yes),
-          yes1: (parseInt(this.formGroup.value.yes) > 0 ? 1 : 0 ),
-          time: parseInt(this.formGroup.value.time),
-          time1: (parseInt(this.formGroup.value.time) > 0 ? 1 : 0 ),
-          comment: this.formGroup.value.comment,
-          user_id: this.currentUser.id,
-          province_id: this.currentUser.province_id,
-          area_id: this.currentUser.area_id,
-          sup_id: this.currentUser.sup_id,
-          pos_id: parseInt(this.formGroup.value.pos_id),
-          latitude: this.latitude,
-          longitude: this.longitude,
-          price: this.formGroup.value.price,
-          signature: this.currentUser.fullname,
-        };
-        this.posformService.create(body).subscribe({
-          next: (res) => {
-            this.logActivity.activity(
-              'PosForm',
-              this.currentUser.id,
-              'created', 
-              `Created new PosForm id: ${res.data.ID}`,
-              this.currentUser.fullname
-            ).subscribe({
-              next: () => {
-                this.isLoading = false;
-                this.formGroup.reset();
-                this.toastr.success('Ajouter avec succès!', 'Success!'); 
-              },
-              error: (err) => {
-                this.isLoading = false;
-                this.toastr.error(`${err.error.message}`, 'Oupss!');
-                console.log(err);
-              }
-            });
-          },
-          error: (err) => {
-            this.isLoading = false;
-            this.toastr.error('Une erreur s\'est produite!', 'Oupss!');
-            console.log(err);
-          }
-        });
-      }
-    } catch (error) {
-      this.isLoading = false;
-      console.log(error);
-    }
-  }
+ 
 
   onSubmitUpdate() {
     try {
@@ -491,5 +382,4 @@ export class PostformListComponent implements OnInit {
       }
       );
   }
- 
 }
