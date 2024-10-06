@@ -141,10 +141,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
 
 
   onPageChange(event: PageEvent): void {
-    this.isLoadingData = true;
-    // this.pageIndex = event.pageIndex;
-    // this.pageSize = event.pageSize;
-    // this.length = event.length;
+    this.isLoadingData = true; 
     this.fetchProducts(this.currentUser, event.pageIndex, event.pageSize);
   }
 
@@ -195,12 +192,13 @@ export class UserListComponent implements OnInit, AfterViewInit {
         this.length = res.pagination.length;
         this.dataSource = new MatTableDataSource<IUser>(this.dataList);
         // // this.paginator.length = res.pagination.length;
-        this.dataSource.sort = this.sort; 
-        
+        this.dataSource.sort = this.sort;  
 
         this.isLoadingData = false;
       });
     }
+
+  
 
   }
 
