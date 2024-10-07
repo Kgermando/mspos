@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -24,7 +24,6 @@ import { LogsService } from '../../user-logs/logs.service';
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserListComponent implements OnInit, AfterViewInit {
   isLoadingData = false;
@@ -74,8 +73,6 @@ export class UserListComponent implements OnInit, AfterViewInit {
   supList: ISup[] = [];
   supListFilter: ISup[] = [];
   isManager = false;
-
-
 
   constructor(
     private router: Router,
@@ -136,7 +133,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
       is_manager: [''],
     });
 
-
+    
   }
 
 
