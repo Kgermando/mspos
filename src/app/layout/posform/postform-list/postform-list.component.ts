@@ -100,7 +100,7 @@ export class PostformListComponent implements OnInit {
 
         this.posService.getAll().subscribe(res => {
           this.posList = res.data;
-          this.posListFilter = this.posList.filter((v) => v.area_id == this.currentUser.area_id) 
+          this.posListFilter = this.posList.filter((v) => v.user_id == this.currentUser.id) 
         });
 
         this.geolocation$.subscribe((position) => {
@@ -296,8 +296,8 @@ export class PostformListComponent implements OnInit {
           area_id: this.currentUser.area_id,
           sup_id: this.currentUser.sup_id,
           pos_id: parseInt(this.formGroup.value.pos_id),
-          latitude: this.latitude,
-          longitude: this.longitude,
+          latitude: this.latitude.toString(),
+          longitude: this.longitude.toString(),
           price: this.formGroup.value.price,
           signature: this.currentUser.fullname,
         };

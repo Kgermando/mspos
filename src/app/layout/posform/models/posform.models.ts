@@ -1,4 +1,4 @@
-export interface IPosForm { 
+export interface IPosForm {
     id: number;
     id_unique: string;
     eq: number;

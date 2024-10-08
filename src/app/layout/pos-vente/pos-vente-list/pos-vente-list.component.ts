@@ -261,7 +261,6 @@ export class PosVenteListComponent implements OnInit {
           status: (this.formGroup.value.status) ? this.formGroup.value.status : false,
           signature: this.currentUser.fullname,
         };
-        console.log("POS", body)
         this.posVenteService.create(body).subscribe({
           next: (res) => {
             this.logActivity.activity(
