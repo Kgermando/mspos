@@ -118,7 +118,7 @@ export class PosVenteListComponent implements OnInit {
       eparasol: [''],
       etable: [''],
       ekiosk: [''],
-      inputgroupselector: ['', Validators.required],
+      inputgroupselector: [''],
       cparasol: [''],
       ctable: [''],
       ckiosk: [''],
@@ -158,8 +158,7 @@ export class PosVenteListComponent implements OnInit {
         this.dataList = res.data;
         this.totalItems = res.pagination.total_pages;
         this.length = res.pagination.length;
-        this.dataSource = new MatTableDataSource<IPos>(this.dataList); 
-        // this.paginator.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<IPos>(this.dataList);  
         this.dataSource.sort = this.sort;
   
         this.isLoadingData = false;
@@ -170,8 +169,7 @@ export class PosVenteListComponent implements OnInit {
         this.dataList = res.data;
         this.totalItems = res.pagination.total_pages;
         this.length = res.pagination.length;
-        this.dataSource = new MatTableDataSource<IPos>(this.dataList); 
-        // this.paginator.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<IPos>(this.dataList);  
         this.dataSource.sort = this.sort;
   
         this.isLoadingData = false;
@@ -181,8 +179,7 @@ export class PosVenteListComponent implements OnInit {
         this.dataList = res.data;
         this.totalItems = res.pagination.total_pages;
         this.length = res.pagination.length;
-        this.dataSource = new MatTableDataSource<IPos>(this.dataList); 
-        // this.paginator.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<IPos>(this.dataList);  
         this.dataSource.sort = this.sort;
   
         this.isLoadingData = false;
@@ -192,8 +189,7 @@ export class PosVenteListComponent implements OnInit {
         this.dataList = res.data;
         this.totalItems = res.pagination.total_pages;
         this.length = res.pagination.length;
-        this.dataSource = new MatTableDataSource<IPos>(this.dataList); 
-        // this.paginator.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<IPos>(this.dataList);  
         this.dataSource.sort = this.sort;
   
         this.isLoadingData = false;
@@ -203,8 +199,7 @@ export class PosVenteListComponent implements OnInit {
         this.dataList = res.data;
         this.totalItems = res.pagination.total_pages;
         this.length = res.pagination.length;
-        this.dataSource = new MatTableDataSource<IPos>(this.dataList); 
-        // this.paginator.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<IPos>(this.dataList);  
         this.dataSource.sort = this.sort;
   
         this.isLoadingData = false;
@@ -262,9 +257,11 @@ export class PosVenteListComponent implements OnInit {
           ckiosk: (this.formGroup.value.ckiosk) ? this.formGroup.value.ckiosk : false,
           province_id: parseInt(this.formGroup.value.province_id),
           area_id: parseInt(this.formGroup.value.area_id),
+          user_id: this.currentUser.id,
           status: (this.formGroup.value.status) ? this.formGroup.value.status : false,
           signature: this.currentUser.fullname,
         };
+        console.log("POS", body)
         this.posVenteService.create(body).subscribe({
           next: (res) => {
             this.logActivity.activity(
@@ -320,6 +317,7 @@ export class PosVenteListComponent implements OnInit {
         ckiosk: this.formGroup.value.ckiosk,
         province_id: parseInt(this.formGroup.value.province_id),
         area_id: parseInt(this.formGroup.value.area_id),
+        user_id: this.currentUser.id,
         status: (this.formGroup.value.status) ? this.formGroup.value.status : false, 
         signature: this.currentUser.fullname,
       };

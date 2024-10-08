@@ -19,6 +19,7 @@ export interface IPos {
     ckiosk: boolean;
     province_id:  number;
     area_id:  number;
+    user_id: number;
     status: boolean;
     signature: string;
     CreatedAt: Date;
@@ -26,4 +27,5 @@ export interface IPos {
 
     province:  string;
     area:  string;
+    user: string;
 }

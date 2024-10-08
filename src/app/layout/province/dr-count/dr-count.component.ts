@@ -9,20 +9,20 @@ import { IUser } from '../../user/models/user.model';
 })
 export class DrCountComponent implements OnInit {
   @Input() id!: number;
- 
-  drList: IUser[] = []; 
+
+  drList: IUser[] = [];
   totalDR = 0;
 
-  constructor( 
+  constructor(
     private drServce: UserService,
-  ) { 
-  } 
+  ) {
+  }
 
 
   ngOnInit(): void {
     this.drServce.getAllById(this.id).subscribe(res => {
-    this.drList = res.data;
-    this.totalDR = this.drList.length
-  })
+      this.drList = res.data;
+      this.totalDR = this.drList.length
+    })
   }
 }
