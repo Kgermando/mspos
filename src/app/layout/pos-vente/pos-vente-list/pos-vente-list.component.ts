@@ -25,7 +25,9 @@ import { LogsService } from '../../user-logs/logs.service';
 })
 export class PosVenteListComponent implements OnInit {
   isLoadingData = false;
+  
   public routes = routes;
+
   // Table 
   dataList: IPos[] = [];
   totalItems: number = 0;
@@ -33,7 +35,7 @@ export class PosVenteListComponent implements OnInit {
   pageIndex: number = 0;
   length: number = 0;
 
-  // Table 
+  // Table
   displayedColumns: string[] = ['status', 'province', 'area', 'dr', 'name', 'shop', 'manager', 'commune', 'avenue', 'quartier', 'reference', 'telephone', 'inputgroupselector', 'eparasol', 'etable', 'ekiosk', 'cparasol', 'ctable', 'ckiosk', 'id'];
   dataSource = new MatTableDataSource<IPos>(this.dataList);
 

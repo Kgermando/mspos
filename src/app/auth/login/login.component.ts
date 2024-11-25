@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
                   if (user.role == 'Manager') {
                     this.router.navigate([routes.msposDashboard]);
                   } else if (user.role == 'ASM') {
-                    this.router.navigate([routes.msposDashboard]);
+                    this.router.navigate([routes.ndDashboard]);
                   } else if (user.role == 'Supervisor') {
                     this.router.navigate([routes.posVente]);
                   } else if (user.role == 'DR') {
@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit {
                   } else {
                     this.router.navigate(['/auth/login']);
                   }
-                  this.toastr.success(`Bienvenue ${user.fullname}! 🎉`, 'Success!');  
+                  this.toastr.success(`Bienvenue ${user.fullname}! 🎉`, 'Success!');
                   this.isLoading = false;
                 },
                 error: (err) => {
