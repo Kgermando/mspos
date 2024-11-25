@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, tap } from 'rxjs'; 
+import { Observable, Subject, tap } from 'rxjs';
 import { Cacheable } from "ts-cacheable"
 import { ApiResponse } from '../model/api-response.model';
 
@@ -10,7 +10,7 @@ import { ApiResponse } from '../model/api-response.model';
   providedIn: 'root'
 })
 export abstract class ApiService {
-  abstract get endpoint(): string; 
+  abstract get endpoint(): string;
 
   constructor(protected http: HttpClient) { }
 
@@ -26,33 +26,50 @@ export abstract class ApiService {
     return this._refreshData$;
   }
  
-  getData(): Observable<ApiResponse> { 
-    return this.http.get<ApiResponse>(`${this.endpoint}/all`);
-  }
-  
   // @Cacheable({ cacheBusterObserver: cacheBuster$ })
-  getPaginated(page: number, pageSize: number): Observable<ApiResponse> { 
-    const params = {page: page, page_size: pageSize }; 
+  getPaginated(page: number, pageSize: number, search: string): Observable<ApiResponse> {
+    let params = new HttpParams()
+    .set("page", page.toString())
+    .set("page_size", pageSize.toString())
+    .set("search", search)
     return this.http.get<ApiResponse>(`${this.endpoint}/all/paginate`, { params });
   }
 
   // @Cacheable({ cacheBusterObserver: cacheBuster$ })
-  getPaginatedById(id: number, pageSize: number, pageNumber: number): Observable<any> {
-    const params = { page_size: pageSize, page_number: pageNumber };
+  getPaginatedById(id: number, page: number, pageSize: number, search: string): Observable<any> {
+    let params = new HttpParams()
+      .set("page", page.toString())
+      .set("page_size", pageSize.toString())
+      .set("search", search)
     return this.http.get<any>(`${this.endpoint}/all/paginate/${id}`, { params });
   }
 
-  getPaginatedByProvinceId(id: number, pageSize: number, pageNumber: number): Observable<any> {
-    const params = { page_size: pageSize, page_number: pageNumber };
-    return this.http.get<any>(`${this.endpoint}/all/paginate/province/${id}`, { params });
+  getPaginatedByProvinceId(province_id: number, page: number, pageSize: number, search: string): Observable<any> {
+    let params = new HttpParams()
+      .set("page", page.toString())
+      .set("page_size", pageSize.toString())
+      .set("search", search)
+    return this.http.get<any>(`${this.endpoint}/all/paginate/province/${province_id}`, { params });
   }
 
-  getPaginatedBySupId(id: number, pageSize: number, pageNumber: number): Observable<any> {
-    const params = { page_size: pageSize, page_number: pageNumber };
-    return this.http.get<any>(`${this.endpoint}/all/paginate/sup/${id}`, { params });
+  getPaginatedBySupId(sup_id: number, page: number, pageSize: number, search: string): Observable<any> {
+    let params = new HttpParams()
+      .set("page", page.toString())
+      .set("page_size", pageSize.toString())
+      .set("search", search)
+    return this.http.get<any>(`${this.endpoint}/all/paginate/sup/${sup_id}`, { params });
   }
- 
- 
+
+  GetAllBySearch(search: string): Observable<any> {
+    let params = new HttpParams() 
+      .set("search", search)
+    return this.http.get<any>(`${this.endpoint}/all/search/${search}`, { params });
+  }
+
+  getData(): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.endpoint}/all`);
+  }
+
   // @Cacheable({ cacheBusterObserver: cacheBuster$ })
   getAll(): Observable<any> {
     return this.http.get(`${this.endpoint}/all`);
@@ -61,20 +78,20 @@ export abstract class ApiService {
   getAllById(id: number): Observable<any> {
     return this.http.get(`${this.endpoint}/all/${id}`);
   }
-  
+
   // @Cacheable({ cacheBusterObserver: cacheBuster$ })
   all(page?: number): Observable<any> {
     let url = `${this.endpoint}`;
     if (page) { // page is optional
       url += `?page=${page}`;
-    } 
-    return this.http.get(url); 
+    }
+    return this.http.get(url);
   }
 
   get(id: number): Observable<any> {
     return this.http.get(`${this.endpoint}/get/${id}`);
   }
- 
+
 
   create(data: any): Observable<any> {
     return this.http.post(`${this.endpoint}/create`, data).pipe(tap(() => {
@@ -91,7 +108,7 @@ export abstract class ApiService {
       // cacheBuster$.next();
     }));
   }
- 
+
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.endpoint}/delete/${id}`).pipe(tap(() => {
@@ -108,7 +125,7 @@ export abstract class ApiService {
 
   uploadFile(file: File): Observable<any> {
     const formData = new FormData();
-    formData.append('file', file); 
+    formData.append('file', file);
     return this.http.post(`${this.endpoint}/uploads`, formData, {
       reportProgress: true,
       observe: 'events'

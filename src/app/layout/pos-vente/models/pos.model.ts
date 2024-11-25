@@ -27,5 +27,5 @@ export interface IPos {
 
     province:  string;
     area:  string;
-    user: string;
+    dr: string; 
 }

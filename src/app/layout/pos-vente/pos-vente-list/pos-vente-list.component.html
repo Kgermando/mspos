@@ -29,9 +29,12 @@
                                 <div class="col-sm-4">
                                     <div class="icon-form mb-3 mb-sm-0">
                                         <span class="form-icon"><i class="ti ti-search"></i></span>
-                                        <input type="text" (keyup)="applyFilter($event)" class="form-control"
-                                            placeholder="Ex. jean kasongo" #input />
-                                    </div>
+                                        <!-- <input type="text" (keyup)="applyFilter($event)" class="form-control"
+                                            placeholder="Ex. jean kasongo" #input /> -->
+                                            <input type="text" #input [(ngModel)]="search" 
+                                            (ngModelChange)="onSearchChange($event)" class="form-control" 
+                                            placeholder="Ex. Jean paul">
+                                    </div> 
                                 </div>
                                 <div class="col-sm-8">
                                     <div class="d-flex align-items-center flex-wrap row-gap-2 justify-content-sm-end">
@@ -96,18 +99,24 @@
                                         <th mat-header-cell *matHeaderCellDef> Province </th>
                                         <td mat-cell *matCellDef="let element"> {{element.province}} </td>
                                     </ng-container>
-    
-                                    <!-- name Column -->
-                                    <ng-container matColumnDef="name">
-                                        <th mat-header-cell *matHeaderCellDef> Name </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                                    </ng-container>
-    
-                                    <!-- name Column -->
-                                    <ng-container matColumnDef="area">
+
+                                     <!-- Area Column -->
+                                     <ng-container matColumnDef="area">
                                         <th mat-header-cell *matHeaderCellDef> Area </th>
                                         <td mat-cell *matCellDef="let element"> {{element.area}} </td>
                                     </ng-container>
+    
+                                    <!-- dr Column -->
+                                    <ng-container matColumnDef="dr">
+                                        <th mat-header-cell *matHeaderCellDef> DR </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.dr}} </td>
+                                    </ng-container>
+
+                                     <!-- name Column -->
+                                     <ng-container matColumnDef="name">
+                                        <th mat-header-cell *matHeaderCellDef> Name </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                                    </ng-container> 
     
                                     <!-- name Column -->
                                     <ng-container matColumnDef="shop">
@@ -117,7 +126,7 @@
     
                                     <!-- name Column -->
                                     <ng-container matColumnDef="manager">
-                                        <th mat-header-cell *matHeaderCellDef> Manager </th>
+                                        <th mat-header-cell *matHeaderCellDef> Gérant </th>
                                         <td mat-cell *matCellDef="let element"> {{element.manager}} </td>
                                     </ng-container>
     
@@ -201,14 +210,14 @@
                                             currentUser.permission === 'VAE' ||
                                             currentUser.permission === 'VED' ||
                                             currentUser.permission === 'VE') {
-                                            <button mat-icon-button (click)="findValue(element.id)"
+                                            <button mat-icon-button (click)="findValue(element.ID)"
                                                 data-bs-toggle="offcanvas" data-bs-target="#offcanvas_edit">
                                                 <mat-icon class="text-blue">edit</mat-icon>
                                             </button>
                                             }
                                             @if(currentUser.permission === 'ALL' ||
                                             currentUser.permission === 'VED') {
-                                            <button mat-icon-button (click)="findValue(element.id)" data-bs-toggle="modal"
+                                            <button mat-icon-button (click)="findValue(element.ID)" data-bs-toggle="modal"
                                                 data-bs-target="#delete_contact">
                                                 <mat-icon class="text-danger">delete</mat-icon>
                                             </button>
@@ -318,7 +327,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label class="col-form-label" for="text">Manager <span class="text-danger">*</span></label>
+                            <label class="col-form-label" for="text">Gérant <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" formControlName="manager" required />
                             <mat-error *ngIf="formGroup.controls['manager'].hasError('required')">
                                 Ce champs est obligatoire
@@ -546,7 +555,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label class="col-form-label" for="text">Manager <span class="text-danger">*</span></label>
+                            <label class="col-form-label" for="text">Gérant <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" formControlName="manager" required />
                             <mat-error *ngIf="formGroup.controls['manager'].hasError('required')">
                                 Ce champs est obligatoire

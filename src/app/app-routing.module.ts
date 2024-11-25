@@ -23,14 +23,10 @@ const routes: Routes = [
     loadChildren: () =>
       import('./error-pages/error-pages.module').then(
         (m) => m.ErrorPagesModule
-      ),
+    ),
   },
 
-  // {
-  //   path: '',
-  //   redirectTo: 'auth',
-  //   pathMatch: 'full',
-  // },
+
   { path: '', redirectTo: 'auth', pathMatch: 'full' },
   { path: '**', redirectTo: 'auth', pathMatch: 'full' }
 ];

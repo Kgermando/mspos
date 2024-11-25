@@ -36,7 +36,7 @@ export class ManagerListComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  public searchDataValue = '';
+  public search = '';
   // / Forms  
   idItem!: number;
   dataItem!: IManager; // Single data 
@@ -73,9 +73,9 @@ export class ManagerListComponent implements OnInit {
       next: (user) => {
         this.currentUser = user;
         this.managerService.refreshDataList$.subscribe(() => {
-          this.fetchProducts(this.pageIndex, this.pageSize);
+          this.fetchProducts();
         });
-        this.fetchProducts(this.pageIndex, this.pageSize);
+        this.fetchProducts();
 
       },
       error: (error) => {
@@ -116,26 +116,29 @@ export class ManagerListComponent implements OnInit {
 
   onPageChange(event: PageEvent): void {
     this.isLoadingData = true;
-    this.fetchProducts(event.pageIndex, event.pageSize);
+    this.pageIndex = event.pageIndex
+    this.pageSize = event.pageSize
+    this.fetchProducts();
   }
 
 
 
-  fetchProducts(pageIndex: number, pageSize: number) {
-    this.managerService.getPaginated(pageIndex, pageSize).subscribe(res => {
+  fetchProducts() {
+    this.managerService.getPaginated(this.pageIndex, this.pageSize, this.search).subscribe(res => {
       this.dataList = res.data;
       this.totalItems = res.pagination.total_pages;
       this.length = res.pagination.length;
-      this.dataSource = new MatTableDataSource<IManager>(this.dataList);
-      //  this.dataSource.paginator = this.paginator; 
-      // this.paginator.length = res.pagination.length;
+      this.dataSource = new MatTableDataSource<IManager>(this.dataList); 
       this.dataSource.sort = this.sort;
 
       this.isLoadingData = false;
     });
   }
 
-
+  onSearchChange(search: string) {
+    this.search = search;
+    this.fetchProducts();
+  }
 
 
   public sortData(sort: Sort) {

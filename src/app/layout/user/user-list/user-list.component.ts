@@ -45,7 +45,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  public searchDataValue = '';
+  public search = '';
 
   // Forms  
   idItem!: number;
@@ -91,9 +91,9 @@ export class UserListComponent implements OnInit, AfterViewInit {
       next: (user) => {
         this.currentUser = user;
         this.usersService.refreshDataList$.subscribe(() => {
-          this.fetchProducts(this.currentUser, this.pageIndex, this.pageSize);
+          this.fetchProducts(this.currentUser);
         });
-        this.fetchProducts(this.currentUser, this.pageIndex, this.pageSize);
+        this.fetchProducts(this.currentUser);
 
         this.provinceService.getAll().subscribe(res => {
           this.provinceList = res.data;
@@ -125,7 +125,6 @@ export class UserListComponent implements OnInit, AfterViewInit {
       province_id: [''],
       area_id: [''],
       sup_id: [''],
-      pos_id: [''],
       // role: ['', Validators.required], // Utilise deja Title
       permission: ['', Validators.required],
       // image: [''], 
@@ -133,20 +132,22 @@ export class UserListComponent implements OnInit, AfterViewInit {
       is_manager: [''],
     });
 
-    
+
   }
 
 
   onPageChange(event: PageEvent): void {
-    this.isLoadingData = true; 
-    this.fetchProducts(this.currentUser, event.pageIndex, event.pageSize);
+    this.isLoadingData = true;
+    this.pageIndex = event.pageIndex
+    this.pageSize = event.pageSize
+    this.fetchProducts(this.currentUser);
   }
 
 
 
-  fetchProducts(currentUser: UserModel, pageIndex: number, pageSize: number) {
+  fetchProducts(currentUser: UserModel) {
     if (currentUser.role == 'Manager') {
-      this.usersService.getPaginated(pageIndex, pageSize).subscribe(res => {
+      this.usersService.getPaginated(this.pageIndex, this.pageSize, this.search).subscribe(res => {
         this.dataList = res.data;
         this.totalItems = res.pagination.total_pages;
         this.length = res.pagination.length;
@@ -158,19 +159,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
         this.isLoadingData = false;
       });
     } else if (currentUser.role == 'ASM') {
-      this.usersService.getPaginatedByProvinceId(currentUser.province_id, pageIndex, pageSize).subscribe(res => {
-        this.dataList = res.data;
-        this.totalItems = res.pagination.total_pages;
-        this.length = res.pagination.length;
-        this.dataSource = new MatTableDataSource<IUser>(this.dataList);
-        // this.paginator.length = res.pagination.length;
-        this.dataSource.sort = this.sort; 
-
-        this.isLoadingData = false;
-      });
-
-    } else if (currentUser.role == 'Supervisor') {
-      this.usersService.getPaginatedBySupId(currentUser.area_id, pageIndex, pageSize).subscribe(res => {
+      this.usersService.getPaginatedByProvinceId(currentUser.province_id, this.pageIndex, this.pageSize, this.search).subscribe(res => {
         this.dataList = res.data;
         this.totalItems = res.pagination.total_pages;
         this.length = res.pagination.length;
@@ -181,22 +170,35 @@ export class UserListComponent implements OnInit, AfterViewInit {
         this.isLoadingData = false;
       });
 
-    } else {
-      this.usersService.getPaginated(pageIndex, pageSize).subscribe(res => {
+    } else if (currentUser.role == 'Supervisor') {
+      this.usersService.getPaginatedBySupId(currentUser.area_id, this.pageIndex, this.pageSize, this.search).subscribe(res => {
         this.dataList = res.data;
         this.totalItems = res.pagination.total_pages;
-
         this.length = res.pagination.length;
         this.dataSource = new MatTableDataSource<IUser>(this.dataList);
-        // // this.paginator.length = res.pagination.length;
-        this.dataSource.sort = this.sort;  
+        this.dataSource.sort = this.sort;
 
         this.isLoadingData = false;
       });
-    }
 
-  
+    } else {
+      this.usersService.getPaginated(this.pageIndex, this.pageSize, this.search).subscribe(res => {
+        this.dataList = res.data;
+        this.totalItems = res.pagination.total_pages;
+        console.log("data", res.data)
+        this.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<IUser>(this.dataList);
+        this.dataSource.sort = this.sort;
 
+        this.isLoadingData = false;
+      });
+    } 
+
+  }
+
+  onSearchChange(search: string) {
+    this.search = search;
+    this.fetchProducts(this.currentUser);
   }
 
 
@@ -252,7 +254,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
           province_id: (this.isManager) ? 0 : parseInt(this.formGroup.value.province_id),
           area_id: (this.isManager) ? 0 : parseInt(this.formGroup.value.area_id),
           sup_id: (this.isManager) ? 0 : parseInt(this.formGroup.value.sup_id),
-          pos_id: (this.isManager) ? 0 : parseInt(this.formGroup.value.pos_id),
+          // pos_id: (this.isManager) ? 0 : parseInt(this.formGroup.value.pos_id),
           role: this.formGroup.value.title, // Role et title c'est la meme chose mais le role cest pour le code source
           permission: this.formGroup.value.permission,
           // image: this.imageUrl,  
@@ -306,7 +308,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
         province_id: (this.isManager) ? 0 : parseInt(this.formGroup.value.province_id),
         area_id: (this.isManager) ? 0 : parseInt(this.formGroup.value.area_id),
         sup_id: (this.isManager) ? 0 : parseInt(this.formGroup.value.sup_id),
-        pos_id: (this.isManager) ? 0 : parseInt(this.formGroup.value.pos_id),
+        // pos_id: (this.isManager) ? 0 : parseInt(this.formGroup.value.pos_id),
         role: this.formGroup.value.title, // Role et title c'est la meme chose mais le role cest pour le code source
         permission: this.formGroup.value.permission,
         // image: this.imageUrl,  

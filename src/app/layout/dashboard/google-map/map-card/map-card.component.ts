@@ -5,6 +5,7 @@ import { _isNumberValue } from '@angular/cdk/coercion';
 interface Marker {
   lat: number;
   lng: number;
+  name: string;
 }
 
 @Component({
@@ -24,7 +25,7 @@ export class MapCardComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     this.googleMapList.forEach(element => {
-      this.markers.push({ lat: parseFloat(element.Latitude), lng: parseFloat(element.Longitude) });
+      this.markers.push({ lat: parseFloat(element.Latitude), lng: parseFloat(element.Longitude), name: '' });
     });
 
     console.log("markers", this.markers);

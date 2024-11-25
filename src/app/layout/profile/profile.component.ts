@@ -32,6 +32,9 @@ export class ProfileComponent implements OnInit {
 
   currentUser!: UserModel;
 
+  public searchLog = '';
+  public searchPosForm = '';
+
   // Table 
   dataLogList: UserLogsModel[] = [];
   totalItemsLog: number = 0;
@@ -107,14 +110,14 @@ export class ProfileComponent implements OnInit {
         });
 
         this.logsService.refreshDataList$.subscribe(() => {
-          this.fetchProductsLog(this.currentUser.id, this.pageIndexLog, this.pageSizeLog);
+          this.fetchProductsLog(this.currentUser.id);
         });
-        this.fetchProductsLog(this.currentUser.id, this.pageIndexLog, this.pageSizeLog);
+        this.fetchProductsLog(this.currentUser.id);
 
         this.posformService.refreshDataList$.subscribe(() => {
-          this.fetchProductsPosForm(this.currentUser.id, this.pageIndexPosForm, this.pageSizePosForm);
+          this.fetchProductsPosForm(this.currentUser.id);
         });
-        this.fetchProductsPosForm(this.currentUser.id, this.pageIndexPosForm, this.pageSizePosForm);
+        this.fetchProductsPosForm(this.currentUser.id);
 
         this.isLoading = false;
       },
@@ -129,20 +132,26 @@ export class ProfileComponent implements OnInit {
 
   onPageChangeLog(event: PageEvent): void {
     this.isLoadingData = true;
-    this.fetchProductsLog(this.currentUser.id, event.pageIndex, event.pageSize);
+    this.pageIndexLog = event.pageIndex
+    this.pageSizeLog = event.pageSize
+    this.fetchProductsLog(this.currentUser.id);
   }
 
-  fetchProductsLog(id: number, pageIndex: number, pageSize: number) {
-    this.logsService.getPaginatedById(id, pageIndex, pageSize).subscribe(res => {
+  fetchProductsLog(id: number) {
+    this.logsService.getPaginatedById(id, this.pageIndexLog, this.pageSizeLog, this.searchLog).subscribe(res => {
       this.dataLogList = res.data;
       this.totalItemsLog = res.pagination.total_pages;
       this.lengthLog = res.pagination.length;
-      this.dataSourceLog = new MatTableDataSource<UserLogsModel>(this.dataLogList);
-      // this.paginator.length = res.pagination.length;
+      this.dataSourceLog = new MatTableDataSource<UserLogsModel>(this.dataLogList); 
       this.dataSourceLog.sort = this.sort;
 
       this.isLoadingData = false;
     });
+  }
+
+  onSearchChangeLog(search: string) {
+    this.searchLog = search;
+    this.fetchProductsLog(this.currentUser.id);
   }
 
   public sortDataLog(sort: Sort) {
@@ -168,20 +177,26 @@ export class ProfileComponent implements OnInit {
 
   onPageChangePosForm(event: PageEvent): void {
     this.isLoadingData = true;
-    this.fetchProductsPosForm(this.currentUser.id, event.pageIndex, event.pageSize);
+    this.pageIndexPosForm = event.pageIndex
+    this.pageSizePosForm = event.pageSize
+    this.fetchProductsPosForm(this.currentUser.id);
   }
 
-  fetchProductsPosForm(id: number, pageIndex: number, pageSize: number) {
-    this.posformService.getPaginatedById(id, pageIndex, pageSize).subscribe(res => {
+  fetchProductsPosForm(id: number) {
+    this.posformService.getPaginatedById(id, this.pageIndexPosForm, this.pageSizePosForm, this.searchPosForm).subscribe(res => {
       this.dataPosFormList = res.data;
       this.totalItemsPosForm = res.pagination.total_pages;
       this.lengthPosForm = res.pagination.length;
-      this.dataSourcePosForm = new MatTableDataSource<IPosForm>(this.dataPosFormList); 
-      // this.paginator.length = res.pagination.length;
+      this.dataSourcePosForm = new MatTableDataSource<IPosForm>(this.dataPosFormList);
       this.dataSourcePosForm.sort = this.sort;
 
       this.isLoadingData = false;
     });
+  }
+
+  onSearchChangePosForm(search: string) {
+    this.searchPosForm = search;
+    this.fetchProductsPosForm(this.currentUser.id);
   }
 
 

@@ -34,13 +34,13 @@ export class PosVenteListComponent implements OnInit {
   length: number = 0;
 
   // Table 
-  displayedColumns: string[] = ['status', 'province', 'name', 'area', 'shop', 'manager', 'commune', 'avenue', 'quartier', 'reference', 'telephone', 'inputgroupselector', 'eparasol', 'etable', 'ekiosk', 'cparasol', 'ctable', 'ckiosk', 'id'];
+  displayedColumns: string[] = ['status', 'province', 'area', 'dr', 'name', 'shop', 'manager', 'commune', 'avenue', 'quartier', 'reference', 'telephone', 'inputgroupselector', 'eparasol', 'etable', 'ekiosk', 'cparasol', 'ctable', 'ckiosk', 'id'];
   dataSource = new MatTableDataSource<IPos>(this.dataList);
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  public searchDataValue = '';
+  public search = '';
 
   // Forms  
   idItem!: number;
@@ -84,9 +84,9 @@ export class PosVenteListComponent implements OnInit {
       next: (user) => {
         this.currentUser = user;
         this.posVenteService.refreshDataList$.subscribe(() => {
-          this.fetchProducts(this.currentUser, this.pageIndex, this.pageSize);
+          this.fetchProducts(this.currentUser);
         });
-        this.fetchProducts(this.currentUser, this.pageIndex, this.pageSize);
+        this.fetchProducts(this.currentUser);
 
         this.provinceService.getAll().subscribe(res => {
           this.provinceList = res.data;
@@ -149,12 +149,14 @@ export class PosVenteListComponent implements OnInit {
 
   onPageChange(event: PageEvent): void {
     this.isLoadingData = true;
-    this.fetchProducts(this.currentUser, event.pageIndex, event.pageSize);
+    this.pageIndex = event.pageIndex
+    this.pageSize = event.pageSize
+    this.fetchProducts(this.currentUser);
   }
 
-  fetchProducts(currentUser: UserModel, pageIndex: number, pageSize: number) {
+  fetchProducts(currentUser: UserModel) {
     if (currentUser.role == 'Manager') {
-      this.posVenteService.getPaginated(pageIndex, pageSize).subscribe(res => {
+      this.posVenteService.getPaginated(this.pageIndex, this.pageSize, this.search).subscribe(res => {
         this.dataList = res.data;
         this.totalItems = res.pagination.total_pages;
         this.length = res.pagination.length;
@@ -165,7 +167,7 @@ export class PosVenteListComponent implements OnInit {
       });
 
     } else if (currentUser.role == 'ASM') {
-      this.posVenteService.getPaginatedByProvinceId(currentUser.province_id, pageIndex, pageSize).subscribe(res => {
+      this.posVenteService.getPaginatedByProvinceId(currentUser.province_id,this.pageIndex, this.pageSize, this.search).subscribe(res => {
         this.dataList = res.data;
         this.totalItems = res.pagination.total_pages;
         this.length = res.pagination.length;
@@ -175,7 +177,7 @@ export class PosVenteListComponent implements OnInit {
         this.isLoadingData = false;
       });
     } else if (currentUser.role == 'Supervisor') {
-      this.posVenteService.getPaginatedBySupId(currentUser.area_id, pageIndex, pageSize).subscribe(res => {
+      this.posVenteService.getPaginatedBySupId(currentUser.area_id, this.pageIndex, this.pageSize, this.search).subscribe(res => {
         this.dataList = res.data;
         this.totalItems = res.pagination.total_pages;
         this.length = res.pagination.length;
@@ -185,7 +187,7 @@ export class PosVenteListComponent implements OnInit {
         this.isLoadingData = false;
       });
     }  else if (currentUser.role == 'DR') {
-      this.posVenteService.getPaginatedById(currentUser.id, pageIndex, pageSize).subscribe(res => {
+      this.posVenteService.getPaginatedById(currentUser.id, this.pageIndex, this.pageSize, this.search).subscribe(res => {
         this.dataList = res.data;
         this.totalItems = res.pagination.total_pages;
         this.length = res.pagination.length;
@@ -195,16 +197,21 @@ export class PosVenteListComponent implements OnInit {
         this.isLoadingData = false;
       });
     } else {
-      this.posVenteService.getPaginated(pageIndex, pageSize).subscribe(res => {
+      this.posVenteService.getPaginated(this.pageIndex, this.pageSize, this.search).subscribe(res => {
         this.dataList = res.data;
         this.totalItems = res.pagination.total_pages;
         this.length = res.pagination.length;
         this.dataSource = new MatTableDataSource<IPos>(this.dataList);  
-        this.dataSource.sort = this.sort;
-  
+        this.dataSource.sort = this.sort; 
         this.isLoadingData = false;
       });
     } 
+  }
+
+
+  onSearchChange(search: string) {
+    this.search = search;
+    this.fetchProducts(this.currentUser);
   }
 
   public sortData(sort: Sort) {

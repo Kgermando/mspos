@@ -28,8 +28,10 @@
                             <div class="col-sm-4">
                                 <div class="icon-form mb-3 mb-sm-0">
                                     <span class="form-icon"><i class="ti ti-search"></i></span>
-                                    <input type="text" (keyup)="applyFilter($event)" class="form-control"
-                                        placeholder="Ex. jean kasongo" #input />
+                                    <!-- <input type="text" (keyup)="applyFilter($event)" class="form-control"
+                                        placeholder="Ex. jean kasongo" #input /> -->
+                                        <input type="text"  #input [(ngModel)]="search" (ngModelChange)="onSearchChange($event)" 
+                                        class="form-control" placeholder="Ex. Jean paul">
                                 </div>
                             </div>
                             <div class="col-sm-8">

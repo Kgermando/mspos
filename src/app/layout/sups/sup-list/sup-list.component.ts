@@ -39,7 +39,7 @@ export class SupListComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  public searchDataValue = '';
+  public search = '';
 
   // Forms  
   idItem!: number;
@@ -81,9 +81,9 @@ export class SupListComponent implements OnInit {
       next: (user) => {
         this.currentUser = user;
         this.supService.refreshDataList$.subscribe(() => {
-          this.fetchProducts(this.currentUser, this.pageIndex, this.pageSize);
+          this.fetchProducts(this.currentUser);
         });
-        this.fetchProducts(this.currentUser, this.pageIndex, this.pageSize);
+        this.fetchProducts(this.currentUser);
 
         this.provinceService.getAll().subscribe(res => {
           this.provinceList = res.data;
@@ -100,7 +100,6 @@ export class SupListComponent implements OnInit {
     });
   }
 
-   
   ngOnInit() {
     this.isLoadingData = true;
     this.formGroup = this._formBuilder.group({
@@ -129,48 +128,52 @@ export class SupListComponent implements OnInit {
   }
 
   onPageChange(event: PageEvent): void {
-    this.isLoadingData = true; 
-    this.fetchProducts(this.currentUser ,event.pageIndex, event.pageSize);
-  } 
+    this.isLoadingData = true;
+    this.pageIndex = event.pageIndex
+    this.pageSize = event.pageSize
+    this.fetchProducts(this.currentUser);
+  }
 
-  fetchProducts(currentUser: UserModel ,pageIndex: number, pageSize: number) {
+
+  fetchProducts(currentUser: UserModel) {
     if (currentUser.role == 'Manager') {
-      this.supService.getPaginated(pageIndex, pageSize).subscribe(res => {
+      this.supService.getPaginated(this.pageIndex, this.pageSize, this.search).subscribe(res => {
         this.dataList = res.data;
         this.totalItems = res.pagination.total_pages;
         this.length = res.pagination.length;
-        this.dataSource = new MatTableDataSource<ISup>(this.dataList);
-        //  this.dataSource.paginator = this.paginator; 
-        // this.paginator.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<ISup>(this.dataList); 
         this.dataSource.sort = this.sort; 
   
         this.isLoadingData = false;
       });
 
     } else if (currentUser.role == 'ASM') {
-      this.supService.getPaginatedByProvinceId(currentUser.province_id, pageIndex, pageSize).subscribe(res => {
+      this.supService.getPaginatedByProvinceId(currentUser.province_id, this.pageIndex, this.pageSize, this.search).subscribe(res => {
         this.dataList = res.data;
         this.totalItems = res.pagination.total_pages;
         this.length = res.pagination.length;
-        this.dataSource = new MatTableDataSource<ISup>(this.dataList); 
-        // this.paginator.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<ISup>(this.dataList);
         this.dataSource.sort = this.sort; 
   
         this.isLoadingData = false;
       }); 
     } else {
-      this.supService.getPaginated(pageIndex, pageSize).subscribe(res => {
+      this.supService.getPaginated(this.pageIndex, this.pageSize, this.search).subscribe(res => {
         this.dataList = res.data;
         this.totalItems = res.pagination.total_pages;
         this.length = res.pagination.length;
-        this.dataSource = new MatTableDataSource<ISup>(this.dataList); 
-        // this.paginator.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<ISup>(this.dataList);
         this.dataSource.sort = this.sort; 
   
         this.isLoadingData = false;
       });
     } 
   } 
+
+  onSearchChange(search: string) {
+    this.search = search;
+    this.fetchProducts(this.currentUser);
+  }
 
   public sortData(sort: Sort) {
     const data = this.dataList.slice();

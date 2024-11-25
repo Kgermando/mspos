@@ -28,8 +28,10 @@
               <div class="col-sm-4">
                 <div class="icon-form mb-3 mb-sm-0">
                   <span class="form-icon"><i class="ti ti-search"></i></span>
-                  <input type="text" (keyup)="applyFilter($event)" class="form-control" placeholder="Ex. jean kasongo"
-                    #input />
+                  <!-- <input type="text"  #input (keyup)="applyFilter($event)" class="form-control" 
+                  placeholder="Ex. jean kasongo"/> -->
+                  <input type="text"  #input [(ngModel)]="search" (ngModelChange)="onSearchChange($event)" class="form-control" 
+                  placeholder="Ex. jean kasongo"/>
                 </div>
               </div>
               <div class="col-sm-8">
@@ -151,14 +153,14 @@
                     currentUser.permission === 'VAE' ||
                     currentUser.permission === 'VED' ||
                     currentUser.permission === 'VE') {
-                    <button mat-icon-button (click)="findValue(element.id)" data-bs-toggle="offcanvas"
+                    <button mat-icon-button (click)="findValue(element.ID)" data-bs-toggle="offcanvas"
                       data-bs-target="#offcanvas_edit">
                       <mat-icon class="text-blue">edit</mat-icon>
                     </button>
                     }
                     @if(currentUser.permission === 'ALL' ||
                     currentUser.permission === 'VED') {
-                    <button mat-icon-button (click)="findValue(element.id)" data-bs-toggle="modal"
+                    <button mat-icon-button (click)="findValue(element.ID)" data-bs-toggle="modal"
                       data-bs-target="#delete_contact">
                       <mat-icon class="text-danger">delete</mat-icon>
                     </button>

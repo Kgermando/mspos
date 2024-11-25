@@ -20,6 +20,8 @@ export class LogsListComponent implements OnInit {
 
   currentUser!: UserModel;
 
+  public search = '';
+
   // Table 
   dataList: UserLogsModel[] = [];
   totalItems: number = 0;
@@ -56,9 +58,9 @@ export class LogsListComponent implements OnInit {
       next: (user) => {
         this.currentUser = user;
         this.logsService.refreshDataList$.subscribe(() => {
-          this.fetchProducts(this.pageIndex, this.pageSize);
+          this.fetchProducts();
         });
-        this.fetchProducts(this.pageIndex, this.pageSize); 
+        this.fetchProducts(); 
       },
       error: (error) => {
         this.isLoadingData = false;
@@ -90,23 +92,31 @@ export class LogsListComponent implements OnInit {
     ];
   }
 
+
   onPageChange(event: PageEvent): void {
     this.isLoadingData = true;
-    this.fetchProducts(event.pageIndex, event.pageSize);
+    this.pageIndex = event.pageIndex
+    this.pageSize = event.pageSize
+    this.fetchProducts();
   }
 
-  fetchProducts(pageIndex: number, pageSize: number) {
-    this.logsService.getPaginated(pageIndex, pageSize).subscribe(res => {
+  fetchProducts() {
+    this.logsService.getPaginated(this.pageIndex, this.pageSize, this.search).subscribe(res => {
       this.dataList = res.data; 
       this.totalItems = res.pagination.total_pages;
       this.length = res.pagination.length;
-      this.dataSource = new MatTableDataSource<UserLogsModel>(this.dataList); 
-      // this.paginator.length = res.pagination.length;
+      this.dataSource = new MatTableDataSource<UserLogsModel>(this.dataList);  
       this.dataSource.sort = this.sort;  
 
       this.isLoadingData = false;
     });
   }
+
+  onSearchChange(search: string) {
+    this.search = search;
+    this.fetchProducts();
+  }
+
 
   public sortData(sort: Sort) {
     const data = this.dataList.slice();

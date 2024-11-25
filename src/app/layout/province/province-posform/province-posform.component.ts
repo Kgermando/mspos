@@ -44,7 +44,7 @@ export class ProvincePosformComponent  implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  public searchDataValue = '';
+  public search = '';
 
   province!: IProvince;
   // Forms  
@@ -99,9 +99,9 @@ export class ProvincePosformComponent  implements OnInit {
       next: (user) => {
         this.currentUser = user;
         this.posformService.refreshDataList$.subscribe(() => {
-          this.fetchProducts(this.currentUser, this.pageIndex, this.pageSize);
+          this.fetchProducts(this.currentUser);
         });
-        this.fetchProducts(this.currentUser, this.pageIndex, this.pageSize);
+        this.fetchProducts(this.currentUser);
 
         this.posService.getAll().subscribe(res => {
           this.posList = res.data;
@@ -173,20 +173,26 @@ export class ProvincePosformComponent  implements OnInit {
  
   onPageChange(event: PageEvent): void {
     this.isLoadingData = true; 
-    this.fetchProducts(this.currentUser, event.pageIndex, event.pageSize);
-  } 
+    this.pageIndex = event.pageIndex
+    this.pageSize = event.pageSize
+    this.fetchProducts(this.currentUser);
+  }
 
-  fetchProducts(currentUser: UserModel, pageIndex: number, pageSize: number) {
-    this.posformService.getPaginatedByProvinceId(currentUser.province_id, pageIndex, pageSize).subscribe(res => {
+  fetchProducts(currentUser: UserModel) {
+    this.posformService.getPaginatedByProvinceId(currentUser.province_id, this.pageIndex, this.pageSize, this.search).subscribe(res => {
       this.dataList = res.data;
       this.totalItems = res.pagination.total_pages;
       this.length = res.pagination.length;
-      this.dataSource = new MatTableDataSource<IPosForm>(this.dataList); 
-      // this.paginator.length = res.pagination.length;
+      this.dataSource = new MatTableDataSource<IPosForm>(this.dataList);
       this.dataSource.sort = this.sort; 
 
       this.isLoadingData = false;
     });
+  }
+
+  onSearchChange(search: string) {
+    this.search = search;
+    this.fetchProducts(this.currentUser);
   }
 
   public loadData(id: any): void {

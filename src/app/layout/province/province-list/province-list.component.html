@@ -28,8 +28,10 @@
                             <div class="col-sm-4">
                                 <div class="icon-form mb-3 mb-sm-0">
                                     <span class="form-icon"><i class="ti ti-search"></i></span>
-                                    <input type="text" (keyup)="applyFilter($event)" class="form-control"
-                                        placeholder="Ex. jean kasongo" #input />
+                                    <!-- <input type="text" (keyup)="applyFilter($event)" class="form-control"
+                                        placeholder="Ex. jean kasongo" #input /> -->
+                                    <input type="text" #input [(ngModel)]="search"  placeholder="Ex. Kinshasa"
+                                        (ngModelChange)="onSearchChange($event)" class="form-control" >
                                 </div>
                             </div>
                             <div class="col-sm-8">
@@ -85,7 +87,7 @@
                                     <ng-container matColumnDef="area">
                                         <th mat-header-cell *matHeaderCellDef> Total Area </th>
                                         <td mat-cell *matCellDef="let element">
-                                            <app-area-count [id]="element.id"></app-area-count>
+                                            <app-area-count [id]="element.ID"></app-area-count>
                                         </td>
                                     </ng-container>
 
@@ -93,8 +95,8 @@
                                     <ng-container matColumnDef="pos">
                                         <th mat-header-cell *matHeaderCellDef> Total POS </th>
                                         <td mat-cell *matCellDef="let element">
-                                            @if (element.id){
-                                            <app-pos-count [id]="element.id"></app-pos-count>
+                                            @if (element.ID){
+                                            <app-pos-count [id]="element.ID"></app-pos-count>
                                             }
                                         </td>
                                     </ng-container>
@@ -103,8 +105,8 @@
                                     <ng-container matColumnDef="sup">
                                         <th mat-header-cell *matHeaderCellDef> Total Sup </th>
                                         <td mat-cell *matCellDef="let element">
-                                            @if (element.id){
-                                            <app-sup-count [id]="element.id"></app-sup-count>
+                                            @if (element.ID){
+                                            <app-sup-count [id]="element.ID"></app-sup-count>
                                             }
                                         </td>
                                     </ng-container>
@@ -113,8 +115,8 @@
                                     <ng-container matColumnDef="dr">
                                         <th mat-header-cell *matHeaderCellDef> DR </th>
                                         <td mat-cell *matCellDef="let element">
-                                            @if (element.id) {
-                                            <app-dr-count [id]="element.id"></app-dr-count>
+                                            @if (element.ID) {
+                                            <app-dr-count [id]="element.ID"></app-dr-count>
                                             }
                                         </td>
                                     </ng-container>
@@ -127,14 +129,14 @@
                                             currentUser.permission === 'VAE' ||
                                             currentUser.permission === 'VED' ||
                                             currentUser.permission === 'VE') {
-                                            <button mat-icon-button (click)="findValue(element.id)"
+                                            <button mat-icon-button (click)="findValue(element.ID)"
                                                 data-bs-toggle="offcanvas" data-bs-target="#offcanvas_edit">
                                                 <mat-icon class="text-blue">edit</mat-icon>
                                             </button>
                                             }
                                             @if(currentUser.permission === 'ALL' ||
                                             currentUser.permission === 'VED') {
-                                            <button mat-icon-button (click)="findValue(element.id)"
+                                            <button mat-icon-button (click)="findValue(element.ID)"
                                                 data-bs-toggle="modal" data-bs-target="#delete_contact">
                                                 <mat-icon class="text-danger">delete</mat-icon>
                                             </button>

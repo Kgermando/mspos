@@ -10,8 +10,7 @@ import { url } from '../shared/model/sidebar.model';
 import { CommonService } from '../shared/common/common.service';
 import { DataService } from '../shared/data/data.service';
 import { SettingsService } from '../shared/settings/settings.service';
-import { Title } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+ 
 import { AuthService } from '../auth/auth.service';
 import { Auth } from '../auth/classes/auth';
 import { routes } from '../shared/routes/routes';

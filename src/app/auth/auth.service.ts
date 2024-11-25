@@ -21,16 +21,13 @@ export class AuthService {
     return this.http.post<UserModel>(`${environment.apiUrl}/auth/register`, data);
   }
 
-
   user(): Observable<UserModel> {
     return this.http.get<UserModel>(`${environment.apiUrl}/auth/user`);
   }
 
-
   logout(): Observable<void> {
     return this.http.post<void>(`${environment.apiUrl}/auth/logout`, {});
   }
-
 
   updateInfo(data: any): Observable<UserModel> {
     return this.http.put<UserModel>(`${environment.apiUrl}/auth/profil/info`, data);

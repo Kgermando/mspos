@@ -38,7 +38,7 @@ export class AreaListComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  public searchDataValue = '';
+  public search = '';
 
   // Forms  
   idItem!: number;
@@ -83,9 +83,9 @@ export class AreaListComponent implements OnInit {
       next: (user) => {
         this.currentUser = user;
         this.areaService.refreshDataList$.subscribe(() => {
-          this.fetchProducts(this.currentUser, this.pageIndex, this.pageSize);
+          this.fetchProducts(this.currentUser);
         });
-        this.fetchProducts(this.currentUser, this.pageIndex, this.pageSize);
+        this.fetchProducts(this.currentUser);
 
         this.provinceService.getAll().subscribe(res => {
           this.provinceList = res.data;
@@ -133,46 +133,48 @@ export class AreaListComponent implements OnInit {
 
   onPageChange(event: PageEvent): void {
     this.isLoadingData = true;
-    this.fetchProducts(this.currentUser, event.pageIndex, event.pageSize);
+    this.pageIndex = event.pageIndex
+    this.pageSize = event.pageSize
+    this.fetchProducts(this.currentUser);
   }
 
-  fetchProducts(currentUser: UserModel, pageIndex: number, pageSize: number) { 
+  fetchProducts(currentUser: UserModel) { 
     if (currentUser.role == 'Manager') {
-      this.areaService.getPaginated(pageIndex, pageSize).subscribe(res => {
+      this.areaService.getPaginated(this.pageIndex, this.pageSize, this.search).subscribe(res => {
         this.dataList = res.data;
         this.totalItems = res.pagination.total_pages;
         this.length = res.pagination.length;
-        this.dataSource = new MatTableDataSource<IArea>(this.dataList);
-        // this.paginator.length = res.pagination.length;
-        this.dataSource.sort = this.sort; 
-        console.log("data", res.data);
+        this.dataSource = new MatTableDataSource<IArea>(this.dataList); 
+        this.dataSource.sort = this.sort;  
         this.isLoadingData = false;
       });
     } else if (currentUser.role == 'ASM') {
-      this.areaService.getPaginatedByProvinceId(currentUser.province_id, pageIndex, pageSize).subscribe(res => {
+      this.areaService.getPaginatedByProvinceId(currentUser.province_id, this.pageIndex, this.pageSize, this.search).subscribe(res => {
         this.dataList = res.data;
         this.totalItems = res.pagination.total_pages;
         this.length = res.pagination.length;
-        this.dataSource = new MatTableDataSource<IArea>(this.dataList);
-        // this.paginator.length = res.pagination.length;
-        this.dataSource.sort = this.sort; 
-        console.log("data", res.data);
+        this.dataSource = new MatTableDataSource<IArea>(this.dataList); 
+        this.dataSource.sort = this.sort;  
         this.isLoadingData = false;
       });
     } else {
-      this.areaService.getPaginated(pageIndex, pageSize).subscribe(res => {
+      this.areaService.getPaginated(this.pageIndex, this.pageSize, this.search).subscribe(res => {
         this.dataList = res.data;
         this.totalItems = res.pagination.total_pages;
         this.length = res.pagination.length;
-        this.dataSource = new MatTableDataSource<IArea>(this.dataList);
-        // this.paginator.length = res.pagination.length;
+        this.dataSource = new MatTableDataSource<IArea>(this.dataList); 
         this.dataSource.sort = this.sort; 
+        // console.log("data", res.data.map((v) => Array.from(v.commune)));
         console.log("data", res.data);
         this.isLoadingData = false;
       });
     } 
   }
 
+  onSearchChange(search: string) {
+    this.search = search;
+    this.fetchProducts(this.currentUser);
+  }
 
 
   public sortData(sort: Sort) {
@@ -209,6 +211,7 @@ export class AreaListComponent implements OnInit {
   onSubmit() {
     try {
       if (this.formGroup.valid) {
+        console.log("communeList", this.communeList);
         this.isLoading = true;
         var body = {
           name: this.formGroup.value.name,

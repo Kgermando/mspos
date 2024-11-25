@@ -1,11 +1,5 @@
-import { Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { SOSPieModel } from '../../models/summary-dashboard.model';
-
-interface Province {
-  name: string;
-  capital: string;
-  coordonates: { lat: number, lng: number }
-}
 
 @Component({
   selector: 'app-map-area',
@@ -15,7 +9,7 @@ interface Province {
 export class MapAreaComponent implements OnChanges {
 
   @Input() isLoading: boolean = false;
-  @Input() sosMapList: SOSPieModel[] = []; 
+  @Input() sosMapList: SOSPieModel[] = [];
 
   scaleKongoCentral = 0;
   scaleKinshasa = 0;
@@ -47,7 +41,7 @@ export class MapAreaComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void { 
     for (let index = 0; index < this.sosMapList.length; index++) {
       const element = this.sosMapList[index];
-      // console.log("element", element);
+      console.log("element", element);
 
       if (element.Province == 'Bas-Uele') {
         this.scaleBasUele = element.Eq; 
