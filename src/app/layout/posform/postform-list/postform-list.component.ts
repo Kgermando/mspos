@@ -68,13 +68,14 @@ export class PostformListComponent implements OnInit {
   supList: ISup[] = [];
   posList: IPos[] = [];
   posListFilter: IPos[] = [];
-  posDataList: string[] = [];
 
-  filteredOptions!: Observable<any[]>;
+  // filteredOptions!: Observable<IPos[]>;
+  filteredOptions: IPos[] = []
 
   priceList: string[] = ['150', '100']
 
   @ViewChild('pos_id') pos_id!: ElementRef<HTMLInputElement>;
+  isload = false;
 
   constructor(
     private readonly geolocation$: GeolocationService,
@@ -85,7 +86,7 @@ export class PostformListComponent implements OnInit {
     private posService: PosVenteService,
     private logActivity: LogsService,
     private toastr: ToastrService
-  ) {
+  ) { 
   }
 
   selectedValue1: any[] | undefined;
@@ -97,6 +98,8 @@ export class PostformListComponent implements OnInit {
   selectedDatas2: any[] | undefined;
   selectedDatas3: any[] | undefined;
   selectedDatas4: any[] | undefined;
+
+
 
 
   ngAfterViewInit(): void {
@@ -148,47 +151,28 @@ export class PostformListComponent implements OnInit {
       time: ['', Validators.required],
       comment: ['Rien à signaler', Validators.required],
       price: ['', Validators.required],
-    }); 
+    });
 
-  }
+  } 
 
+  getAllPos(currentUser: UserModel): void {
+    this.isload = true;
+    const filterValue = this.pos_id.nativeElement.value.toLowerCase();
 
-
-  getAllPos(currentUser: UserModel) {
     this.posService.getAll().subscribe(res => {
       this.posList = res.data;
       if (currentUser.role == 'DR') {
-        this.posListFilter = this.posList.filter((v) => v.user_id == this.currentUser.id)
-        this.posDataList = this.posListFilter.map((v) => v.name);
+        this.posListFilter = this.posList.filter((v) => v.user_id == this.currentUser.id);
       } else {
         this.posListFilter = this.posList;
-        this.posDataList = this.posListFilter.map((v) => v.name);
       }
-
-      this.formGroup.valueChanges.subscribe((value) => {
-       console.log("pos_id",  value.pos_id)
-        this._filter( value.pos_id || '')
-      });
-
-      // this.filteredOptions = this.formGroup.controls['pos_id'].valueChanges.pipe(
-      //   startWith(''),
-      //   map(value => this._filter(value || ''))
-      // );
-
+      this.filteredOptions = this.posListFilter.filter(o => o.name.toLowerCase().includes(filterValue)); 
+ 
+      this.isload = false;
+     
     });
-  }
-
-  private _filter(value: string): any[] {
-    const filterValue = typeof value === 'string' ? value.toLowerCase() : '';
-    return this.posListFilter.filter(option => option.name.toLowerCase().includes(filterValue));
-  }
-
-  // filter(): void {
-  //   const filterValue = this.pos_id.nativeElement.value.toLowerCase();
-  //   this.filteredOptions = this.posDataList.filter(o => o.toLowerCase().includes(filterValue));
-  // }
-
-
+  } 
+  
   displayFn(pos: any): any {
     return pos && pos.name ? pos.name : '';
   }
@@ -358,7 +342,7 @@ export class PostformListComponent implements OnInit {
               next: () => {
                 this.isLoading = false;
                 this.formGroup.reset();
-                this.toastr.success('Ajouter avec succès!', 'Success!');
+                this.toastr.success('Fiche soumise avec succès!', 'Success!');
               },
               error: (err) => {
                 this.isLoading = false;

@@ -40,7 +40,7 @@ export interface StatusEquipementModel {
 export interface GoogleMapModel {
 	Latitude: string;
 	Longitude: string; 
-	name: string;
+	Name: string;
 }   
 export interface PriceSaleModel {
 	Price: string;

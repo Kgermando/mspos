@@ -89,7 +89,7 @@ export class GoogleMapComponent implements OnInit {
       if (dataList) {
         this.googleMapList = dataList;
       }
-      // console.log("googleMapList", this.googleMapList)
+      console.log("googleMapList", this.googleMapList)
       this.isLoading = false;
     }); 
   }

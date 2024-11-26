@@ -25,7 +25,7 @@ export class MapCardComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     this.googleMapList.forEach(element => {
-      this.markers.push({ lat: parseFloat(element.Latitude), lng: parseFloat(element.Longitude), name: '' });
+      this.markers.push({ lat: parseFloat(element.Latitude), lng: parseFloat(element.Longitude), name: element.Name });
     });
 
     console.log("markers", this.markers);
