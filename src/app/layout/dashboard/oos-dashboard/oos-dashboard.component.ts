@@ -119,12 +119,16 @@ export class OosDashboardComponent implements OnInit {
         this.end_date = formatDate(this.dateRange.value.rangeValue[1], 'yyyy-MM-dd', 'en-US');
     
         if (this.currentUser.role == 'ASM') {
-          if (this.start_date && this.end_date) {
-            this.getTableView(this.provinceDropdown.name, this.start_date, this.end_date);
-            this.getAverageArea(this.provinceDropdown.name, this.dateRange.value.area, this.start_date, this.end_date);
-            this.getPerformance(this.provinceDropdown.name, this.start_date, this.end_date);
-            this.getNDYear(this.provinceDropdown.name);
-          }
+          this.provinceService.get(this.currentUser.province_id).subscribe((res) => {
+            this.provinceDropdown = res.data;
+            if (this.start_date && this.end_date) {
+              this.getTableView(this.provinceDropdown.name, this.start_date, this.end_date);
+              this.getAverageArea(this.provinceDropdown.name, this.dateRange.value.area, this.start_date, this.end_date);
+              this.getPerformance(this.provinceDropdown.name, this.start_date, this.end_date);
+              this.getNDYear(this.provinceDropdown.name);
+            }
+          });
+          
         } else {
           if (!this.provinceDropdown && this.start_date && this.end_date) {
             this.getTableView(this.dateRange.value.province, this.start_date, this.end_date);
