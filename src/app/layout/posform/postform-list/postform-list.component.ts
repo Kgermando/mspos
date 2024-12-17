@@ -244,6 +244,8 @@ export class PostformListComponent implements OnInit {
         this.dataSource = new MatTableDataSource<IPosForm>(this.dataList);
         this.dataSource.sort = this.sort;
 
+        console.log("dataList", this.dataList);
+
         this.isLoadingData = false;
       });
     }
