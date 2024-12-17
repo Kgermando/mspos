@@ -36,7 +36,7 @@ export class PosVenteListComponent implements OnInit {
   length: number = 0;
 
   // Table
-  displayedColumns: string[] = ['status', 'province', 'area', 'dr', 'name', 'shop', 'manager', 'commune', 'avenue', 'quartier', 'reference', 'telephone', 'inputgroupselector', 'eparasol', 'etable', 'ekiosk', 'cparasol', 'ctable', 'ckiosk', 'id'];
+  displayedColumns: string[] = ['created_at', 'status', 'province', 'area', 'dr', 'name', 'shop', 'manager', 'commune', 'avenue', 'quartier', 'reference', 'telephone', 'inputgroupselector', 'eparasol', 'etable', 'ekiosk', 'cparasol', 'ctable', 'ckiosk', 'id'];
   dataSource = new MatTableDataSource<IPos>(this.dataList);
 
   @ViewChild(MatSort) sort!: MatSort;

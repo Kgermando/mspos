@@ -28,7 +28,6 @@ import { CredentialInterceptor } from './auth/interceptors/credential.intercepto
     },
     provideAnimations(), // required animations providers
     provideToastr(), // Toastr providers
- 
   ],
   bootstrap: [AppComponent]
 })

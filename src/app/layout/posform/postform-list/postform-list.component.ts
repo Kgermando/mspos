@@ -39,7 +39,7 @@ export class PostformListComponent implements OnInit {
   length: number = 0;
 
   // Table 
-  displayedColumns: string[] = ['eq', 'sold', 'dhl', 'ar', 'sbl', 'pmf', 'pmm', 'ticket', 'mtc', 'ws', 'mast', 'oris', 'elite', 'yes', 'time', 'province_id', 'area_id', 'sup_id', 'pos_id', 'user_id', 'comment', 'id'];
+  displayedColumns: string[] = ['created_at', 'eq', 'sold', 'dhl', 'ar', 'sbl', 'pmf', 'pmm', 'ticket', 'mtc', 'ws', 'mast', 'oris', 'elite', 'yes', 'time', 'province_id', 'area_id', 'sup_id', 'pos_id', 'user_id', 'comment', 'id'];
   dataSource = new MatTableDataSource<IPosForm>(this.dataList);
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -68,8 +68,7 @@ export class PostformListComponent implements OnInit {
   supList: ISup[] = [];
   posList: IPos[] = [];
   posListFilter: IPos[] = [];
-
-  // filteredOptions!: Observable<IPos[]>;
+ 
   filteredOptions: IPos[] = []
 
   priceList: string[] = ['150', '100']
